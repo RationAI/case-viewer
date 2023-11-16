@@ -4,10 +4,6 @@ export type MenuItem = {
   subItems?: SubMenuItem[],
 }
 
-export type UserMenu = {
-  items: SubMenuItem[],
-}
-
 type SubMenuItem = {
   label: string,
   link: string,

@@ -1,11 +1,12 @@
 import React from "react";
-import { MenuItem, UserMenu } from "@/type-definitions";
+import { MenuItem } from "@/type-definitions";
 import Link from "next/link";
 import Image from "next/image";
+import MenuContent from "../MenuContent/MenuContent";
 
 const homeLink = "/";
 
-const menuItems: MenuItem[] = [
+const primaryMenu: MenuItem[] = [
   {
     label: "Projects",
     link: "/files",
@@ -26,8 +27,18 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-const userMenu: UserMenu = {
-  items: [
+const secondaryMenu: MenuItem[] = [
+  {
+    label: "Test 1",
+    link: "/files",
+  },
+  {
+    label: "Test 2",
+    link: "/upload",
+  },
+];
+
+const userMenu: MenuItem[] = [
     {
       label: "Profile",
       link: "/user",
@@ -40,20 +51,30 @@ const userMenu: UserMenu = {
       label: "Logout",
       link: "/",
     },
-  ],
-};
+  ];
 
 const Navbar = () => {
   return (
-    <nav className="navbar bg-base-100 border-b border-neutral shadow">
-      <div className="flex-none">
+    <nav className="navbar p-2 bg-base-100 border-b border-neutral shadow fixed z-10">
+      <div className="dropdown">
+        <label tabIndex={0} className="btn btn-ghost md:hidden">
+          <Image src="/svg/menu.svg" alt="Menu" height={25} width={25} />
+        </label>
+        <ul
+          tabIndex={0}
+          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          <MenuContent menuItems={secondaryMenu} />
+        </ul>
+      </div>
+      <div className="flex-1 justify-center md:flex-none">
         <Link href={homeLink} className="btn btn-ghost normal-case text-xl">
           RationAI
         </Link>
       </div>
-      <div className="navbar-center flex-1">
+      <div className="navbar-center hidden md:flex flex-1">
         <ul className="menu menu-horizontal px-1">
-          {menuItems.map((menuItem) => (
+          {secondaryMenu.map((menuItem) => (
             <li key={menuItem.label}>
               {!menuItem.subItems ? (
                 <Link href={menuItem.link}>{menuItem.label}</Link>
@@ -73,29 +94,18 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-none gap-2">
-        <div className="form-control">
-          <input
-            type="text"
-            placeholder="Search files..."
-            className="input input-bordered w-24 md:w-auto"
-          />
-        </div>
+      <div className="flex-none">
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-circle avatar">
             <div className="w-10 rounded-full">
-              <Image src="/user2.svg" alt="User" height={10} width={10} />
+              <Image src="/svg/user2.svg" alt="User" height={10} width={10} />
             </div>
           </label>
           <ul
             tabIndex={0}
             className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
           >
-            {userMenu.items.map((item) => (
-              <li key={item.label}>
-                <Link href={item.link}>{item.label}</Link>
-              </li>
-            ))}
+            <MenuContent menuItems={userMenu} />
           </ul>
         </div>
       </div>
