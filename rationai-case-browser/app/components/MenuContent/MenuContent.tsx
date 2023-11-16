@@ -1,5 +1,6 @@
 import { MenuItem } from "@/type-definitions";
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 
 type Props = {
@@ -11,7 +12,11 @@ const MenuContent = ({ menuItems }: Props) => {
     <>
       {menuItems.map((menuItem) => (
         <li key={menuItem.label}>
-          <Link href={menuItem.link}>{menuItem.label}</Link>
+          <Link href={menuItem.link} className="text-base">
+            {menuItem.icon &&
+              <Image src={menuItem.icon} alt={menuItem.label} height={25} width={25} />
+            }
+            {menuItem.label}</Link>
           {menuItem.subItems && (
             <ul>
               {menuItem.subItems.map((subItem) => (

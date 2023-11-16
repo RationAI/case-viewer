@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en" data-theme="winter">
       <body className={inter.className}>
         <Navbar />
-        <div className="flex">
+        <div className="flex overflow-clip pt-[4.25rem] h-screen">
           <Sidebar />
-          <div className="mt-[4.25rem] ml-52 p-2">
+          <div className="p-2 overflow-scroll">
             {children}
           </div>
         </div>

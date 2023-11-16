@@ -1,12 +1,14 @@
-'use client'
+"use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import MenuContent from "../MenuContent/MenuContent";
 import Image from "next/image";
 
-const menuItems = [
+const primaryMenu = [
   {
     label: "Projects",
     link: "/files",
+    icon: "/svg/files.svg",
     subItems: [
       {
         label: "test1",
@@ -21,6 +23,7 @@ const menuItems = [
   {
     label: "Upload",
     link: "/upload",
+    icon: "/svg/upload.svg",
   },
 ];
 
@@ -28,16 +31,47 @@ const Sidebar = () => {
   const [extended, setExtended] = useState(true);
 
   return (
-    <aside className="flex flex-col items-center pt-[4.25rem] w-52 h-screen bg-base-100 border-r border-neutral shadow fixed">
-      <div className="navbar-center p-2 w-11/12 flex-1">
-        <ul className="menu xl:menu-vertical lg:min-w-max bg-gray-50 rounded-lg">
-          <MenuContent menuItems={menuItems} />
-        </ul>
+    <aside
+      className={
+        "flex flex-col items-center bg-base-100 border-r border-neutral shadow" +
+        (extended ? " min-w-[13rem]" : "")
+      }
+    >
+      <div className="navbar-center p-2 w-full flex-1">
+        {extended ? (
+          <ul className="menu xl:menu-vertical lg:min-w-max bg-gray-50 rounded-lg">
+            <MenuContent menuItems={primaryMenu} />
+          </ul>
+        ) : (
+          <ul className="menu p-0 min-w-max">
+            {primaryMenu.map((menuItem) => (
+              <li key={menuItem.label}>
+                <Link href={menuItem.link}>
+                  <Image
+                    src={menuItem.icon}
+                    alt={menuItem.label}
+                    height={35}
+                    width={35}
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="flex-none w-full">
-        <div className="flex flex-row justify-end">
-          <label tabIndex={0} className="btn btn-ghost" onClick={() => setExtended(!extended)}>
-            <Image src="/svg/expand-left.svg" alt="Extend" height={25} width={25} />
+        <div className={"flex flex-row p-1" + (extended ? " justify-end" : " justify-center")}>
+          <label
+            tabIndex={0}
+            className="btn btn-ghost"
+            onClick={() => setExtended(!extended)}
+          >
+            <Image
+              src={extended ? "/svg/expand-left.svg" : "/svg/expand-right.svg"}
+              alt="Extend"
+              height={25}
+              width={25}
+            />
           </label>
         </div>
       </div>

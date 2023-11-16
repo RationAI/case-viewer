@@ -6,27 +6,6 @@ import MenuContent from "../MenuContent/MenuContent";
 
 const homeLink = "/";
 
-const primaryMenu: MenuItem[] = [
-  {
-    label: "Projects",
-    link: "/files",
-    subItems: [
-      {
-        label: "test1",
-        link: "/",
-      },
-      {
-        label: "test2",
-        link: "/",
-      },
-    ],
-  },
-  {
-    label: "Upload",
-    link: "/upload",
-  },
-];
-
 const secondaryMenu: MenuItem[] = [
   {
     label: "Test 1",
@@ -68,7 +47,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
-        <Link href={homeLink} className="btn btn-ghost normal-case text-xl">
+        <Link href={homeLink} className="btn btn-ghost normal-case text-2xl">
           RationAI
         </Link>
       </div>
