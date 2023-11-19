@@ -1,8 +1,11 @@
 import React from 'react'
+import FileTree from '../../components/FileTree'
 
 const UserFiles = () => {
   return (
-    <div>UserFiles</div>
+    <div>
+      <FileTree root/>
+    </div>
   )
 }
 

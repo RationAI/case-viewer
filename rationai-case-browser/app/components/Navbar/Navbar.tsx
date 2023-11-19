@@ -48,7 +48,12 @@ const Navbar = () => {
       </div>
       <div className="flex-1 justify-center md:flex-none">
         <Link href={homeLink} className="btn btn-ghost normal-case text-2xl">
-          RationAI
+          <Image
+            src='/svg/rationai-color.svg'
+            alt='RationAI'
+            height={130}
+            width={130}
+          />
         </Link>
       </div>
       <div className="navbar-center hidden md:flex flex-1">
