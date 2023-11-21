@@ -100,7 +100,7 @@ const fileStructure: FileTreeStructure = {
 const FileTree = async ({root, fileTree = fileStructure}: Props) => {
   return (
     <div>
-      <ul className={root ? "menu menu-xs bg-base-200 rounded-lg min-w-[20rem] max-w-xs overflow-x-scroll" : ""}>
+      <ul className={root ? "menu menu-xs bg-gray-50 rounded-lg min-w-[20rem] max-w-xs overflow-x-scroll" : ""}>
         {fileTree.items?.map((item) => (
           <li key={item.path}>
             {item.folder ? (

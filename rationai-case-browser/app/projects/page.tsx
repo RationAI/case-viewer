@@ -25,7 +25,9 @@ const exampleFolder: FolderStructure = {
   files: [
     {
       uuid: 'dasdiasuidasodisnasodsa',
+      name: 'report.pdf',
       path: '/report.pdf',
+      previewURL: '/file_icons/image_file.svg',
       format: 'pdf',
       created: timestamp,
       createdBy: 'John Doe',
@@ -35,7 +37,43 @@ const exampleFolder: FolderStructure = {
       },
       masks: [
         {
-          name: 'mask',
+          name: 'mask1',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask2',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask3',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask4',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask5',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask6',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask7',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask8',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask9',
+          imageLink: '/file_icons/image_file.svg',
+        },
+        {
+          name: 'mask10',
           imageLink: '/file_icons/image_file.svg',
         },
       ],

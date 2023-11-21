@@ -35,9 +35,11 @@ type Metadata = {
   [key: string]: string,
 }
 
-type File = {
+export type File = {
   uuid: string,
+  name: string,
   path: string,
+  previewURL: string,
   format: string,
   created: string,
   createdBy: string,
@@ -46,12 +48,19 @@ type File = {
   annotations: Annotation[],
 }
 
-type Mask = {
+export type ImageType = {
   name: string,
   imageLink: string,
 }
 
-type Annotation = {
-  name: string,
-  imageLink: string,
+type MaskSpecific = {
+  something?: string,
 }
+
+type AnnotationSpecific = {
+  something?: string,
+}
+
+type Mask = ImageType & MaskSpecific;
+
+type Annotation = ImageType & AnnotationSpecific;
