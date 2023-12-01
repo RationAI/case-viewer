@@ -87,9 +87,9 @@ const exampleFolder: FolderStructure = {
   ]
 }
 
-const rootPath = '/projects';
+const rootPath = '/files';
 
-const UserFiles = () => {
+const ProjectFiles = () => {
   return (
     <div>
       <Table rootPath={rootPath} folderStructure={exampleFolder}/>
@@ -97,4 +97,4 @@ const UserFiles = () => {
   )
 }
 
-export default UserFiles
+export default ProjectFiles

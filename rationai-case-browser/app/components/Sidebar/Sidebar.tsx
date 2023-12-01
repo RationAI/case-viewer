@@ -7,23 +7,18 @@ import Image from "next/image";
 const primaryMenu = [
   {
     label: "Projects",
-    link: "/projects",
+    link: "/files",
     icon: "/svg/files.svg",
     subItems: [
       {
-        label: "My Files",
-        link: "/projects",
+        label: "Project 1",
+        link: "/files",
       },
       {
-        label: "File tree",
-        link: "/projects/tree",
+        label: "Project 2",
+        link: "/files",
       },
     ],
-  },
-  {
-    label: "Upload",
-    link: "/upload",
-    icon: "/svg/upload.svg",
   },
 ];
 

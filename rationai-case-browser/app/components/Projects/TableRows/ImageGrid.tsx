@@ -12,7 +12,7 @@ type Props = {
 const ImageGrid = ({ images, count, typeName, rowNo }: Props) => {
   const finalImages = images.slice(0, count - 1)
   return (
-  <div className={"grid gap-1 w-[70px] h-[70px] " + (count > 4 ? "grid-cols-3" : "grid-cols-2")}>
+  <div className={"grid gap-1 w-[6.25rem] aspect-square " + (count > 4 ? "grid-cols-3" : "grid-cols-2")}>
     <div className="text-center">
       <Image
         className="block opacity-70"

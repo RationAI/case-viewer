@@ -22,7 +22,7 @@ export default function RootLayout({
         <Navbar />
         <div className="flex overflow-clip pt-[4.25rem] h-screen">
           <Sidebar />
-          <div className="p-2 overflow-scroll">
+          <div className="p-2 overflow-scroll w-full">
             {children}
           </div>
         </div>

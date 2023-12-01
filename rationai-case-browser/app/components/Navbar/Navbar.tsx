@@ -8,12 +8,16 @@ const homeLink = "/";
 
 const secondaryMenu: MenuItem[] = [
   {
-    label: "Test 1",
+    label: "Files",
     link: "/files",
   },
   {
-    label: "Test 2",
+    label: "Upload",
     link: "/upload",
+  },
+  {
+    label: "Annotations",
+    link: "/annotations",
   },
 ];
 
