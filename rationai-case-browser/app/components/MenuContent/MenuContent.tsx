@@ -1,10 +1,10 @@
-import { MenuItem } from "@/type-definitions";
+import { MenuItemT } from "@/type-definitions";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 
 type Props = {
-  menuItems: MenuItem[];
+  menuItems: MenuItemT[];
 };
 
 const MenuContent = ({ menuItems }: Props) => {

@@ -1,11 +1,11 @@
-import { FolderStructure } from "@/type-definitions";
+import { FolderStructureT } from "@/type-definitions";
 import React from "react";
 import FolderRow from "./TableRows/FolderRow";
 import FileRow from "./TableRows/FileRow";
 
 type Props = {
   rootPath: string;
-  folderStructure: FolderStructure;
+  folderStructure: FolderStructureT;
 };
 
 const Table = ({ rootPath, folderStructure }: Props) => {

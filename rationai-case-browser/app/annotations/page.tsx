@@ -3,8 +3,8 @@ import AnnotationPresetGrid from '../components/Annotations/AnnotationPresetGrid
 
 const AnnotationsPage = () => {
   return (
-    <div className='w-full flex flex-col items-center'>
-      <div className='font-sans font-semibold text-slate-500 text-xl'>Annotations</div>
+    <div className='w-full flex flex-col items-center gap-2'>
+      <div className='font-sans font-semibold text-slate-500 text-xl'>Annotations presets</div>
       <AnnotationPresetGrid />
     </div>
   )

@@ -1,10 +1,10 @@
-import { File } from "@/type-definitions";
+import { FileT } from "@/type-definitions";
 import React from "react";
 import Image from "next/image";
 import ImageGrid from "./ImageGrid";
 
 type Props = {
-  file: File;
+  file: FileT;
   rowNo: number;
 };
 

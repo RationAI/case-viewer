@@ -1,11 +1,11 @@
 import React from 'react'
 import Table from '../components/Projects/Table'
-import { FolderStructure } from '@/type-definitions';
+import { FolderStructureT } from '@/type-definitions';
 
 const currentDate = new Date();
 const timestamp = currentDate.toISOString();
 
-const exampleFolder: FolderStructure = {
+const exampleFolder: FolderStructureT = {
   name: 'root',
   link: '/',
   subFolders: [

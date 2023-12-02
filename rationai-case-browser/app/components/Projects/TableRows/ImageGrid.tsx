@@ -1,9 +1,9 @@
-import { ImageType } from "@/type-definitions";
+import { ImageT } from "@/type-definitions";
 import React from "react";
 import Image from "next/image";
 
 type Props = {
-  images: ImageType[];
+  images: ImageT[];
   count: number;
   typeName: string;
   rowNo: number;

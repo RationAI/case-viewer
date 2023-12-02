@@ -1,12 +1,12 @@
 import React from "react";
-import { MenuItem } from "@/type-definitions";
+import { MenuItemT } from "@/type-definitions";
 import Link from "next/link";
 import Image from "next/image";
 import MenuContent from "../MenuContent/MenuContent";
 
 const homeLink = "/";
 
-const secondaryMenu: MenuItem[] = [
+const secondaryMenu: MenuItemT[] = [
   {
     label: "Files",
     link: "/files",
@@ -21,7 +21,7 @@ const secondaryMenu: MenuItem[] = [
   },
 ];
 
-const userMenu: MenuItem[] = [
+const userMenu: MenuItemT[] = [
     {
       label: "Profile",
       link: "/user",

@@ -1,41 +1,41 @@
-export type MenuItem = {
+export type MenuItemT = {
   label: string,
   link: string,
   icon?: string, 
-  subItems?: SubMenuItem[],
+  subItems?: SubMenuItemT[],
 }
 
-type SubMenuItem = {
+type SubMenuItemT = {
   label: string,
   link: string,
 }
 
-export type FileTreeStructure = {
+export type FileTreeStructureT = {
   name: string,
   path: string,
   folder: boolean,
   extension?: string,
-  items?: FileTreeStructure[],
+  items?: FileTreeStructureT[],
 }
 
-export type FolderStructure = {
+export type FolderStructureT = {
   name: string,
   link: string,
   parent?: string,
-  subFolders: SubFolder[],
-  files: File[],
+  subFolders: SubFolderT[],
+  files: FileT[],
 };
 
-type SubFolder = {
+type SubFolderT = {
   name: string,
   link: string,
 };
 
-type Metadata = {
+type MetadataT = {
   [key: string]: string,
 }
 
-export type File = {
+export type FileT = {
   uuid: string,
   name: string,
   path: string,
@@ -43,24 +43,37 @@ export type File = {
   format: string,
   created: string,
   createdBy: string,
-  metadata: Metadata,
-  masks: Mask[],
-  annotations: Annotation[],
+  metadata: MetadataT,
+  masks: MaskT[],
+  annotations: AnnotationT[],
 }
 
-export type ImageType = {
+export type ImageT = {
   name: string,
   imageLink: string,
 }
 
-type MaskSpecific = {
+type MaskSpecificT = {
   something?: string,
 }
 
-type AnnotationSpecific = {
+type AnnotationSpecificT = {
   something?: string,
 }
 
-type Mask = ImageType & MaskSpecific;
+type MaskT = ImageT & MaskSpecificT;
 
-type Annotation = ImageType & AnnotationSpecific;
+type AnnotationT = ImageT & AnnotationSpecificT;
+
+export type AnnotationPresetT = {
+  id: number,
+  color: string,
+  factoryID: string,
+  presetID: string,
+  meta: {
+    [key: string]: {
+      name: string,
+      value: string,
+    },
+  },
+}

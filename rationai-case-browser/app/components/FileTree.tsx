@@ -1,11 +1,11 @@
-import { FileTreeStructure } from "@/type-definitions";
+import { FileTreeStructureT } from "@/type-definitions";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
   root: boolean,
-  fileTree?: FileTreeStructure,
+  fileTree?: FileTreeStructureT,
 }
 
 const fileExtensionIcons: { [k: string] : string } = {
@@ -13,7 +13,7 @@ const fileExtensionIcons: { [k: string] : string } = {
   png: 'image_file',
 }
 
-const fileStructure: FileTreeStructure = {
+const fileStructure: FileTreeStructureT = {
   name: "root",
   path: "/",
   folder: true,
