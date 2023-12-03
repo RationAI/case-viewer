@@ -3,7 +3,8 @@ import { AnnotationPresetT } from "@/type-definitions";
 
 type Props = {
   annotationPreset: AnnotationPresetT;
-}
+  editFieldInPreset: (key: string, value: string, name?: string) => void;
+};
 
 const annotationTypes: { [key: string]: string } = {
   polygon: "Polygon",
@@ -13,19 +14,26 @@ const annotationTypes: { [key: string]: string } = {
   text: "Text",
 };
 
-const APSelect = ({ annotationPreset }: Props) => {
+const APSelect = ({ annotationPreset, editFieldInPreset }: Props) => {
+
+  const handleSelectEdit = (selectValue: string) => {
+    const keyOfSelectedValue = Object.keys(annotationTypes).find((key) => annotationTypes[key] === selectValue) ?? 'polygon';
+    editFieldInPreset('factoryID', keyOfSelectedValue)
+  }
+
   return (
     <div>
       <label
-        htmlFor={"annotation" + annotationPreset.id}
+        htmlFor={"factoryID" + annotationPreset.id}
         className="form-label-custom"
       >
         Annotation
       </label>
       <select
-        id={"annotation" + annotationPreset.id}
+        id={"factoryID" + annotationPreset.id}
         className="form-input-custom"
         defaultValue={annotationTypes[annotationPreset.factoryID]}
+        onChange={(e) => handleSelectEdit(e.target.value)}
       >
         {Object.entries(annotationTypes).map(([key, value]) => (
           <option key={key}>{value}</option>

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { AnnotationPresetT } from "@/type-definitions";
 
 type Props = {
   annotationPreset: AnnotationPresetT;
-  color: string;
-  colorChangeHandler: (value: string) => void;
+  editFieldInPreset: (key: string, value: string, name?: string) => void;
 }
 
-const APColor = ({ annotationPreset, color, colorChangeHandler }: Props) => {
+const APColor = ({ annotationPreset, editFieldInPreset }: Props) => {
+  const [color, setColor] = useState(annotationPreset.color);
+
+  const handleColorChange = (color: string) => {
+    setColor(color);
+    editFieldInPreset('color', color);
+  }
+  
   return (
     <div>
       <label
@@ -21,7 +27,7 @@ const APColor = ({ annotationPreset, color, colorChangeHandler }: Props) => {
         className="form-input-custom"
         type="color"
         value={color}
-        onChange={(e) => colorChangeHandler(e.target.value)}
+        onChange={(e) => handleColorChange(e.target.value)}
       />
     </div>
   );

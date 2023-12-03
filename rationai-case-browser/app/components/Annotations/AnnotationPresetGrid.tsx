@@ -118,10 +118,11 @@ const AnnotationPresetGrid = () => {
   const [presetGroup, setPresetGroup] = useState<AnnotationPresetT[]>(presetGroupExample)
   const [presetIdCurrent, setPresetIdCurrent] = useState(presetGroup.length)
 
-  const handlePresetEdit = (id: number, editedPreset: AnnotationPresetT) => {
+  const handleEditPreset = (id: number, editedPreset: AnnotationPresetT) => {
     const newGroup = [...presetGroup];
     const editedIdx = newGroup.findIndex((preset) => preset.id === id);
-    newGroup[editedIdx] = editedPreset
+    newGroup[editedIdx] = editedPreset;
+    // console.log(newGroup)
     setPresetGroup(newGroup);
   }
 
@@ -156,7 +157,7 @@ const AnnotationPresetGrid = () => {
     <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))] w-full'>
       {presetGroup.map((annotPreset) => {
         return (
-          <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleRemovePreset} editPresetHandler={handlePresetEdit} />
+          <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleRemovePreset} editPresetHandler={handleEditPreset} />
         )
       })}
       <div>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { AnnotationPresetT } from "@/type-definitions";
 import APSelect from "./AnnotationPresetParts/APSelect";
@@ -15,8 +15,6 @@ type Props = {
 };
 
 const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHandler }: Props) => {
-  const [color, setColor] = useState(annotationPreset.color);
-
   const addNewFieldHandler = (name: string) => {
     const newKey = name + getRandomString(10);
     annotationPreset.meta[newKey] = { name: name, value: ''};
@@ -28,6 +26,21 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHan
     editPresetHandler(annotationPreset.id, annotationPreset);
   }
 
+  const editFieldInPreset = (key: string, value: string) => {
+    // console.log(key)
+    if (key === "factoryID" || key === "color") {
+      // console.log('Old value: ' + annotationPreset[key])
+      annotationPreset[key] = value;
+      // console.log('New value: ' + annotationPreset[key])
+    } else {
+      // console.log('Old value: ' + annotationPreset.meta[key].value)
+      annotationPreset.meta[key].value = value;
+      // console.log('New value: ' + annotationPreset.meta[key].value)
+    }
+
+    editPresetHandler(annotationPreset.id, annotationPreset);
+  }
+
   return (
     <div>
       <div className="border border-gray-400 rounded-lg p-2 border-dashed h-full">
@@ -35,9 +48,9 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHan
           <div className="flex justify-between">
             <div className="flex gap-2">
               {/* annotation */}
-              <APSelect annotationPreset={annotationPreset} />
+              <APSelect annotationPreset={annotationPreset} editFieldInPreset={editFieldInPreset} />
               {/* color */}
-              <APColor annotationPreset={annotationPreset} color={color} colorChangeHandler={setColor} />
+              <APColor annotationPreset={annotationPreset} editFieldInPreset={editFieldInPreset} />
             </div>
             {/* remove preset */}
             <div>
@@ -47,7 +60,7 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHan
             </div>
           </div>
           {/* category + custom fields */}
-          <APTextFields annotationPreset={annotationPreset} removeTextField={removeFieldHandler} />          
+          <APTextFields annotationPreset={annotationPreset} removeTextField={removeFieldHandler} editFieldInPreset={editFieldInPreset} />          
         </form>
         <APNewField annotationPreset={annotationPreset} addTextField={addNewFieldHandler} />
       </div>

@@ -77,3 +77,29 @@ export type AnnotationPresetT = {
     },
   },
 }
+
+export type FormConfigT = {
+  title?: string;
+  description?: string;
+  rows: FormRowT[];
+}
+
+type FormRowT = {
+  fields: FormFieldT[];
+}
+
+type FormFieldT = FormSelectFieldT | FormTextFieldT;
+
+export type FormSelectFieldT = FormFieldBaseT & {
+  options: string[];
+}
+
+export type FormTextFieldT = FormFieldBaseT;
+
+type FormFieldBaseT = {
+  type: string;
+  fieldID: string;
+  label: string;
+  defaultValue?: string;
+  description?: string;
+}
