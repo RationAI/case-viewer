@@ -154,7 +154,7 @@ const AnnotationPresetGrid = () => {
 
 
   return (
-    <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))] w-full'>
+    <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
       {presetGroup.map((annotPreset) => {
         return (
           <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleRemovePreset} editPresetHandler={handleEditPreset} />

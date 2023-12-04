@@ -8,7 +8,7 @@ const primaryMenu = [
   {
     label: "Projects",
     link: "/files",
-    icon: "/svg/files.svg",
+    icon: "/svg/projects.svg",
     subItems: [
       {
         label: "Project 1",

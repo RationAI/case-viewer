@@ -7,7 +7,7 @@ type Props = {
 
 const FormTextField = ({ field }: Props) => {
   return (
-    <div>
+    <div className="flex-1">
       <label htmlFor={field.fieldID} className="form-label-custom">
         {field.label}
       </label>
