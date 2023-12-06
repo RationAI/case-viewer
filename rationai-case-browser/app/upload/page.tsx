@@ -109,8 +109,8 @@ const UploadPage = () => {
             <FileBrowseInput />
           </div>
           <div className="w-2/3 flex flex-col items-center gap-8">
-            <Form config={formConfigExample} />
-            <UploadButtonsAndProgress />
+            <Form config={formConfigExample} formID="uploadForm" />
+            <UploadButtonsAndProgress formID="uploadForm"/>
           </div>
         </div>
       </div>
