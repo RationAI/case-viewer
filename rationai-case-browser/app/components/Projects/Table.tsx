@@ -2,6 +2,7 @@ import { FolderStructureT } from "@/type-definitions";
 import React from "react";
 import FolderRow from "./TableRows/FolderRow";
 import FileRow from "./TableRows/FileRow";
+import FileCardStack from "./FileCardStack/FileCardStack";
 
 type Props = {
   rootPath: string;
@@ -34,13 +35,16 @@ const Table = ({ rootPath, folderStructure }: Props) => {
             <div className="flex gap-4 font-sans font-semibold text-slate-500 pl-4 pr-12">
               <div className="min-w-[7rem] text-center">Preview</div>
               <div className="flex-1 px-1 min-w-[18rem]">Info</div>
-              <div className="min-w-[7rem] text-center">Masks</div>
+              <div className="min-w-[12.5rem] text-center">Masks</div>
               <div className="min-w-[7rem] text-center">Annotations</div>
               <div className="min-w-[4rem] text-center">Actions</div>
             </div>
             {folderStructure.files.map((file, idx) => (
               <FileRow key={file.uuid} file={file} rowNo={idx}/>
             ))}
+      </div>
+      <div>
+        <FileCardStack />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import { FileT } from "@/type-definitions";
 import React from "react";
 import Image from "next/image";
-import ImageGrid from "./ImageGrid";
+import ImageGrid from "./FileRowParts/ImageGrid";
+import FileRowActions from "./FileRowParts/FileRowActions";
+import FileRowSelect from "./FileRowParts/FileRowSelect";
 
 type Props = {
   file: FileT;
@@ -9,6 +11,7 @@ type Props = {
 };
 
 const FileRow = ({ file, rowNo }: Props) => {
+
   return (
     <div key={file.path} className="collapse bg-gray-50 collapse-arrow">
       <input type="checkbox" />
@@ -21,13 +24,8 @@ const FileRow = ({ file, rowNo }: Props) => {
           <p className="">{file.created}</p>
           <p className="">{file.createdBy}</p>
         </div>
-        <div className="flex items-center justify-center z-10 px-[0.375rem]">
-          <ImageGrid
-            images={file.masks}
-            count={9}
-            typeName="mask"
-            rowNo={rowNo}
-          />
+        <div className="flex w-[12.5rem] items-center justify-center z-10">
+          <FileRowSelect options={file.masks.map((annot) => annot.name)}/>
         </div>
         <div className="flex items-center justify-center z-10 px-[0.375rem]">
           <ImageGrid
@@ -37,7 +35,9 @@ const FileRow = ({ file, rowNo }: Props) => {
             rowNo={rowNo}
           />
         </div>
-        <div className="w-16"></div>
+        <div className="w-16 z-10">
+          <FileRowActions />
+        </div>
       </div>
       <div className="collapse-content">
         {Object.entries(file.metadata).map(([key, value]) => (

@@ -45,7 +45,7 @@ const exampleFolder: FolderStructureT = {
           imageLink: '/file_icons/image_file.svg',
         },
         {
-          name: 'mask3',
+          name: 'mask3sadasdasdasdsadasdas',
           imageLink: '/file_icons/image_file.svg',
         },
         {
