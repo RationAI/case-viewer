@@ -6,10 +6,10 @@ type Props = {
 
 const FileRowSelect = ({ options }: Props) => {
   return (
-    <select className="select select-bordered select-xs w-full max-w-xs">
-      {options.map((option, idx) => {
+    <select defaultValue={options[0]} className="select select-bordered select-xs w-full max-w-xs">
+      {options.map((option) => {
         return (
-        <option key={option} selected={idx === 0}>
+        <option key={option}>
           {option}
         </option>
         )
