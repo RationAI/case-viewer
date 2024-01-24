@@ -1,4 +1,7 @@
+'use client'
+
 import React from "react";
+import { useSession } from "next-auth/react"
 import { MenuItemT } from "@/type-definitions";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,34 +12,50 @@ const homeLink = "/";
 const secondaryMenu: MenuItemT[] = [
   {
     label: "Files",
-    link: "/files",
+    link: "",
   },
   {
     label: "Upload",
-    link: "/upload",
+    link: "upload",
   },
   {
     label: "Annotations",
-    link: "/annotations",
+    link: "annotations",
   },
 ];
 
 const userMenu: MenuItemT[] = [
     {
       label: "Profile",
-      link: "/user",
-    },
-    {
-      label: "Settings",
-      link: "/",
-    },
-    {
-      label: "Logout",
       link: "/",
     },
   ];
 
 const Navbar = () => {
+  const { data: session } = useSession()
+
+  // TODO get current caseId ?from state?
+
+  const caseIdMock = "caseId-123456";
+
+  let menuItems = secondaryMenu.map((item) => {
+    const absoluteLink = `/authorized/${session?.userId ?? ""}/${caseIdMock}/${item.link}`
+    const newItem = {
+      ...item,
+      link: absoluteLink
+    }
+    return newItem
+  })
+
+  if (!session) {
+    menuItems = [
+      {
+        label: "Sign In",
+        link: "/",
+      }
+    ]
+  }
+
   return (
     <nav className="navbar p-2 bg-base-100 border-b border-neutral shadow fixed z-10">
       <div className="dropdown">
@@ -47,7 +66,7 @@ const Navbar = () => {
           tabIndex={0}
           className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
         >
-          <MenuContent menuItems={secondaryMenu} />
+          <MenuContent menuItems={menuItems} />
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
@@ -62,7 +81,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-center hidden md:flex flex-1">
         <ul className="menu menu-horizontal px-1">
-          {secondaryMenu.map((menuItem) => (
+          {menuItems.map((menuItem) => (
             <li key={menuItem.label}>
               {!menuItem.subItems ? (
                 <Link href={menuItem.link}>{menuItem.label}</Link>

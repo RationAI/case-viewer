@@ -1,8 +1,8 @@
 import React from "react";
-import FileBrowseInput from "../components/Upload/FileBrowseInput";
-import Form from "../components/Upload/Form/Form";
+import FileBrowseInput from "../../../../components/Upload/FileBrowseInput";
+import Form from "../../../../components/Upload/Form/Form";
 import { FormConfigT } from "@/type-definitions";
-import UploadButtonsAndProgress from "../components/Upload/UploadButtonsAndProgress";
+import UploadButtonsAndProgress from "../../../../components/Upload/UploadButtonsAndProgress";
 
 const formConfigExample: FormConfigT = {
   title: "Title",

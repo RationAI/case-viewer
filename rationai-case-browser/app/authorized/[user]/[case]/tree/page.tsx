@@ -1,5 +1,5 @@
 import React from 'react'
-import FileTree from '../../components/FileTree'
+import FileTree from '../../../../components/FileTree'
 
 const UserFiles = () => {
   return (

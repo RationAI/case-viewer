@@ -1,5 +1,5 @@
 import React from 'react'
-import Table from '../components/Projects/Table'
+import Table from '../../../components/Projects/Table'
 import { FolderStructureT } from '@/type-definitions';
 
 const currentDate = new Date();
@@ -87,12 +87,17 @@ const exampleFolder: FolderStructureT = {
   ]
 }
 
-const rootPath = '/files';
+const ProjectFiles = ({ params }: { params: { user: string, case: string } }) => {
+  const rootPathOfCase = `/authorized/${params.user}/${params.case}`;
 
-const ProjectFiles = () => {
+  // TODO probably set caseId in some global state, for the sake of links in Navbar
+
+  // TODO here should be a call to get contents of CASE
+
   return (
     <div>
-      <Table rootPath={rootPath} folderStructure={exampleFolder}/>
+      <div>Case ID: {params.case}</div>
+      <Table rootPath={rootPathOfCase} folderStructure={exampleFolder}/>
     </div>
   )
 }
