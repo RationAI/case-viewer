@@ -1,24 +1,6 @@
+import { OAuthRefreshResponse, OAuthToken } from "@/type-definitions"
 import NextAuth, { NextAuthOptions } from "next-auth"
-import { JWT } from "next-auth/jwt";
 import KeycloakProvider from "next-auth/providers/keycloak"
-
-interface OAuthToken extends JWT {
-  accessToken?: string;
-  accessTokenExpires: number;
-  refreshToken?: string;
-}
-
-interface OAuthRefreshResponse {
-  access_token: string;
-  expires_in: number;
-  refresh_expires_in: number;
-  refresh_token: string;
-  token_type: string;
-  id_token: string;
-  'not-before-policy': number;
-  session_state: string;
-  scope: string;
-}
 
 async function refreshAccessToken(token: OAuthToken) {
   try {
@@ -34,7 +16,7 @@ async function refreshAccessToken(token: OAuthToken) {
           })
 
     const refreshedTokens: OAuthRefreshResponse = await response.json()
-    console.log("Refreshing token")
+    console.log("Refreshing token in callback")
 
     if (!response.ok) {
       throw refreshedTokens
@@ -92,6 +74,7 @@ export const authOptions: NextAuthOptions = {
       console.log(Date.now())
       console.log((token as OAuthToken).accessTokenExpires)
 
+      console.log("Token check in JWT callback")
       // Return previous token if the access token has not expired yet
       if (Date.now() < (token as OAuthToken).accessTokenExpires) {
         console.log("Access Token still valid")
