@@ -5,6 +5,13 @@ import './globals.css'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import SessionProvider from "./components/SessionProvider/SessionProvider";
+import { server } from './mocks/node'
+ 
+server.listen()
+
+server.events.on('request:start', ({ request }) => {
+  console.log('MSW intercepted:', request.headers, request.method, request.url)
+})
 
 const inter = Inter({ subsets: ['latin'] })
 
