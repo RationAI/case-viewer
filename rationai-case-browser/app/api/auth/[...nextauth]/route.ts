@@ -7,10 +7,10 @@ async function refreshAccessToken(token: OAuthToken) {
     const response = await fetch(process.env.KEYCLOAK_TOKEN_ENDPOINT!, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
-              client_id: process.env.KEYCLOAK_ID ?? "",
+              client_id: process.env.KEYCLOAK_ID || "",
               // client_secret: process.env.KEYCLOAK_SECRET,
               grant_type: "refresh_token",
-              refresh_token: token.refreshToken ?? "",
+              refresh_token: token.refreshToken || "",
             }),
             method: "POST",
           })
@@ -71,8 +71,6 @@ export const authOptions: NextAuthOptions = {
         console.log("Initial sign in")
         return token
       }
-      console.log(Date.now())
-      console.log((token as OAuthToken).accessTokenExpires)
 
       console.log("Token check in JWT callback")
       // Return previous token if the access token has not expired yet
@@ -90,7 +88,6 @@ export const authOptions: NextAuthOptions = {
       session = Object.assign({}, session, {accessTokenExpires: token.accessTokenExpires})
       session = Object.assign({}, session, {refreshToken: token.refreshToken})
       session = Object.assign({}, session, {userId: token.sub})
-      console.log(session);
       }
     return session
     }

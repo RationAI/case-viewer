@@ -8,10 +8,10 @@ async function refreshAccessToken(token: OAuthToken): Promise<OAuthToken> {
     const response = await fetch(process.env.KEYCLOAK_TOKEN_ENDPOINT!, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
-              client_id: process.env.KEYCLOAK_ID ?? "",
+              client_id: process.env.KEYCLOAK_ID || "",
               // client_secret: process.env.KEYCLOAK_SECRET,
               grant_type: "refresh_token",
-              refresh_token: token.refreshToken ?? "",
+              refresh_token: token.refreshToken || "",
             }),
             method: "POST",
           })
@@ -65,19 +65,14 @@ export const middleware: NextMiddleware = async (request: NextRequest) => {
 
   const token = await getToken({ req: request });
 
-  console.log(token)
-  console.log(Date.now())
-
   if (!token) return signOut(request);
 
-  const response = NextResponse.next();
+  let response;
 
   console.log("Token check in middleware")
 
   if (shouldUpdateToken(token as OAuthToken)) {
     const newToken = await refreshAccessToken(token as OAuthToken);
-
-    console.log(newToken)
 
     const newSessionToken = await encode({
       secret: process.env.NEXTAUTH_SECRET as string,
@@ -90,7 +85,15 @@ export const middleware: NextMiddleware = async (request: NextRequest) => {
 
     request.cookies.set(sessionCookie, newSessionToken)
 
+    response = NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+
     response.cookies.set(sessionCookie, newSessionToken)
+  } else {
+    response = NextResponse.next()
   }
 
   return response;

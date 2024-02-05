@@ -24,13 +24,6 @@ const secondaryMenu: MenuItemT[] = [
   },
 ];
 
-const userMenu: MenuItemT[] = [
-    {
-      label: "Profile",
-      link: "/",
-    },
-  ];
-
 const Navbar = () => {
   const { data: session } = useSession()
 
@@ -46,6 +39,13 @@ const Navbar = () => {
     }
     return newItem
   })
+
+  const userMenu: MenuItemT[] = [
+    {
+      label: "Profile",
+      link: `/authorized/${session?.userId}`,
+    },
+  ];
 
   if (!session) {
     menuItems = [
