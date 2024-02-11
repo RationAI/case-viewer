@@ -46,11 +46,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.KEYCLOAK_SECRET || "",
       issuer: process.env.KEYCLOAK_ISSUER,
       //client: {
-      //  redirect_uris: [process.env.REDIRECT_URI || ""]
+      //  redirect_uris: [process.env.KEYCLOAK_REDIRECT_URI || ""]
       //},
       authorization: {
         params: {
-          scope: process.env.OIDC_SCOPE,
+          scope: process.env.KEYCLOAK_OIDC_SCOPE,
         }
       }
     })

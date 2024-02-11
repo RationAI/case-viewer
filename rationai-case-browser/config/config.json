@@ -1,0 +1,8 @@
+{
+  "project": "",
+  "local_id_separator": "[\\s\\S]*",
+  "local_id_hint": "This is default separator, overwrite it for your projects local_id",
+  "hierarchy_spec": ["year", "month"],
+  
+  "searchKeys": []
+}

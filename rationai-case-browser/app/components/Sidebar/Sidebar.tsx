@@ -1,29 +1,46 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import MenuContent from "../MenuContent/MenuContent";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { getCaseSearchResult } from "@/app/utils";
+import { MenuItemT } from "@/type-definitions";
 
-const primaryMenu = [
+type Props = {
+  children: React.ReactNode;
+}
+
+const defaultMenu = [
   {
-    label: "Projects",
-    link: "/files",
+    label: "Cases",
+    link: "/",
     icon: "/svg/projects.svg",
-    subItems: [
-      {
-        label: "Project 1",
-        link: "/files",
-      },
-      {
-        label: "Project 2",
-        link: "/files",
-      },
-    ],
+    subItems: [],
   },
 ];
 
-const Sidebar = () => {
-  const [extended, setExtended] = useState(true);
+const Sidebar = ({children}: Props) => {
+  const { data: session } = useSession()
+  const [extended, setExtended] = useState(false);
+  const [sidebarMenu, setSidebarMenu] = useState<MenuItemT[]>(defaultMenu)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cases = await getCaseSearchResult(session!, []);
+      const newMenu = sidebarMenu
+      newMenu[0].link = `/authorized/${session?.userId}`
+      newMenu[0].subItems = cases?.map((caseObj) => {
+        return { label: caseObj.id, link: `/authorized/cases/${caseObj.id}`}
+      })
+      setSidebarMenu(newMenu)
+    };
+
+    if (session?.accessToken) {
+      fetchData()
+    } else {
+      setSidebarMenu(defaultMenu)
+    }
+  }, [session, sidebarMenu])
 
   return (
     <aside
@@ -32,22 +49,24 @@ const Sidebar = () => {
         (extended ? " min-w-[13rem]" : "")
       }
     >
-      <div className="navbar-center p-2 w-full flex-1">
+      <div className="navbar-center pt-1 p-[2px] w-full flex-1">
         {extended ? (
-          <ul className="menu xl:menu-vertical lg:min-w-max bg-gray-50 rounded-lg">
-            <MenuContent menuItems={primaryMenu} />
-          </ul>
+          <div>
+            {children}
+          </div>
         ) : (
           <ul className="menu p-0 min-w-max">
-            {primaryMenu.map((menuItem) => (
+            {sidebarMenu.map((menuItem) => (
               <li key={menuItem.label}>
                 <Link href={menuItem.link}>
-                  <Image
-                    src={menuItem.icon}
-                    alt={menuItem.label}
-                    height={35}
-                    width={35}
-                  />
+                  {menuItem.icon &&
+                    <Image
+                      src={menuItem.icon}
+                      alt={menuItem.label}
+                      height={30}
+                      width={30}
+                    />
+                  }
                 </Link>
               </li>
             ))}

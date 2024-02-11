@@ -11,17 +11,19 @@ const MenuContent = ({ menuItems }: Props) => {
   return (
     <>
       {menuItems.map((menuItem) => (
-        <li key={menuItem.label}>
-          <Link href={menuItem.link} className="text-base">
+        <li key={menuItem.label} className="w-[100%]">
+          <Link href={menuItem.link} className="text-base max-w-[100%]">
             {menuItem.icon &&
               <Image src={menuItem.icon} alt={menuItem.label} height={25} width={25} />
             }
             {menuItem.label}</Link>
           {menuItem.subItems && (
-            <ul>
+            <ul className="w-[90%]">
               {menuItem.subItems.map((subItem) => (
-                <li key={subItem.label}>
-                  <Link href={subItem.link}>{subItem.label}</Link>
+                <li key={subItem.label} className="max-w-[100%]">
+                  <Link href={subItem.link} className="max-w-[100%]">
+                    <div className="truncate">{subItem.label}</div>
+                  </Link>
                 </li>
               ))}
             </ul>

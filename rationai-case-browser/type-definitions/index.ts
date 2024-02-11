@@ -1,5 +1,14 @@
 import { JWT } from "next-auth/jwt";
 
+export type AppConfigT = {
+  project?: string,
+  local_id_separator?: string,
+  local_id_hint?: string,
+  hierarchy_spec?: string[],
+  
+  searchKeys?: string[],
+}
+
 export type MenuItemT = {
   label: string,
   link: string,
@@ -12,24 +21,16 @@ type SubMenuItemT = {
   link: string,
 }
 
-export type FileTreeStructureT = {
+export type TableStructureT = {
   name: string,
-  path: string,
-  folder: boolean,
-  extension?: string,
-  items?: FileTreeStructureT[],
-}
-
-export type FolderStructureT = {
-  name: string,
-  link: string,
   parent?: string,
-  subFolders: SubFolderT[],
-  files: FileT[],
+  cases: TableCaseT[],
+  slides: TableSlideT[],
 };
 
-type SubFolderT = {
+type TableCaseT = {
   name: string,
+  desc?: string,
   link: string,
 };
 
@@ -37,7 +38,7 @@ type MetadataT = {
   [key: string]: string,
 }
 
-export type FileT = {
+export type TableSlideT = {
   uuid: string,
   name: string,
   path: string,

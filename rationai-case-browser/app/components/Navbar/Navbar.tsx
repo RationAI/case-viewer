@@ -32,7 +32,7 @@ const Navbar = () => {
   const caseIdMock = "caseId-123456";
 
   let menuItems = secondaryMenu.map((item) => {
-    const absoluteLink = `/authorized/${session?.userId ?? ""}/${caseIdMock}/${item.link}`
+    const absoluteLink = `/authorized/cases/${caseIdMock}/${item.link}`
     const newItem = {
       ...item,
       link: absoluteLink
@@ -57,7 +57,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar p-2 bg-base-100 border-b border-neutral shadow fixed z-10">
+    <nav className="navbar px-2 p-0 bg-base-100 border-b border-neutral shadow fixed z-10 min-h-[3.5rem]">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost md:hidden">
           <Image src="/svg/menu.svg" alt="Menu" height={25} width={25} />
@@ -74,13 +74,13 @@ const Navbar = () => {
           <Image
             src='/svg/rationai-color.svg'
             alt='RationAI'
-            height={130}
-            width={130}
+            height={120}
+            width={120}
           />
         </Link>
       </div>
       <div className="navbar-center hidden md:flex flex-1">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 py-0">
           {menuItems.map((menuItem) => (
             <li key={menuItem.label}>
               {!menuItem.subItems ? (
@@ -103,9 +103,9 @@ const Navbar = () => {
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <Image src="/svg/user2.svg" alt="User" height={10} width={10} />
+          <label tabIndex={0} className="btn btn-circle btn-md avatar">
+            <div className="w-8 rounded-full">
+              <Image src="/svg/user2.svg" alt="User" height={8} width={8} />
             </div>
           </label>
           <ul

@@ -1,4 +1,4 @@
-import { FileT } from "@/type-definitions";
+import { TableSlideT } from "@/type-definitions";
 import React from "react";
 import Image from "next/image";
 import ImageGrid from "./FileRowParts/ImageGrid";
@@ -6,7 +6,7 @@ import FileRowActions from "./FileRowParts/FileRowActions";
 import FileRowSelect from "./FileRowParts/FileRowSelect";
 
 type Props = {
-  file: FileT;
+  file: TableSlideT;
   rowNo: number;
 };
 

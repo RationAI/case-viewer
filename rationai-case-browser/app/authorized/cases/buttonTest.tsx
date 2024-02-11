@@ -1,5 +1,5 @@
 'use client'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { getCurrentUsersCases } from '@/app/utils'

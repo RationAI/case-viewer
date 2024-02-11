@@ -1,14 +1,13 @@
 import React from 'react'
-import Table from '../../../components/Projects/Table'
-import { FolderStructureT } from '@/type-definitions';
+import Table from '../../../../components/Projects/Table'
+import { TableStructureT } from '@/type-definitions';
 
 const currentDate = new Date();
 const timestamp = currentDate.toISOString();
 
-const exampleFolder: FolderStructureT = {
-  name: 'root',
-  link: '/',
-  subFolders: [
+const exampleFolder: TableStructureT = {
+  name: 'folder',
+  cases: [
     {
       name: 'project1',
       link: '/project1'
@@ -22,7 +21,7 @@ const exampleFolder: FolderStructureT = {
       link: '/project3'
     },
   ],
-  files: [
+  slides: [
     {
       uuid: 'dasdiasuidasodisnasodsa',
       name: 'report.pdf',
@@ -97,7 +96,7 @@ const ProjectFiles = ({ params }: { params: { user: string, case: string } }) =>
   return (
     <div>
       <div>Case ID: {params.case}</div>
-      <Table rootPath={rootPathOfCase} folderStructure={exampleFolder}/>
+      <Table tableStructure={exampleFolder}/>
     </div>
   )
 }
