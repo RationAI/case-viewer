@@ -36,7 +36,7 @@ export default async function RootLayout({
           <div className="flex overflow-clip pt-[3.5rem] h-screen">
             <Sidebar>
               {hierarchy ? 
-                <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={hierarchy} includeCases={true} /> :
+                <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={hierarchy} /> :
                 <div>Log in to see your cases</div>
               }
             </Sidebar>

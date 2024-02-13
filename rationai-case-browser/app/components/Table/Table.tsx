@@ -11,7 +11,21 @@ const Table = ({ tableStructure }: Props) => {
   return (
     <div className="overflow-x-auto p-3">
       <div className='font-sans font-semibold text-slate-500 text-xl pl-2'>{tableStructure.name}</div>
-      {tableStructure.cases.length > 0 &&
+      {tableStructure.folders &&
+        <div className="flex flex-col gap-1">
+          {tableStructure.parent && (
+            <FolderRow name=".." link={tableStructure.parent} />
+          )}
+          {tableStructure.folders.map((caseObj) => (
+            <FolderRow
+              key={caseObj.link}
+              name={caseObj.name}
+              link={caseObj.link}
+            />
+          ))}
+        </div>
+      }
+      {tableStructure.cases &&
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (
             <FolderRow name=".." link={tableStructure.parent} />
@@ -26,7 +40,7 @@ const Table = ({ tableStructure }: Props) => {
           ))}
         </div>
       }
-      {tableStructure.slides.length > 0 &&
+      {tableStructure.slides &&
         <div className="flex-col">
           <div className="flex gap-4 font-sans font-semibold text-slate-500 pl-4 pr-12">
             <div className="min-w-[7rem] text-center">Preview</div>

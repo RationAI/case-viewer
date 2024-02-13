@@ -1,5 +1,5 @@
 import React from 'react'
-import Table from '../../../../components/Projects/Table'
+import Table from '../../../../components/Table/Table'
 import { TableStructureT } from '@/type-definitions';
 
 const currentDate = new Date();

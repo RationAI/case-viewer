@@ -24,11 +24,17 @@ type SubMenuItemT = {
 export type TableStructureT = {
   name: string,
   parent?: string,
-  cases: TableCaseT[],
-  slides: TableSlideT[],
+  folders?: TableFolderRowT[],
+  cases?: TableCaseRowT[],
+  slides?: TableSlideRowT[],
 };
 
-type TableCaseT = {
+type TableFolderRowT = {
+  name: string,
+  link: string,
+}
+
+type TableCaseRowT = {
   name: string,
   desc?: string,
   link: string,
@@ -38,7 +44,7 @@ type MetadataT = {
   [key: string]: string,
 }
 
-export type TableSlideT = {
+export type TableSlideRowT = {
   uuid: string,
   name: string,
   path: string,

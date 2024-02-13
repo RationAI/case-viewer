@@ -10,10 +10,10 @@ type Props = {
   children: React.ReactNode;
 }
 
-const defaultMenu = [
+const sidebarIconMenu = [
   {
     label: "Cases",
-    link: "/",
+    link: "/authorized/cases/path",
     icon: "/svg/projects.svg",
     subItems: [],
   },
@@ -22,7 +22,7 @@ const defaultMenu = [
 const Sidebar = ({children}: Props) => {
   const { data: session } = useSession()
   const [extended, setExtended] = useState(false);
-  const [sidebarMenu, setSidebarMenu] = useState<MenuItemT[]>(defaultMenu)
+  /* const [sidebarMenu, setSidebarMenu] = useState<MenuItemT[]>(sidebarIconMenu)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,9 +38,9 @@ const Sidebar = ({children}: Props) => {
     if (session?.accessToken) {
       fetchData()
     } else {
-      setSidebarMenu(defaultMenu)
+      setSidebarMenu(sidebarIconMenu)
     }
-  }, [session, sidebarMenu])
+  }, [session, sidebarMenu]) */
 
   return (
     <aside
@@ -56,7 +56,7 @@ const Sidebar = ({children}: Props) => {
           </div>
         ) : (
           <ul className="menu p-0 min-w-max">
-            {sidebarMenu.map((menuItem) => (
+            {sidebarIconMenu.map((menuItem) => (
               <li key={menuItem.label}>
                 <Link href={menuItem.link}>
                   {menuItem.icon &&
