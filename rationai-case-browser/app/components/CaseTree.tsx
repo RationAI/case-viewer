@@ -20,8 +20,10 @@ const CaseTree = async ({root, rootLink, hierarchy }: Props) => {
           hierarchy.items as CaseHierarchy[]).map((item) => (
             <li key={item.levelName} className="max-w-full truncate">
               <details open={!item.items[0].local_id} className="max-w-full *:open:after:rotate-[-135deg]">
-                <summary className="flex flex-row-reverse justify-end">
-                  <div className="truncate">{item.levelName}</div>
+                <summary className="flex flex-row-reverse justify-end py-0 active:!bg-gray-50 hover:bg-gray-50">
+                  <Link href={`${rootLink}/${item.levelName}`} className="flex-1">
+                    <div className="truncate hover:bg-gray-200 rounded-md px-[0.375rem] py-[0.25rem]">{item.levelName}</div>
+                  </Link>
                   {/* <Image
                       src='/file_icons/folder.svg'
                       alt='Folder'

@@ -7,20 +7,6 @@ const timestamp = currentDate.toISOString();
 
 const exampleFolder: TableStructureT = {
   name: 'folder',
-  cases: [
-    {
-      name: 'project1',
-      link: '/project1'
-    },
-    {
-      name: 'project2',
-      link: '/project2'
-    },
-    {
-      name: 'project3',
-      link: '/project3'
-    },
-  ],
   slides: [
     {
       uuid: 'dasdiasuidasodisnasodsa',

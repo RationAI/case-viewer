@@ -6,13 +6,14 @@ import { MenuItemT } from "@/type-definitions";
 import Link from "next/link";
 import Image from "next/image";
 import MenuContent from "../MenuContent/MenuContent";
+import UserBubble from "./UserBubble";
 
 const homeLink = "/";
 
 const secondaryMenu: MenuItemT[] = [
   {
-    label: "Files",
-    link: "",
+    label: "Cases",
+    link: "cases/path",
   },
   {
     label: "Upload",
@@ -27,12 +28,8 @@ const secondaryMenu: MenuItemT[] = [
 const Navbar = () => {
   const { data: session } = useSession()
 
-  // TODO get current caseId ?from state?
-
-  const caseIdMock = "caseId-123456";
-
   let menuItems = secondaryMenu.map((item) => {
-    const absoluteLink = `/authorized/cases/${caseIdMock}/${item.link}`
+    const absoluteLink = `/authorized/${item.link}`
     const newItem = {
       ...item,
       link: absoluteLink
@@ -40,20 +37,8 @@ const Navbar = () => {
     return newItem
   })
 
-  const userMenu: MenuItemT[] = [
-    {
-      label: "Profile",
-      link: `/authorized/${session?.userId}`,
-    },
-  ];
-
   if (!session) {
-    menuItems = [
-      {
-        label: "Sign In",
-        link: "/",
-      }
-    ]
+    menuItems = []
   }
 
   return (
@@ -101,21 +86,7 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-none">
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-circle btn-md avatar">
-            <div className="w-8 rounded-full">
-              <Image src="/svg/user2.svg" alt="User" height={8} width={8} />
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-          >
-            <MenuContent menuItems={userMenu} />
-          </ul>
-        </div>
-      </div>
+      <UserBubble />
     </nav>
   );
 };

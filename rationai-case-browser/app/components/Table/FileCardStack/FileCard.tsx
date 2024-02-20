@@ -4,7 +4,7 @@ import Image from "next/image";
 const FileCard = () => {
   return (
     <div className="card w-full bg-base-100 border border-base-content">
-      <figure className="px-4 pt-4">
+      <figure>
         <Image
           className="object-cover block m-auto"
           src="/file_icons/image_file.svg"

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import Table from "@/app/components/Projects/Table";
+import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
 import { getCaseSearchResult } from "@/app/utils/data";
 import { createSearchQueryFromUrl } from "@/app/utils/utilities";

@@ -1,46 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { getCaseSearchResult } from "@/app/utils";
-import { MenuItemT } from "@/type-definitions";
 
 type Props = {
   children: React.ReactNode;
 }
 
-const sidebarIconMenu = [
-  {
-    label: "Cases",
-    link: "/authorized/cases/path",
-    icon: "/svg/projects.svg",
-    subItems: [],
-  },
-];
-
 const Sidebar = ({children}: Props) => {
-  const { data: session } = useSession()
   const [extended, setExtended] = useState(false);
-  /* const [sidebarMenu, setSidebarMenu] = useState<MenuItemT[]>(sidebarIconMenu)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const cases = await getCaseSearchResult(session!, []);
-      const newMenu = sidebarMenu
-      newMenu[0].link = `/authorized/${session?.userId}`
-      newMenu[0].subItems = cases?.map((caseObj) => {
-        return { label: caseObj.id, link: `/authorized/cases/${caseObj.id}`}
-      })
-      setSidebarMenu(newMenu)
-    };
-
-    if (session?.accessToken) {
-      fetchData()
-    } else {
-      setSidebarMenu(sidebarIconMenu)
-    }
-  }, [session, sidebarMenu]) */
+  const sidebarIconMenu = [
+    {
+      label: "Cases",
+      onClick: () => setExtended(true),
+      icon: "/svg/projects.svg",
+      subItems: [],
+    },
+  ];
 
   return (
     <aside
@@ -58,7 +34,7 @@ const Sidebar = ({children}: Props) => {
           <ul className="menu p-0 min-w-max">
             {sidebarIconMenu.map((menuItem) => (
               <li key={menuItem.label}>
-                <Link href={menuItem.link}>
+                <div onClick={menuItem.onClick}>
                   {menuItem.icon &&
                     <Image
                       src={menuItem.icon}
@@ -67,7 +43,7 @@ const Sidebar = ({children}: Props) => {
                       width={30}
                     />
                   }
-                </Link>
+                </div>
               </li>
             ))}
           </ul>

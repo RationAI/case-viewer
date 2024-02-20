@@ -26,7 +26,7 @@ export default function AuthForm({ provider }: Props) {
       )}
 
       {session && <button className='btn btn-sm btn-outline font-sans' onClick={handleSignOut}>Sign out</button>}
-      <div className='break-words'>{JSON.stringify(session) ?? ""}</div>
+      {/* <div className='break-words'>{JSON.stringify(session) ?? ""}</div> */}
     </div>
   );
 }
