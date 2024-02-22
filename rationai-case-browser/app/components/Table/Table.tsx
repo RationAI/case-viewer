@@ -41,16 +41,22 @@ const Table = ({ tableStructure }: Props) => {
         </div>
       }
       {tableStructure.slides &&
-        <div className="flex-col">
+        <div className="flex flex-col gap-1">
           <div className="flex gap-4 font-sans font-semibold text-slate-500 pr-12">
             <div className="min-w-[8rem] text-center">Preview</div>
             <div className="flex-1 px-1 min-w-[18rem]">Info</div>
             <div className="min-w-[12.5rem] text-center">Masks</div>
-            <div className="min-w-[7rem] text-center">Annotations</div>
+            <div className="min-w-[5rem] text-center">Annot</div>
             <div className="min-w-[4rem] text-center">Actions</div>
           </div>
           {tableStructure.slides.map((slide, idx) => (
-            <FileRow key={slide.uuid} file={slide} rowNo={idx}/>
+            <div key={idx} className="flex flex-col gap-1">
+              <FileRow key={slide.uuid} file={slide} rowNo={idx}/>
+              <FileRow key={slide.uuid + "1"} file={slide} rowNo={idx + 1}/>
+              <FileRow key={slide.uuid + "2"} file={slide} rowNo={idx + 2}/>
+              <FileRow key={slide.uuid + "3"} file={slide} rowNo={idx + 3}/>
+              <FileRow key={slide.uuid + "4"} file={slide} rowNo={idx + 4}/>
+            </div>
           ))}
         </div>
       }

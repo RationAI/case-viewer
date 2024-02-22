@@ -14,11 +14,11 @@ type Props = {
 const FileRow = ({ file, rowNo }: Props) => {
 
   return (
-    <div key={file.path} className="collapse bg-gray-100 collapse-arrow rounded-lg overflow-visible">
+    <div key={file.path + rowNo.toString()} className="collapse bg-gray-100 collapse-arrow rounded-lg overflow-visible">
       <input type="checkbox" />
       <div className="collapse-title flex flex-row gap-4 py-0 pl-0">
-        <ImagePreview modalId="modalId" imageLink="https://fastly.picsum.photos/id/353/1000/1600.jpg?hmac=6lprb8McnS7Y-BtUjqLG8LN-dkqECqIkwHrpY4g5SUE" />
-        <div className="flex-1 flex flex-row gap-4 py-[0.375rem]">
+        <ImagePreview modalId={"modalId" + rowNo.toString()} imageLink="https://fastly.picsum.photos/id/353/1000/1600.jpg?hmac=6lprb8McnS7Y-BtUjqLG8LN-dkqECqIkwHrpY4g5SUE" />
+        <div className="flex-1 flex flex-row gap-4">
           <div className="flex flex-col justify-center min-w-[18rem] flex-1 px-2 py-2">
             <p className="font-bold">{file.name}</p>
             <p className="">{file.created}</p>
@@ -50,7 +50,7 @@ const FileRow = ({ file, rowNo }: Props) => {
           ))}
         </div>
       </div>
-      <ModalImagePreview modalId="modalId" imageLink="https://fastly.picsum.photos/id/353/1000/1600.jpg?hmac=6lprb8McnS7Y-BtUjqLG8LN-dkqECqIkwHrpY4g5SUE" />
+      <ModalImagePreview modalId={"modalId" + rowNo.toString()} imageLink="https://fastly.picsum.photos/id/353/1000/1600.jpg?hmac=6lprb8McnS7Y-BtUjqLG8LN-dkqECqIkwHrpY4g5SUE" />
     </div>
   );
 };

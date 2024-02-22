@@ -20,7 +20,7 @@ const UserBubble = () => {
   const userMenu: MenuItemT[] = [
     {
       label: "Profile",
-      link: `/authorized/${session?.userId}`,
+      link: `/authorized/user`,
     },
   ];
   if (!session) {
