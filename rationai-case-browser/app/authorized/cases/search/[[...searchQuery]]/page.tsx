@@ -5,11 +5,18 @@ import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
 import { getCaseSearchResult } from "@/app/utils/data";
 import { createSearchQueryFromUrl } from "@/app/utils/utilities";
+import CaseSearchForm from "@/app/components/CaseSearchForm/CaseSearchForm";
 
-export default async function CaseSearchResultPage({ params }: { params: { searchQuery: string[] } }) {
+export default async function CaseSearchResultPage({ params }: { params: { searchQuery?: string[] } }) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect("/");
+  }
+
+  if(!params.searchQuery) {
+    return (
+      <CaseSearchForm session={session} />
+    )
   }
 
   const query = createSearchQueryFromUrl(params.searchQuery)
@@ -17,7 +24,7 @@ export default async function CaseSearchResultPage({ params }: { params: { searc
   if(query === null) {
     return (
       <div>
-        <div>Invalid search URL</div>
+        <div>Invalid search</div>
       </div>
     )
   }

@@ -1,98 +1,7 @@
 import React from "react";
 import FileBrowseInput from "../../components/Upload/FileBrowseInput";
-import Form from "../../components/Upload/Form/Form";
-import { FormConfigT } from "@/type-definitions";
 import UploadButtonsAndProgress from "../../components/Upload/UploadButtonsAndProgress";
-
-const formConfigExample: FormConfigT = {
-  title: "Title",
-  description:
-    "saasdnasndnaiosndionsaond inaiondnsadn naicnsadnas iainasndisa inaionias niadasdsa d sad asd asd a s dasdsadasd dasdasdas da",
-  rows: [
-    {
-      fields: [
-        {
-          type: "select",
-          fieldID: "0",
-          label: "Select",
-          defaultValue: "one",
-          description: "inionsdnasndnakasmdas",
-          options: [
-            "one",
-            "two",
-            "three",
-            "longer-option",
-            "four",
-            "five",
-            "six",
-          ],
-        },
-        {
-          type: "text",
-          fieldID: "1",
-          label: "Text",
-          defaultValue: "",
-        },
-      ],
-    },
-    {
-      fields: [
-        {
-          type: "text",
-          fieldID: "2",
-          label: "Text",
-          defaultValue: "",
-        },
-      ],
-    },
-    {
-      fields: [
-        {
-          type: "text",
-          fieldID: "3",
-          label: "Text",
-          defaultValue: "",
-        },
-      ],
-    },
-    {
-      fields: [
-        {
-          type: "select",
-          fieldID: "4",
-          label: "Select",
-          defaultValue: "one",
-          description: "inionsdnasndnakasmdas",
-          options: [
-            "one",
-            "two",
-            "three",
-            "longer-option",
-            "four",
-            "five",
-            "six",
-          ],
-        },
-      ],
-    },
-    {
-      fields: [
-        {
-          type: "text",
-          fieldID: "5",
-          label: "Text",
-          defaultValue: "",
-        },
-        {
-          type: "text",
-          fieldID: "6",
-          label: "Text",
-          defaultValue: "",
-        },
-      ],
-    },
-  ],
-};
+import UploadForm from "@/app/components/Upload/UploadForm";
 
 const UploadPage = () => {
   return (
@@ -109,7 +18,7 @@ const UploadPage = () => {
             <FileBrowseInput />
           </div>
           <div className="w-2/3 flex flex-col items-center gap-8">
-            <Form config={formConfigExample} formID="uploadForm" />
+            <UploadForm />
             <UploadButtonsAndProgress formID="uploadForm"/>
           </div>
         </div>

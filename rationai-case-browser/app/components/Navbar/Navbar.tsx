@@ -12,8 +12,8 @@ const homeLink = "/";
 
 const secondaryMenu: MenuItemT[] = [
   {
-    label: "Cases",
-    link: "cases/path",
+    label: "Search",
+    link: "cases/search",
   },
   {
     label: "Upload",

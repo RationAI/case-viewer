@@ -97,13 +97,19 @@ type FormRowT = {
   fields: FormFieldT[];
 }
 
-type FormFieldT = FormSelectFieldT | FormTextFieldT;
+export type FormFieldT = FormSelectFieldT | FormTextFieldT | FormNumberFieldT;
 
 export type FormSelectFieldT = FormFieldBaseT & {
   options: string[];
 }
 
 export type FormTextFieldT = FormFieldBaseT;
+
+export type FormNumberFieldT = FormFieldBaseT & {
+  minValue?: string;
+  maxValue?: string;
+  step?: string;
+};
 
 type FormFieldBaseT = {
   type: string;

@@ -51,6 +51,30 @@ export const getCaseSearchResult = async (session: Session, query: CaseSearchPar
   return result
 }
 
+export const getAllTissues = async (session: Session) => {
+  const explorer = await getCaseExplorer(session)
+  let result: string[] = [];
+  try {
+    result = (await explorer.tissues())
+  } catch (e) {
+    return null
+  }
+ 
+  return result
+}
+
+export const getAllStains = async (session: Session) => {
+  const explorer = await getCaseExplorer(session)
+  let result: string[] = [];
+  try {
+    result = (await explorer.stains())
+  } catch (e) {
+    return null
+  }
+ 
+  return result
+}
+
 export const getSlideThumbnailURL = async (session: Session, slideId: string) => {
   const api = await getRootApi(session)
   const thumbnail = await api.slides.slideThumbnail("8c5608f3-a824-485c-b791-2a640405d87b", 500, 500)
