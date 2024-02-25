@@ -4,8 +4,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getUserCaseHierarchy } from "@/app/utils";
 import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
-import { CaseHierarchy } from "lib-empationapi/src/v3/extensions/types/case-hierarchy-result";
-import { Case } from "lib-empationapi/src/v3/root/types/case";
+import { CaseHierarchy } from "@/../EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
+import { Case } from "@/../EmpationAPI/src/v3/root/types/case"
 
 const basePageLink = '/authorized/cases'
 

@@ -1,10 +1,10 @@
 import { Session } from 'next-auth';
 import { cache } from 'react'
-import { V3 } from 'lib-empationapi/src';
+import { V3 } from '../../../EmpationAPI/src';
 import { getHierarchySpec, getIdentifierSeparator } from './config';
-import { CaseHierarchy } from 'lib-empationapi/src/v3/extensions/types/case-hierarchy-result';
-import { CaseSearchParams } from 'lib-empationapi/src/v3/extensions/types/case-search-params';
-import { Case } from 'lib-empationapi/src/v3/root/types/case';
+import { CaseHierarchy } from '@/../EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
+import { CaseSearchParams } from '@/../EmpationAPI/src/v3/extensions/types/case-search-params';
+import { Case } from '@/../EmpationAPI/src/v3/root/types/case';
 
 export const getRootApi = async (session: Session) => {
 

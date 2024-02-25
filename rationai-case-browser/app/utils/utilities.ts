@@ -1,4 +1,4 @@
-import { CaseSearchParams } from "lib-empationapi/src/v3/extensions/types/case-search-params";
+import { CaseSearchParams } from "@/../EmpationAPI/src/v3/extensions/types/case-search-params";
 
 export const getRandomString = (length: number) => {
   const randomString = Math.random().toString(10);

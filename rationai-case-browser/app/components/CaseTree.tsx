@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CaseHierarchy } from "lib-empationapi/src/v3/extensions/types/case-hierarchy-result";
-import { Case } from "lib-empationapi/src/v3/root/types/case";
+import { CaseHierarchy } from "@/../EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
+import { Case } from "@/../EmpationAPI/src/v3/root/types/case"
 
 type Props = {
   root: boolean,

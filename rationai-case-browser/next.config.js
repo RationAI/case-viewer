@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  transpilePackages: ['lib-empationapi'],
+  transpilePackages: ['lib-empationapi', '../EmpationAPI'],
   images: {
     remotePatterns: [
       {
