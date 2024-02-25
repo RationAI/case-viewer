@@ -20,8 +20,8 @@ export const getRootApi = async (session: Session) => {
 
 export const getCaseExplorer = async (session: Session) => {
   const api = await getRootApi(session)
-  api.cases.explorer.use(getIdentifierSeparator())
-  return api.cases.explorer
+  api.cases.caseExplorer.use(getIdentifierSeparator())
+  return api.cases.caseExplorer
 }
 
 export const getUserCaseHierarchy = async (session: Session) => {
@@ -49,4 +49,10 @@ export const getCaseSearchResult = async (session: Session, query: CaseSearchPar
   }
  
   return result
+}
+
+export const getSlideThumbnailURL = async (session: Session, slideId: string) => {
+  const api = await getRootApi(session)
+  const thumbnail = await api.slides.slideThumbnail("8c5608f3-a824-485c-b791-2a640405d87b", 500, 500)
+  return URL.createObjectURL(thumbnail)
 }

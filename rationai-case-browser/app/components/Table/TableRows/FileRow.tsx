@@ -3,7 +3,6 @@ import React from "react";
 import ImageGrid from "./FileRowParts/ImageGrid";
 import FileRowActions from "./FileRowParts/FileRowActions";
 import FileRowSelect from "./FileRowParts/FileRowSelect";
-import ModalImagePreview from "../../ModalImagePreview/ModalImagePreview";
 import ImagePreview from "./FileRowParts/ImagePreview";
 
 type Props = {
@@ -11,7 +10,7 @@ type Props = {
   rowNo: number;
 };
 
-const FileRow = ({ file, rowNo }: Props) => {
+const FileRow = async ({ file, rowNo }: Props) => {
 
   return (
     <div key={file.path + rowNo.toString()} className="collapse bg-gray-100 collapse-arrow rounded-lg overflow-visible">
@@ -50,7 +49,6 @@ const FileRow = ({ file, rowNo }: Props) => {
           ))}
         </div>
       </div>
-      <ModalImagePreview modalId={"modalId" + rowNo.toString()} imageLink="https://fastly.picsum.photos/id/353/1000/1600.jpg?hmac=6lprb8McnS7Y-BtUjqLG8LN-dkqECqIkwHrpY4g5SUE" />
     </div>
   );
 };

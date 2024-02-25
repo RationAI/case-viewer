@@ -52,16 +52,3 @@ export default async function CaseHierarchyLevelPage({ params }: { params: { cas
     </div>
   );
 }
-
-/* <div>
-      This is a protected user page of {session.user.name ?? "NO USERNAME"}.
-      <br />
-      You will only see this if you are authenticated.
-      {JSON.stringify(session)}
-      <br />
-      <br />
-      {"Data: " + JSON.stringify(data)}
-      <br />
-      <br />
-      <ButtonTest />
-    </div> */

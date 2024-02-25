@@ -72,7 +72,7 @@ const exampleFolder: TableStructureT = {
   ]
 }
 
-const ProjectFiles = ({ params }: { params: { user: string, case: string } }) => {
+const CasePage = ({ params }: { params: { user: string, case: string } }) => {
   const rootPathOfCase = `/authorized/${params.user}/${params.case}`;
 
   // TODO probably set caseId in some global state, for the sake of links in Navbar
@@ -87,4 +87,4 @@ const ProjectFiles = ({ params }: { params: { user: string, case: string } }) =>
   )
 }
 
-export default ProjectFiles
+export default CasePage
