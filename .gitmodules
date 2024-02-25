@@ -1,0 +1,3 @@
+[submodule "EmpationAPI"]
+	path = EmpationAPI
+	url = https://github.com/RationAI/EmpationAPI.git
