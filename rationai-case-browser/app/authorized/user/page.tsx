@@ -8,7 +8,7 @@ const UserPage = async () => {
     <div>
       <div>UserPage</div>
       <div>
-        {JSON.stringify(session)}
+        {JSON.stringify(session?.accessToken)}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./api/auth/[...nextauth]/route"
-import AuthForm from "./components/AuthForm/AuthForm";
+import AuthForm from "./components/Forms/AuthForm/AuthForm";
 
 
 const AuthPage = async () => {

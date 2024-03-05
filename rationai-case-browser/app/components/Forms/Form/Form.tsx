@@ -1,3 +1,4 @@
+'use client'
 import { FormConfigT, FormNumberFieldT, FormSelectFieldT, FormTextFieldT } from '@/type-definitions';
 import React from 'react'
 import FormSelectField from './FormFields/FormSelectField';
@@ -7,9 +8,10 @@ import FormNumberField from './FormFields/FormNumberField';
 type Props = {
   formID: string;
   config: FormConfigT;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const Form = ({ formID, config }: Props) => {
+const Form = ({ formID, config, onSubmit }: Props) => {
   return (
     <div className='flex flex-col gap-2'>
       {config.title && (
@@ -18,7 +20,7 @@ const Form = ({ formID, config }: Props) => {
       {config.description && (
         <div className='font-sans font-normal text-slate-700 text-sm'>{config.description}</div>
       )}
-      <form id={formID} className="flex flex-col gap-2">
+      <form id={formID} className="flex flex-col gap-2" onSubmit={onSubmit}>
         {config.rows.map((row) => {
           if (row.fields.length > 0) {
             return (

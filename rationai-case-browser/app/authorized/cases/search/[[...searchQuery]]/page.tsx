@@ -4,8 +4,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
 import { getCaseSearchResult } from "@/app/utils/data";
-import { createSearchQueryFromUrl } from "@/app/utils/utilities";
-import CaseSearchForm from "@/app/components/CaseSearchForm/CaseSearchForm";
+import { createSearchQueryFromUrl, getNumberOfGroupsFromRegexString } from "@/app/utils/utilities";
+import CaseSearchForm from "@/app/components/Forms/CaseSearchForm/CaseSearchForm";
+import { getConfig } from "@/app/utils/config";
 
 export default async function CaseSearchResultPage({ params }: { params: { searchQuery?: string[] } }) {
   const session = await getServerSession(authOptions);
@@ -13,9 +14,11 @@ export default async function CaseSearchResultPage({ params }: { params: { searc
     redirect("/");
   }
 
+  const identifierParts = getNumberOfGroupsFromRegexString(getConfig().local_id_separator || "")
+
   if(!params.searchQuery) {
     return (
-      <CaseSearchForm session={session} />
+      <CaseSearchForm session={session} identifierParts={identifierParts}/>
     )
   }
 
@@ -37,7 +40,7 @@ export default async function CaseSearchResultPage({ params }: { params: { searc
       return { 
         name: caseObj.id,
         desc: caseObj.description || undefined,
-        link: `/authorized/cases/${caseObj.id}`}
+        link: `/authorized/cases/case/${caseObj.id}`}
     }),
     slides: [],
   }
