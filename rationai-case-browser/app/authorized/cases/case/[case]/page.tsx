@@ -1,17 +1,17 @@
 import React from 'react'
 import Table from '../../../../components/Table/Table'
 import { TableStructureT } from '@/type-definitions';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { redirect } from 'next/navigation';
+import { getCaseInfo, getCaseSlides, getSlideThumbnailURL } from '@/app/utils/data';
 
-const currentDate = new Date();
-const timestamp = currentDate.toISOString();
-
-const exampleFolder: TableStructureT = {
+/* const exampleFolder: TableStructureT = {
   name: 'folder',
   slides: [
     {
       uuid: 'dasdiasuidasodisnasodsa',
       name: 'report.pdf',
-      path: '/report.pdf',
       previewURL: '/file_icons/image_file.svg',
       format: 'pdf',
       created: timestamp,
@@ -70,19 +70,54 @@ const exampleFolder: TableStructureT = {
       ]
     }
   ]
-}
+} */
 
-const CasePage = ({ params }: { params: { user: string, case: string } }) => {
-  const rootPathOfCase = `/authorized/${params.user}/${params.case}`;
+const CasePage = async ({ params }: { params: { case: string } }) => {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    redirect("/");
+  }
 
-  // TODO probably set caseId in some global state, for the sake of links in Navbar
+  const caseObj = await getCaseInfo(session, params.case)
+  const slides = await getCaseSlides(session, params.case)
 
-  // TODO here should be a call to get contents of CASE
+  const tableStructure: TableStructureT = { 
+    name: caseObj.local_id || caseObj.id,
+    slides: await Promise.all(slides.map(async (slide) => { 
+      const previewURL = await getSlideThumbnailURL(session, slide.id)
+      return ({
+        uuid: slide.id,
+        name: slide.local_id?.split('.')[-1] || slide.id,
+        previewURL: previewURL,
+        created: new Date(slide.created_at).toISOString(),
+        metadata: {
+          something: "something",
+        },
+        visualizations: [
+          {
+            name: "Pure background",
+            visConfig: {    
+              "params": {
+              }, 
+              "data": [slide.id],
+              "background": [
+                  {
+                      "dataReference": 0,
+                      "lossless": false,
+                      "protocol": "path + \"?Deepzoom=\" + data + \".dzi\";"
+                  }
+              ],
+              "visualizations": [],
+          }
+          }
+        ]
+      })
+    }))
+  }
 
   return (
     <div>
-      <div>Case ID: {params.case}</div>
-      <Table tableStructure={exampleFolder}/>
+      <Table tableStructure={tableStructure}/>
     </div>
   )
 }

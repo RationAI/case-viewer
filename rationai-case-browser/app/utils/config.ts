@@ -33,3 +33,8 @@ export const getHierarchySpec = () => {
   const config = getConfig()
   return config.hierarchy_spec || []
 }
+
+export const getSlideMaskSeparator = () => {
+  const config = getConfig()
+  return config.slide_mask_separator!
+}

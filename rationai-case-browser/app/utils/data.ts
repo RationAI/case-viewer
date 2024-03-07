@@ -1,7 +1,7 @@
 import { Session } from 'next-auth';
 import { cache } from 'react'
 import { V3 } from '../../../EmpationAPI/src';
-import { getHierarchySpec, getIdentifierSeparator } from './config';
+import { getHierarchySpec, getIdentifierSeparator, getSlideMaskSeparator } from './config';
 import { CaseHierarchy } from '@/../EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
 import { CaseSearchParams } from '@/../EmpationAPI/src/v3/extensions/types/case-search-params';
 import { Case } from '@/../EmpationAPI/src/v3/root/types/case';
@@ -75,8 +75,32 @@ export const getAllStains = async (session: Session) => {
   return result
 }
 
+export const getCaseInfo = async (session: Session, caseId: string) => {
+  const api = await getRootApi(session);
+  const caseObj = (await api.cases.get(caseId))
+  return caseObj
+}
+
+export const getCaseSlides = async (session: Session, caseId: string) => {
+  const api = await getRootApi(session);
+  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
+  const slides = (await api.cases.slideExplorer.actualSlides(caseId)).filter((slide) => !slide.deleted)
+  return slides
+}
+
+export const getCaseMasks = async (session: Session, caseId: string) => {
+  const api = await getRootApi(session);
+  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
+  const masks = await api.cases.slideExplorer.masks(caseId)
+  return masks
+}
+
 export const getSlideThumbnailURL = async (session: Session, slideId: string) => {
   const api = await getRootApi(session)
-  const thumbnail = await api.slides.slideThumbnail("8c5608f3-a824-485c-b791-2a640405d87b", 500, 500)
-  return URL.createObjectURL(thumbnail)
+  try {
+    const thumbnail = await api.slides.slideThumbnail(slideId, 500, 500);
+    return URL.createObjectURL(thumbnail)
+  } catch (e) {
+    return;
+  }
 }

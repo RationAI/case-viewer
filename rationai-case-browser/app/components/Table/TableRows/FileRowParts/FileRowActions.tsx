@@ -6,19 +6,15 @@ import Image from "next/image";
 
 const FileRowActions = () => {
 
-  const handleOpenInXOpat = () => {
-
-  }
-
   const handleDownload = () => {
 
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-2">
+    <div className="flex flex-col items-center justify-center h-full gap-1 py-1">
       <button
+        type="submit"
         title="Open in xOpat"
-        onClick={handleOpenInXOpat}
         className="btn btn-sm btn-square p-1 bg-primary hover:bg-primary"
       >
         <Image src="/svg/xopat.svg" alt="Open in xOpat" height={33} width={33} />

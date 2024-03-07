@@ -5,6 +5,7 @@ export type AppConfigT = {
   local_id_separator?: string,
   local_id_hint?: string,
   hierarchy_spec?: string[],
+  slide_mask_separator?: string,
   
   searchKeys?: string[],
 }
@@ -44,17 +45,20 @@ type MetadataT = {
   [key: string]: string,
 }
 
+type Visualization = {
+  name: string,
+  visConfig: object,
+}
+
 export type TableSlideRowT = {
   uuid: string,
   name: string,
-  path: string,
-  previewURL: string,
-  format: string,
+  previewURL?: string,
   created: string,
-  createdBy: string,
   metadata: MetadataT,
-  masks: MaskT[],
-  annotations: AnnotationT[],
+  masks?: MaskT[],
+  annotations?: AnnotationT[],
+  visualizations?: Visualization[],
 }
 
 export type ImageT = {

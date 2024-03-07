@@ -38,7 +38,7 @@ const CaseTree = async ({root, rootLink, hierarchy }: Props) => {
           ) : 
           (hierarchy.items as Case[]).map((item) => (
             <li key={item.local_id} className="truncate">
-              <Link href={`/authorized/cases/case/${item.local_id}`} className="flex flex-row max-w-full">
+              <Link href={`/authorized/cases/case/${item.id}`} className="flex flex-row max-w-full">
                 <Image
                   src={'/file_icons/folder.svg' }
                   alt='Icon'

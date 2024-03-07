@@ -5,15 +5,34 @@ import React, { useEffect, useState } from 'react'
 import Form from '../Form/Form';
 import { getAllStains, getAllTissues } from '@/app/utils';
 import { Session } from 'next-auth';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   session: Session;
   identifierParts: number;
 }
 
+type FormType = {
+  year: { value: string };
+  month: { value: string };
+  day: { value: string };
+  description: { value: string };
+  tissues: { value: string };
+  stains: { value: string };
+};
+
+const createSearchUrl = (paramNames: string[], target: FormType) => {
+  return paramNames.reduce((prev, currParam) => {
+    const paramValue = target[currParam as keyof FormType].value;
+    return `${prev}${paramValue ? `/${currParam}/${paramValue}` : ''}`
+  }, '');
+}
+
 const CaseSearchForm = ({ session, identifierParts }: Props) => {
   const [tissues, setTissues] = useState<string[]>([])
   const [stains, setStains] = useState<string[]>([])
+
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async (session: Session) => {
@@ -30,7 +49,7 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
 
   const searchRows = [
     ['year', 'month', 'day'],
-    [...new Array(identifierParts)].map((value, idx) => `id_part_${idx}`),
+    [...new Array(identifierParts)].map((value, idx) => `id_part_${idx + 1}`),
     ['description'],
     ['tissues', 'stains'],
   ] 
@@ -60,12 +79,7 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
     "description": {
         type: "text",
         fieldID: "description",
-        label: "Description keywords",
-    },
-    "id_part": {
-      type: "text",
-      fieldID: "idPart",
-      label: "Identifier",
+        label: "Description keyword",
     },
     "tissues": {
       type: "select",
@@ -88,7 +102,7 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
         fields: row.map((field) => {
           if(field.slice(0, 8) === "id_part_") {
             return {
-              ...searchFields["id_part"],
+              type: "text",
               fieldID: field,
               label: field,
             }
@@ -104,22 +118,18 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
 
   const onSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const target = event.target as typeof event.target & {
-      year: { value: string };
-      month: { value: string };
-      day: { value: string };
-      description: { value: string };
-      tissues: { value: string };
-      stains: { value: string };
-    };
+    
+    const target = event.target as typeof event.target & FormType;
 
-    console.log(target.month.value)
+    const staticSearchParams = createSearchUrl(Object.keys(searchFields), target)
+    const dynamicSearchParams = createSearchUrl(searchRows[1], target)
+    router.push(`/authorized/cases/search${dynamicSearchParams}${staticSearchParams}`)
   }
 
   return (
     <>
       <Form config={searchForm} formID="searchForm" onSubmit={onSubmitSearch} />
-      <input type="submit" form="searchForm" />
+      <button type="submit" form="searchForm" className='btn btn-sm btn-outline font-sans mt-2'>Search</button>
     </>
   )
 }
