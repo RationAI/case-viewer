@@ -6,6 +6,7 @@ import ImageGrid from "./FileRowParts/ImageGrid";
 import FileRowActions from "./FileRowParts/FileRowActions";
 import FileRowSelect from "./FileRowParts/FileRowSelect";
 import ImagePreview from "./FileRowParts/ImagePreview";
+import { openXOpat } from "@/app/utils/xOpat";
 
 type Props = {
   slide: TableSlideRowT;
@@ -18,7 +19,15 @@ const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: Table
     visName: { value: string };
   };
 
-  console.log(JSON.stringify(slide.visualizations?.find((vis) => vis.name === target.visName.value)?.visConfig))
+  const xOpatVisualization = slide.visualizations?.find((vis) => vis.name === target.visName.value)?.visConfig
+
+  if(xOpatVisualization) {
+    openXOpat(xOpatVisualization);
+    console.log("Opening xOpat with visualization:" + JSON.stringify(xOpatVisualization));
+    return;
+  }
+
+  console.log(JSON.stringify("No visualization, cannot open xOpat"))
 }
 
 const FileRow = ({ slide, rowNo }: Props) => {

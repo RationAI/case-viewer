@@ -97,18 +97,14 @@ const CasePage = async ({ params }: { params: { case: string } }) => {
           {
             name: "Pure background",
             visConfig: {    
-              "params": {
-              }, 
               "data": [slide.id],
               "background": [
                   {
                       "dataReference": 0,
                       "lossless": false,
-                      "protocol": "path + \"?Deepzoom=\" + data + \".dzi\";"
                   }
               ],
-              "visualizations": [],
-          }
+            }
           }
         ]
       })
