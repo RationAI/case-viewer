@@ -1,3 +1,15 @@
+import { JWT } from "next-auth/jwt";
+
+export type AppConfigT = {
+  project?: string,
+  local_id_separator?: string,
+  local_id_hint?: string,
+  hierarchy_spec?: string[],
+  slide_mask_separator?: string,
+  
+  searchKeys?: string[],
+}
+
 export type MenuItemT = {
   label: string,
   link: string,
@@ -10,24 +22,22 @@ type SubMenuItemT = {
   link: string,
 }
 
-export type FileTreeStructureT = {
+export type TableStructureT = {
   name: string,
-  path: string,
-  folder: boolean,
-  extension?: string,
-  items?: FileTreeStructureT[],
-}
-
-export type FolderStructureT = {
-  name: string,
-  link: string,
   parent?: string,
-  subFolders: SubFolderT[],
-  files: FileT[],
+  folders?: TableFolderRowT[],
+  cases?: TableCaseRowT[],
+  slides?: TableSlideRowT[],
 };
 
-type SubFolderT = {
+type TableFolderRowT = {
   name: string,
+  link: string,
+}
+
+type TableCaseRowT = {
+  name: string,
+  desc?: string,
   link: string,
 };
 
@@ -35,17 +45,20 @@ type MetadataT = {
   [key: string]: string,
 }
 
-export type FileT = {
+type Visualization = {
+  name: string,
+  visConfig: object,
+}
+
+export type TableSlideRowT = {
   uuid: string,
   name: string,
-  path: string,
-  previewURL: string,
-  format: string,
+  previewURL?: string,
   created: string,
-  createdBy: string,
   metadata: MetadataT,
-  masks: MaskT[],
-  annotations: AnnotationT[],
+  masks?: MaskT[],
+  annotations?: AnnotationT[],
+  visualizations?: Visualization[],
 }
 
 export type ImageT = {
@@ -88,7 +101,7 @@ type FormRowT = {
   fields: FormFieldT[];
 }
 
-type FormFieldT = FormSelectFieldT | FormTextFieldT;
+export type FormFieldT = FormSelectFieldT | FormTextFieldT | FormNumberFieldT;
 
 export type FormSelectFieldT = FormFieldBaseT & {
   options: string[];
@@ -96,10 +109,34 @@ export type FormSelectFieldT = FormFieldBaseT & {
 
 export type FormTextFieldT = FormFieldBaseT;
 
+export type FormNumberFieldT = FormFieldBaseT & {
+  minValue?: string;
+  maxValue?: string;
+  step?: string;
+};
+
 type FormFieldBaseT = {
   type: string;
   fieldID: string;
   label: string;
   defaultValue?: string;
   description?: string;
+}
+
+export interface OAuthToken extends JWT {
+  accessToken?: string;
+  accessTokenExpires: number;
+  refreshToken?: string;
+}
+
+export interface OAuthRefreshResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
+  refresh_token: string;
+  token_type: string;
+  id_token: string;
+  'not-before-policy': number;
+  session_state: string;
+  scope: string;
 }

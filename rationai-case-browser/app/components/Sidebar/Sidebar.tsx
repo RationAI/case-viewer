@@ -1,29 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
-import MenuContent from "../MenuContent/MenuContent";
 import Image from "next/image";
 
-const primaryMenu = [
-  {
-    label: "Projects",
-    link: "/files",
-    icon: "/svg/projects.svg",
-    subItems: [
-      {
-        label: "Project 1",
-        link: "/files",
-      },
-      {
-        label: "Project 2",
-        link: "/files",
-      },
-    ],
-  },
-];
+type Props = {
+  children: React.ReactNode;
+}
 
-const Sidebar = () => {
-  const [extended, setExtended] = useState(true);
+const Sidebar = ({children}: Props) => {
+  const [extended, setExtended] = useState(false);
+
+  const sidebarIconMenu = [
+    {
+      label: "Cases",
+      onClick: () => setExtended(true),
+      icon: "/svg/projects.svg",
+      subItems: [],
+    },
+  ];
 
   return (
     <aside
@@ -32,23 +25,25 @@ const Sidebar = () => {
         (extended ? " min-w-[13rem]" : "")
       }
     >
-      <div className="navbar-center p-2 w-full flex-1">
+      <div className="navbar-center pt-1 p-[2px] w-full flex-1">
         {extended ? (
-          <ul className="menu xl:menu-vertical lg:min-w-max bg-gray-50 rounded-lg">
-            <MenuContent menuItems={primaryMenu} />
-          </ul>
+          <div>
+            {children}
+          </div>
         ) : (
           <ul className="menu p-0 min-w-max">
-            {primaryMenu.map((menuItem) => (
+            {sidebarIconMenu.map((menuItem) => (
               <li key={menuItem.label}>
-                <Link href={menuItem.link}>
-                  <Image
-                    src={menuItem.icon}
-                    alt={menuItem.label}
-                    height={35}
-                    width={35}
-                  />
-                </Link>
+                <div onClick={menuItem.onClick}>
+                  {menuItem.icon &&
+                    <Image
+                      src={menuItem.icon}
+                      alt={menuItem.label}
+                      height={30}
+                      width={30}
+                    />
+                  }
+                </div>
               </li>
             ))}
           </ul>
