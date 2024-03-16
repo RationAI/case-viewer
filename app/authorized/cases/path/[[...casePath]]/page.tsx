@@ -6,6 +6,7 @@ import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case"
+import SegmentedPathLink from "@/app/components/SegmentedPathLink/SegmentedPathLink";
 
 const basePageLink = '/authorized/cases'
 
@@ -48,6 +49,7 @@ export default async function CaseHierarchyLevelPage({ params }: { params: { cas
 
   return (
     <div>
+      <SegmentedPathLink homelink="/authorized/cases/path" segments={params.casePath.map((part) => ({label: part, linkSegment: part}))} />
       <Table tableStructure={tableStructure}/>
     </div>
   );
