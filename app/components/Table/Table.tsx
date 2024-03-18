@@ -10,7 +10,7 @@ type Props = {
 
 const Table = ({ tableStructure, advancedUser = false }: Props) => {
   return (
-    <div className="overflow-x-auto p-3 pb-16">
+    <div className="overflow-x-auto">
       <div className='font-sans font-semibold text-slate-500 text-xl pl-2'>{tableStructure.name}</div>
       {tableStructure.folders &&
         <div className="flex flex-col gap-1">

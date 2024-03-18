@@ -32,7 +32,7 @@ export default async function CaseHierarchyLevelPage({ params }: { params: { cas
   }, cases)
 
   const tableStructure: TableStructureT = {
-    name: currentLevel.levelName || "All cases",
+    name: !currentLevel.levelName && "All cases",
     parent: currentLevel.levelName &&  `${basePageLink}/path${relativePath.slice(0, relativePath.length - 1).reduce((path, param) => `${path}/${param}`, '')}`,
     folders: !currentLevel.lastLevel ? (currentLevel.items as CaseHierarchy[]).map((item) => {
       return { 
@@ -48,8 +48,10 @@ export default async function CaseHierarchyLevelPage({ params }: { params: { cas
   }
 
   return (
-    <div>
-      <SegmentedPathLink homelink="/authorized/cases/path" segments={params.casePath.map((part) => ({label: part, linkSegment: part}))} />
+    <div className="flex flex-col gap-4 p-1">
+      {params.casePath &&
+        <SegmentedPathLink homelink="/authorized/cases/path" segments={params.casePath.map((part) => ({label: part, linkSegment: part}))} />
+      }
       <Table tableStructure={tableStructure}/>
     </div>
   );

@@ -21,11 +21,11 @@ const Sidebar = ({children}: Props) => {
   return (
     <aside
       className={
-        "flex flex-col items-center bg-base-100 border-r border-neutral shadow" +
-        (extended ? " min-w-[13rem]" : "")
+        "flex flex-col items-center bg-base-100 border-r border-neutral shadow max-h-full" +
+        (extended ? " min-w-[13rem] max-w-[13rem]" : "")
       }
     >
-      <div className="navbar-center pt-1 p-[2px] w-full flex-1">
+      <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto bg-gray-50">
         {extended ? (
           <div>
             {children}
@@ -49,7 +49,7 @@ const Sidebar = ({children}: Props) => {
           </ul>
         )}
       </div>
-      <div className="flex-none w-full">
+      <div className="flex-none w-full border-t border-neutral">
         <div className={"flex flex-row p-1" + (extended ? " justify-end" : " justify-center")}>
           <label
             tabIndex={0}
