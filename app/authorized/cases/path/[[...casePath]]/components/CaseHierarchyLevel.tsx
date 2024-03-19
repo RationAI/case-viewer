@@ -29,7 +29,7 @@ const getCurrentLevelFromHierarchy = (hierarchy: CaseHierarchy, relativePath: st
 
 const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string[]) => {
   const tableStructure: TableStructureT = {
-    name: !currLvl.levelName && "All cases",
+    name: !currLvl.levelName ? "All cases" : undefined,
     parent: currLvl.levelName &&  `${basePageLink}/path${relativePath.slice(0, relativePath.length - 1).reduce((path, param) => `${path}/${param}`, '')}`,
     folders: !currLvl.lastLevel ? (currLvl.items as CaseHierarchy[]).map((item) => {
       return { 
@@ -72,13 +72,13 @@ export default function CaseHierarchyLevel() {
   }, [session, session?.accessToken])
 
   useEffect(() => {
-    const getCurrentLevel = async () => {
-      const currLvl = getCurrentLevelFromHierarchy(caseHierarchy, getPathParts(relativePath))
+    const getCurrentLevel = async (hierarchy: CaseHierarchy) => {
+      const currLvl = getCurrentLevelFromHierarchy(hierarchy, getPathParts(relativePath))
       setCurrentLevel(currLvl);
     };
 
     if (caseHierarchy) {
-      getCurrentLevel();
+      getCurrentLevel(caseHierarchy)
     }
   }, [caseHierarchy, relativePath])
 

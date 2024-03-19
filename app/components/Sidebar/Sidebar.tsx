@@ -46,7 +46,7 @@ const Sidebar = () => {
       <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto bg-gray-50">
         {extended ? (
           <div>
-            <div className="px-1 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
+            <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
             {caseHierarchy && 
               <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
             }
