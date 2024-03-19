@@ -33,7 +33,7 @@ const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: Table
 const FileRow = ({ slide, rowNo }: Props) => {
 
   return (
-    <div key={slide.uuid} className="collapse bg-gray-100 collapse-arrow rounded-lg overflow-visible">
+    <div key={slide.uuid} className="collapse bg-gray-100 collapse-arrow rounded-sm overflow-visible">
       <input type="checkbox" />
       <div className="collapse-title flex flex-row gap-4 py-0 pl-0">
         <ImagePreview modalId={"modalId" + slide.uuid} slideId={slide.uuid} />

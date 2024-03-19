@@ -1,5 +1,4 @@
 import { Session } from 'next-auth';
-import { cache } from 'react'
 import { V3 } from '@/EmpationAPI/src';
 import { getHierarchySpec, getIdentifierSeparator, getSlideMaskSeparator } from './config';
 import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
@@ -16,6 +15,12 @@ export const getRootApi = async (session: Session) => {
     await api.from(session.accessToken);
 
   return api;
+}
+
+export const getRationAIApi = async (session: Session) => {
+  const root = await getRootApi(session);
+  await root.rationai.use(root.userId)
+  return root.rationai;
 }
 
 export const getCaseExplorer = async (session: Session) => {
@@ -51,30 +56,6 @@ export const getCaseSearchResult = async (session: Session, query: CaseSearchPar
   return result
 }
 
-export const getAllTissues = async (session: Session) => {
-  const explorer = await getCaseExplorer(session)
-  let result: string[] = [];
-  try {
-    result = (await explorer.tissues())
-  } catch (e) {
-    return null
-  }
- 
-  return result
-}
-
-export const getAllStains = async (session: Session) => {
-  const explorer = await getCaseExplorer(session)
-  let result: string[] = [];
-  try {
-    result = (await explorer.stains())
-  } catch (e) {
-    return null
-  }
- 
-  return result
-}
-
 export const getCaseInfo = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
   const caseObj = (await api.cases.get(caseId))
@@ -83,15 +64,15 @@ export const getCaseInfo = async (session: Session, caseId: string) => {
 
 export const getCaseSlides = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
-  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
-  const slides = (await api.cases.slideExplorer.actualSlides(caseId)).filter((slide) => !slide.deleted)
+  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
+  const slides = (await api.cases.wsiExplorer.slides(caseId)).filter((slide) => !slide.deleted)
   return slides
 }
 
 export const getCaseMasks = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
-  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
-  const masks = await api.cases.slideExplorer.masks(caseId)
+  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
+  const masks = await api.cases.wsiExplorer.masks(caseId)
   return masks
 }
 
@@ -102,5 +83,24 @@ export const getSlideThumbnailURL = async (session: Session, slideId: string) =>
     return URL.createObjectURL(thumbnail)
   } catch (e) {
     return;
+  }
+}
+
+export const getSlideVisualizations = async (session: Session, slideId: string) => {
+  const defaultVis = {    
+    data: [slideId],
+    background: [
+        {
+            dataReference: 0,
+            lossless: false,
+        }
+    ],
+  }
+  const rationaiApi = await getRationAIApi(session)
+  try {
+    const vis = await rationaiApi.globalStorage.wsiMetadata.getVisualizations(slideId);
+    return vis
+  } catch (e) {
+    return defaultVis;
   }
 }

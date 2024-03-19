@@ -10,18 +10,19 @@ type Props = {
 
 const Table = ({ tableStructure, advancedUser = false }: Props) => {
   return (
-    <div className="overflow-x-auto p-3 pb-16">
+    <div className="overflow-x-auto">
       <div className='font-sans font-semibold text-slate-500 text-xl pl-2'>{tableStructure.name}</div>
       {tableStructure.folders &&
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (
-            <FolderRow name=".." link={tableStructure.parent} />
+            <FolderRow name=".." link={tableStructure.parent} shallow/>
           )}
           {tableStructure.folders.map((caseObj) => (
             <FolderRow
               key={caseObj.link}
               name={caseObj.name}
               link={caseObj.link}
+              shallow
             />
           ))}
         </div>
@@ -29,7 +30,7 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
       {tableStructure.cases &&
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (
-            <FolderRow name=".." link={tableStructure.parent} />
+            <FolderRow name=".." link={tableStructure.parent} shallow/>
           )}
           {tableStructure.cases.map((caseObj) => (
             <FolderRow

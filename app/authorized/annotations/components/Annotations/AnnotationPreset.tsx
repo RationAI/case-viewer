@@ -6,15 +6,16 @@ import APSelect from "./AnnotationPresetParts/APSelect";
 import APColor from "./AnnotationPresetParts/APColor";
 import APTextFields from "./AnnotationPresetParts/APTextFields";
 import APNewField from "./AnnotationPresetParts/APNewField";
-import { getRandomString } from "../../utils";
+import { getRandomString } from "../../../../utils";
 
 type Props = {
   annotationPreset: AnnotationPresetT;
   removePresetHandler: (id: number) => void;
+  copyPresetHandler: (id: number) => void;
   editPresetHandler: (id: number, editedPreset: AnnotationPresetT) => void;
 };
 
-const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHandler }: Props) => {
+const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHandler, editPresetHandler }: Props) => {
   const addNewFieldHandler = (name: string) => {
     const newKey = name + getRandomString(10);
     annotationPreset.meta[newKey] = { name: name, value: ''};
@@ -44,7 +45,7 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHan
   return (
     <div>
       <div className="border border-gray-400 rounded-lg p-2 border-dashed h-full">
-        <form className="flex flex-col gap-2">
+        <form className="flex flex-col gap-[2px]">
           <div className="flex justify-between">
             <div className="flex gap-2">
               {/* annotation */}
@@ -52,9 +53,12 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, editPresetHan
               {/* color */}
               <APColor annotationPreset={annotationPreset} editFieldInPreset={editFieldInPreset} />
             </div>
-            {/* remove preset */}
-            <div>
-              <button onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
+            {/* copy/remove preset */}
+            <div className="flex flex-row gap-1">
+              <button type="button" onClick={() => copyPresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
+                <Image src="/svg/copy.svg" alt="Copy" height={33} width={33} />
+              </button>
+              <button type="button" onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
                 <Image src="/svg/cross.svg" alt="Remove" height={33} width={33} />
               </button>
             </div>

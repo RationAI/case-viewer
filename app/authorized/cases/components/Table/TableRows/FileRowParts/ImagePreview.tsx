@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSession } from 'next-auth/react';
 import { getSlideThumbnailURL } from '@/app/utils/data';
 import { Session } from 'next-auth';
-import ModalImagePreview from '@/app/components/Table/ModalImagePreview/ModalImagePreview';
+import ModalImagePreview from '../../ModalImagePreview/ModalImagePreview';
 
 type Props = {
   modalId: string;

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from "next/image";
 import AnnotationPreset from './AnnotationPreset'
 import { AnnotationPresetT } from '@/type-definitions'
+import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
 
 const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
 
@@ -19,11 +20,11 @@ const presetGroupExample: AnnotationPresetT[] = [
         "value": "Ignore*"
       },
       "k1700645671744": {
-        "name": "zdar more",
+        "name": "cancer",
         "value": "ano"
       },
       "k1700645680488": {
-        "name": "tyo tkáně",
+        "name": "no cancer",
         "value": "neco"
       }
     },
@@ -117,6 +118,7 @@ const presetGroupExample: AnnotationPresetT[] = [
 const AnnotationPresetGrid = () => {
   const [presetGroup, setPresetGroup] = useState<AnnotationPresetT[]>(presetGroupExample)
   const [presetIdCurrent, setPresetIdCurrent] = useState(presetGroup.length)
+  const [deletePresetId, setDeletePresetId] = useState<number | undefined>(undefined)
 
   const handleEditPreset = (id: number, editedPreset: AnnotationPresetT) => {
     const newGroup = [...presetGroup];
@@ -147,9 +149,26 @@ const AnnotationPresetGrid = () => {
     setPresetGroup(newGroup);
   }
 
+  const handleCopyPreset = (id: number) => {
+    const currId = presetIdCurrent;
+    setPresetIdCurrent(presetIdCurrent + 1)
+    const oldPresetIdx = presetGroup.findIndex((grp) => grp.id === id);
+    const copiedPreset: AnnotationPresetT = {
+      ...presetGroup[oldPresetIdx],
+      id: currId,
+    };
+    const newGroup = [...presetGroup];
+    setPresetGroup(newGroup.slice(0, oldPresetIdx).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx)))
+  }
+
   const handleRemovePreset = (id: number) => {
     const newGroup = presetGroup.filter((preset) => preset.id != id);
     setPresetGroup(newGroup);
+  }
+
+  const handlePopUpOpen = (presetId: number) => {
+    setDeletePresetId(presetId);
+    (document.getElementById('annotPopUp') as HTMLDialogElement).showModal()
   }
 
 
@@ -157,7 +176,7 @@ const AnnotationPresetGrid = () => {
     <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
       {presetGroup.map((annotPreset) => {
         return (
-          <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleRemovePreset} editPresetHandler={handleEditPreset} />
+          <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handlePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
         )
       })}
       <div>
@@ -168,6 +187,7 @@ const AnnotationPresetGrid = () => {
           </button>
         </div>
       </div>
+      <APConfirmationPopUp presetId={deletePresetId!} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
     </div>
   )
 }

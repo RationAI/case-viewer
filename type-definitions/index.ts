@@ -23,7 +23,7 @@ type SubMenuItemT = {
 }
 
 export type TableStructureT = {
-  name: string,
+  name?: string,
   parent?: string,
   folders?: TableFolderRowT[],
   cases?: TableCaseRowT[],
