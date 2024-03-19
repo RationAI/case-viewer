@@ -18,7 +18,7 @@ export const createConfig = async (project: string | null) => {
 }
 
 export const getConfig = () => {
-  const configSerialized = process.env.NEXT_APP_CONFIG
+  const configSerialized = process.env.NEXT_PUBLIC_APP_CONFIG || process.env.NEXT_APP_CONFIG
   const configJson = configSerialized ? (JSON.parse(configSerialized) as AppConfigT) : {}
   
   return configJson

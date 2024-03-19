@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import Table from "@/app/components/Table/Table";
 import { TableStructureT } from "@/type-definitions";
 import { getCaseSearchResult } from "@/app/utils/data";
 import { createSearchQueryFromUrl, getNumberOfGroupsFromRegexString } from "@/app/utils/utilities";
 import CaseSearchForm from "@/app/components/Forms/CaseSearchForm/CaseSearchForm";
 import { getConfig } from "@/app/utils/config";
+import Table from "../../components/Table/Table";
 
 export default async function CaseSearchResultPage({ params }: { params: { searchQuery?: string[] } }) {
   const session = await getServerSession(authOptions);
@@ -38,7 +38,7 @@ export default async function CaseSearchResultPage({ params }: { params: { searc
     name: "Search results",
     cases: cases.map((caseObj) => {
       return { 
-        name: caseObj.id,
+        name: caseObj.local_id,
         desc: caseObj.description || undefined,
         link: `/authorized/cases/case/${caseObj.id}`}
     }),

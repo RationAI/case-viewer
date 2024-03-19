@@ -10,9 +10,7 @@ type Props = {
   hierarchy: CaseHierarchy,
 }
 
-// group-open:after:rotate-[-135deg]
-
-const CaseTree = async ({root, rootLink, hierarchy }: Props) => {
+const CaseTree = ({root, rootLink, hierarchy }: Props) => {
   return (
     <div className="max-w-full">
       <ul className={root ? "menu pl-0 menu-xs rounded-lg" : "pl-0"}>

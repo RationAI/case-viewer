@@ -15,13 +15,14 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
       {tableStructure.folders &&
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (
-            <FolderRow name=".." link={tableStructure.parent} />
+            <FolderRow name=".." link={tableStructure.parent} shallow/>
           )}
           {tableStructure.folders.map((caseObj) => (
             <FolderRow
               key={caseObj.link}
               name={caseObj.name}
               link={caseObj.link}
+              shallow
             />
           ))}
         </div>
@@ -29,7 +30,7 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
       {tableStructure.cases &&
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (
-            <FolderRow name=".." link={tableStructure.parent} />
+            <FolderRow name=".." link={tableStructure.parent} shallow/>
           )}
           {tableStructure.cases.map((caseObj) => (
             <FolderRow

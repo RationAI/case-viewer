@@ -85,13 +85,13 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
       type: "select",
       fieldID: "tissues",
       label: "Tissues",
-      options: tissues || [],
+      options: [""].concat(tissues),
     },
     "stains": {
         type: "select",
         fieldID: "stains",
         label: "Stains",
-        options: stains || [],
+        options: [""].concat(stains),
     },
   }
 

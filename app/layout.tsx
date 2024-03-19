@@ -5,8 +5,6 @@ import './globals.css'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import SessionProvider from "./components/SessionProvider/SessionProvider";
-import CaseTree from './components/CaseTree'
-import { getUserCaseHierarchy } from './utils'
 import { authOptions } from './api/auth/[...nextauth]/authOptions'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -23,23 +21,13 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  let hierarchy = null;
-  if(session) {
-    hierarchy = await getUserCaseHierarchy(session)
-  }
-
   return (
     <html lang="en" data-theme="winter">
       <body className={inter.className}>
         <SessionProvider session={session}>
           <Navbar />
           <div className="flex overflow-clip pt-[3.5rem] h-screen">
-            <Sidebar>
-              {hierarchy ? 
-                <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={hierarchy} /> :
-                <div>Log in to see your cases</div>
-              }
-            </Sidebar>
+            <Sidebar />
             <div className="p-2 overflow-scroll w-full">
               {children}
             </div>

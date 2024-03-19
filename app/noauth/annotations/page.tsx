@@ -1,6 +1,6 @@
+import AnnotationButtons from '@/app/authorized/annotations/components/Annotations/AnnotationButtons'
+import AnnotationPresetGrid from '@/app/authorized/annotations/components/Annotations/AnnotationPresetGrid'
 import React from 'react'
-import AnnotationPresetGrid from '../../components/Annotations/AnnotationPresetGrid'
-import AnnotationButtons from '../../components/Annotations/AnnotationButtons'
 
 const AnnotationsPage = () => {
   return (

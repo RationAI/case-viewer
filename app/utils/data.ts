@@ -1,5 +1,4 @@
 import { Session } from 'next-auth';
-import { cache } from 'react'
 import { V3 } from '@/EmpationAPI/src';
 import { getHierarchySpec, getIdentifierSeparator, getSlideMaskSeparator } from './config';
 import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result';

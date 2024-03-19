@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from "next/image";
-import Link from 'next/link';
+import Redirect from '@/app/components/Redirect/Redirect';
 
 type Props = {
   homelink: string,
@@ -15,16 +15,16 @@ type Props = {
 const SegmentedPathLink = ({ homelink, segments }: Props) => {
   return (
     <div className='flex flex-row align-middle gap-[2px]'>
-      <Link href={homelink}>
+      <Redirect link={homelink} shallow>
         <Image src={'/svg/home.svg'} alt='Home' height={27} width={27}/>
-      </Link>
+      </Redirect>
       {segments.map((segment, idx, arr) => {
         return (
           <div key={segment.label + idx.toString()} className='flex flex-row gap-[2px]'>
             <p className='text-xl'>/</p>
-            <Link href={homelink + arr.slice(0, idx + 1).reduce((prev, seg) => `${prev}/${seg.linkSegment}`, "")} className='link link-hover font-sans font-semibold text-slate-500 text-xl'>
+            <Redirect link={homelink + arr.slice(0, idx + 1).reduce((prev, seg) => `${prev}/${seg.linkSegment}`, "")} className='link link-hover font-sans font-semibold text-slate-500 text-xl' shallow>
               {segment.label}
-            </Link>
+            </Redirect>
           </div>
         )
         })}

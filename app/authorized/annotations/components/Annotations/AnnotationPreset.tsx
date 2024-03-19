@@ -6,7 +6,7 @@ import APSelect from "./AnnotationPresetParts/APSelect";
 import APColor from "./AnnotationPresetParts/APColor";
 import APTextFields from "./AnnotationPresetParts/APTextFields";
 import APNewField from "./AnnotationPresetParts/APNewField";
-import { getRandomString } from "../../utils";
+import { getRandomString } from "../../../../utils";
 
 type Props = {
   annotationPreset: AnnotationPresetT;
