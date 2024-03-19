@@ -50,30 +50,6 @@ export const getCaseSearchResult = async (session: Session, query: CaseSearchPar
   return result
 }
 
-export const getAllTissues = async (session: Session) => {
-  const explorer = await getCaseExplorer(session)
-  let result: string[] = [];
-  try {
-    result = (await explorer.tissues())
-  } catch (e) {
-    return null
-  }
- 
-  return result
-}
-
-export const getAllStains = async (session: Session) => {
-  const explorer = await getCaseExplorer(session)
-  let result: string[] = [];
-  try {
-    result = (await explorer.stains())
-  } catch (e) {
-    return null
-  }
- 
-  return result
-}
-
 export const getCaseInfo = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
   const caseObj = (await api.cases.get(caseId))
@@ -82,15 +58,15 @@ export const getCaseInfo = async (session: Session, caseId: string) => {
 
 export const getCaseSlides = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
-  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
-  const slides = (await api.cases.slideExplorer.actualSlides(caseId)).filter((slide) => !slide.deleted)
+  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
+  const slides = (await api.cases.wsiExplorer.slides(caseId)).filter((slide) => !slide.deleted)
   return slides
 }
 
 export const getCaseMasks = async (session: Session, caseId: string) => {
   const api = await getRootApi(session);
-  api.cases.slideExplorer.use(getSlideMaskSeparator(), "m")
-  const masks = await api.cases.slideExplorer.masks(caseId)
+  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
+  const masks = await api.cases.wsiExplorer.masks(caseId)
   return masks
 }
 
