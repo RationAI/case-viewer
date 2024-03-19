@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Table from '../../../components/Table/Table'
 import { TableStructureT } from '@/type-definitions';
 import { Session } from 'next-auth';
-import { getCaseInfo, getCaseSlides, getSlideThumbnailURL } from '@/app/utils/data';
+import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideThumbnailURL, getSlideVisualizations } from '@/app/utils/data';
 import { useSession } from 'next-auth/react';
 import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
@@ -13,7 +13,7 @@ type Props = {
   caseId: string;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: string[]) => {
+const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: (string | undefined)[], slideVisualizations: object[]) => {
   const tableStructure: TableStructureT = { 
     name: caseInfo.local_id || caseInfo.id,
     slides: slides.map((slide, idx) => { 
@@ -116,7 +116,8 @@ const CaseContent = ({ caseId }: Props) => {
 
   const [caseInfo, setCaseInfo] = useState<Case | undefined>();
   const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
-  const [thumbnailUrls, setThumbnailUrls] = useState<string[]>([]);
+  const [thumbnailUrls, setThumbnailUrls] = useState<(string | undefined)[]>([]);
+  const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
 
   useEffect(() => {
     const getCaseContent = async (session: Session) => {
@@ -131,6 +132,15 @@ const CaseContent = ({ caseId }: Props) => {
       }))
 
       setThumbnailUrls(slideThumbnails)
+
+      /* const rationaiApi = await getRationAIApi(session)
+
+      const visualizations = await Promise.all(slides.map(async (slide) => {
+        const vis = rationaiApi.globalStorage.wsiMetadata.getVisualizations(slide.id)
+        return vis;
+      }))
+
+      setSlideVisualizations(visualizations) */
     };
 
     if (session?.accessToken) {
@@ -138,10 +148,10 @@ const CaseContent = ({ caseId }: Props) => {
     }
   }, [caseId, session, session?.accessToken])
 
-  if (caseInfo && caseSlides && thumbnailUrls) {
+  if (caseInfo && caseSlides && thumbnailUrls && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls, slideVisualizations)}/>
       </div>
     )
   }

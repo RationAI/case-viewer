@@ -187,7 +187,7 @@ const AnnotationPresetGrid = () => {
           </button>
         </div>
       </div>
-      <APConfirmationPopUp presetId={deletePresetId} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
+      <APConfirmationPopUp presetId={deletePresetId!} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
     </div>
   )
 }
