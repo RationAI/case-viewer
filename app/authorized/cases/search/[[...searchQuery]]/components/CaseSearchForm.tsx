@@ -2,13 +2,13 @@
 
 import { FormConfigT, FormFieldT } from '@/type-definitions';
 import React, { useEffect, useState } from 'react'
-import Form from '../Form/Form';
-import { getAllStains, getAllTissues } from '@/app/utils';
+import { getCaseExplorer } from '@/app/utils';
 import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
+import Form from '@/app/components/Forms/Form/Form';
+import { useSession } from 'next-auth/react';
 
 type Props = {
-  session: Session;
   identifierParts: number;
 }
 
@@ -28,7 +28,9 @@ const createSearchUrl = (paramNames: string[], target: FormType) => {
   }, '');
 }
 
-const CaseSearchForm = ({ session, identifierParts }: Props) => {
+const CaseSearchForm = ({ identifierParts }: Props) => {
+  const { data: session } = useSession();
+
   const [tissues, setTissues] = useState<string[]>([])
   const [stains, setStains] = useState<string[]>([])
 
@@ -36,10 +38,15 @@ const CaseSearchForm = ({ session, identifierParts }: Props) => {
 
   useEffect(() => {
     const fetchData = async (session: Session) => {
-      const tissueOptions = await getAllTissues(session);
-      const stainsOptions = await getAllStains(session);
-      setTissues(tissueOptions || []);
-      setStains(stainsOptions || []);
+      const explorer = await getCaseExplorer(session)
+      try {
+        const tissueOptions = await explorer.tissues();
+        const stainsOptions = await explorer.stains();
+        setTissues(tissueOptions || []);
+        setStains(stainsOptions || []);
+      } catch (e) {
+        console.log("Fetch of tissues/stains failed")
+      }
     };
 
     if (session?.accessToken) {
