@@ -33,6 +33,6 @@ export const getNumberOfGroupsFromRegexString = (regexString: string) => {
   return groups.length - 1;
 }
 
-export const getPathParts = (relativePath: string) => {
-  return relativePath.split('/').filter(Boolean).slice(3);
+export const getPathParts = (relativePath: string, start: number = 0) => {
+  return relativePath.split('/').filter(Boolean).slice(start);
 }

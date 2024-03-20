@@ -55,7 +55,7 @@ export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
 
   useEffect(() => {
     const getCurrentLevel = async (hierarchy: CaseHierarchy) => {
-      const currLvl = getCurrentLevelFromHierarchy(hierarchy, getPathParts(relativePath))
+      const currLvl = getCurrentLevelFromHierarchy(hierarchy, getPathParts(relativePath, 3))
       setCurrentLevel(currLvl);
     };
 
@@ -66,11 +66,11 @@ export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
 
   return (
     <div className="flex flex-col gap-4 p-1">
-      {getPathParts(relativePath).length > 0 &&
-        <SegmentedPathLink homelink="/authorized/cases/path" segments={getPathParts(relativePath).map((part) => ({label: part, linkSegment: part}))} />
+      {getPathParts(relativePath, 3).length > 0 &&
+        <SegmentedPathLink homelink="/authorized/cases/path" segments={getPathParts(relativePath, 3).map((part) => ({label: part, linkSegment: part}))} />
       }
       {currentLevel ? 
-        <Table tableStructure={getTableStructureFromLevel(currentLevel, getPathParts(relativePath))}/> :
+        <Table tableStructure={getTableStructureFromLevel(currentLevel, getPathParts(relativePath, 3))}/> :
         <div>Loading...</div>
       }
     </div>
