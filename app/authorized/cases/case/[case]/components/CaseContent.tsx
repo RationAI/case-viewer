@@ -25,20 +25,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thum
         metadata: {
           something: "something",
         },
-        visualizations: [
-          {
-            name: "Pure background",
-            visConfig: {    
-              "data": [slide.id],
-              "background": [
-                  {
-                      "dataReference": 0,
-                      "lossless": false,
-                  }
-              ],
-            }
-          }
-        ]
+        visualizations: slideVisualizations[idx]
       })
     })
   }
@@ -133,14 +120,14 @@ const CaseContent = ({ caseId }: Props) => {
 
       setThumbnailUrls(slideThumbnails)
 
-      /* const rationaiApi = await getRationAIApi(session)
+      const rationaiApi = await getRationAIApi(session)
 
       const visualizations = await Promise.all(slides.map(async (slide) => {
-        const vis = rationaiApi.globalStorage.wsiMetadata.getVisualizations(slide.id)
+        const vis = await getSlideVisualizations(slide.id, rationaiApi)
         return vis;
       }))
 
-      setSlideVisualizations(visualizations) */
+      setSlideVisualizations(visualizations)
     };
 
     if (session?.accessToken) {

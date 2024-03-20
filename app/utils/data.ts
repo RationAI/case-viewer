@@ -19,7 +19,7 @@ export const getRootApi = async (session: Session) => {
 
 export const getRationAIApi = async (session: Session) => {
   const root = await getRootApi(session);
-  await root.rationai.use(root.userId)
+  await root.rationai.from(session.accessToken)
   return root.rationai;
 }
 
@@ -86,7 +86,7 @@ export const getSlideThumbnailURL = async (session: Session, slideId: string) =>
   }
 }
 
-export const getSlideVisualizations = async (session: Session, slideId: string) => {
+export const getSlideVisualizations = async (slideId: string, rationaiApi: V3.RationAI) => {
   const defaultVis = {    
     data: [slideId],
     background: [
@@ -96,10 +96,12 @@ export const getSlideVisualizations = async (session: Session, slideId: string) 
         }
     ],
   }
-  const rationaiApi = await getRationAIApi(session)
   try {
     const vis = await rationaiApi.globalStorage.wsiMetadata.getVisualizations(slideId);
-    return vis
+    return {
+      ...defaultVis,
+      ...vis,
+    }
   } catch (e) {
     return defaultVis;
   }
