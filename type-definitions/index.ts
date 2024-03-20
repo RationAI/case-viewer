@@ -45,10 +45,17 @@ type MetadataT = {
   [key: string]: string,
 }
 
-type Visualization = {
-  name: string,
-  visConfig: object,
+export type Visualization = {
+  shaders: object,
+  name?: string,
 }
+
+export type VisualizationConfig = {
+  params?: object,
+  data: string[],
+  background?: object,
+  visualization?: Visualization[],
+};
 
 export type TableSlideRowT = {
   uuid: string,
@@ -58,7 +65,7 @@ export type TableSlideRowT = {
   metadata: MetadataT,
   masks?: MaskT[],
   annotations?: AnnotationT[],
-  visualizations?: Visualization[],
+  visualizationConfig?: VisualizationConfig,
 }
 
 export type ImageT = {

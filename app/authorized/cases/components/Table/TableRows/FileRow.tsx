@@ -1,6 +1,6 @@
 'use client'
 
-import { TableSlideRowT } from "@/type-definitions";
+import { TableSlideRowT, VisualizationConfig } from "@/type-definitions";
 import React from "react";
 import ImageGrid from "./FileRowParts/ImageGrid";
 import FileRowActions from "./FileRowParts/FileRowActions";
@@ -19,11 +19,16 @@ const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: Table
     visName: { value: string };
   };
 
-  const xOpatVisualization = slide.visualizations?.find((vis) => vis.name === target.visName.value)?.visConfig
+  const chosenVis = slide.visualizationConfig.visualization.find((vis) => vis.name === target.visName.value)
 
-  if(xOpatVisualization) {
-    openXOpat(xOpatVisualization);
-    console.log("Opening xOpat with visualization:" + JSON.stringify(xOpatVisualization));
+  const xOpatVisualizationConfig: VisualizationConfig = { 
+    ...slide.visualizationConfig,
+    visualization: chosenVis ? [chosenVis] : undefined
+  }
+
+  if(xOpatVisualizationConfig) {
+    openXOpat(xOpatVisualizationConfig);
+    console.log("Opening xOpat with visualization:" + JSON.stringify(xOpatVisualizationConfig));
     return;
   }
 
@@ -57,9 +62,9 @@ const FileRow = ({ slide, rowNo }: Props) => {
               />
             </div>
           }
-          {slide.visualizations &&
+          {slide.visualizationConfig &&
             <div className="flex w-[12.5rem] items-center justify-center z-10">
-              <FileRowSelect options={slide.visualizations.map((vis) => vis.name)} />
+              <FileRowSelect options={slide.visualizationConfig.visualization.map((vis) => vis.name)} />
             </div>
           }
           <div className="w-16 z-10">
