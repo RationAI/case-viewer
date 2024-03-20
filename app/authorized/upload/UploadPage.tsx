@@ -1,3 +1,5 @@
+'use client'
+
 import React from "react";
 import FileBrowseInput from "../../components/Upload/FileBrowseInput";
 import UploadButtonsAndProgress from "../../components/Upload/UploadButtonsAndProgress";

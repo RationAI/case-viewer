@@ -32,3 +32,7 @@ export const getNumberOfGroupsFromRegexString = (regexString: string) => {
   const groups = new RegExp(regexString.toString() + '|').exec('') as RegExpExecArray;
   return groups.length - 1;
 }
+
+export const getPathParts = (relativePath: string) => {
+  return relativePath.split('/').filter(Boolean).slice(3);
+}

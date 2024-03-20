@@ -4,7 +4,7 @@ import { TableStructureT } from "@/type-definitions";
 import { getCaseSearchResult } from "@/app/utils/data";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Table from "../../../components/Table/Table";
+import Table from "../../components/Table/Table";
 import { CaseSearchParams } from "@/EmpationAPI/src/v3/extensions/types/case-search-params";
 import { Session } from "next-auth";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";

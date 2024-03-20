@@ -1,17 +1,19 @@
 'use client'
 
-import { getHierarchySpec, getIdentifierSeparator, getRootApi } from "@/app/utils";
 import { TableStructureT } from "@/type-definitions";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case"
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Session } from "next-auth";
-import Table from "../../../components/Table/Table";
-import SegmentedPathLink from "../../../components/SegmentedPathLink/SegmentedPathLink";
+import Table from "../components/Table/Table";
+import SegmentedPathLink from "../components/SegmentedPathLink/SegmentedPathLink";
+import { getPathParts } from "@/app/utils";
 
 const basePageLink = '/authorized/cases'
+
+type Props = {
+  caseHierarchy: CaseHierarchy;
+}
 
 const getCurrentLevelFromHierarchy = (hierarchy: CaseHierarchy, relativePath: string[]) => {
   const currLvl = relativePath.reduce((lastLevel, childLevelName) => {
@@ -46,30 +48,10 @@ const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string
   return tableStructure
 }
 
-const getPathParts = (relativePath: string) => {
-  return relativePath.split('/').filter(Boolean).slice(3);
-}
-
-export default function CaseHierarchyLevel() {
-  const { data: session } = useSession();
-
-  const [caseHierarchy, setCaseHierarchy] = useState<CaseHierarchy | undefined>();
+export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
   const [currentLevel, setCurrentLevel] = useState<CaseHierarchy | undefined>();
 
   const relativePath = usePathname();
-
-  useEffect(() => {
-    const getCaseClass = async (session: Session) => {
-      const casesClass = (await getRootApi(session)).cases;
-      casesClass.caseExplorer.use(getIdentifierSeparator());
-      const hierarchy = await casesClass.caseExplorer.hierarchy(getHierarchySpec());
-      setCaseHierarchy(hierarchy);
-    };
-
-    if (session?.accessToken) {
-      getCaseClass(session);
-    }
-  }, [session, session?.accessToken])
 
   useEffect(() => {
     const getCurrentLevel = async (hierarchy: CaseHierarchy) => {

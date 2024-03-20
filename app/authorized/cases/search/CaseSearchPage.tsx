@@ -1,26 +1,25 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+'use client'
+
 import { createSearchQueryFromUrl, getNumberOfGroupsFromRegexString } from "@/app/utils/utilities";
 import { getConfig } from "@/app/utils/config";
 import CaseSearchForm from "./components/CaseSearchForm";
 import CaseSearchResult from "./components/CaseSearchResult";
 
-export default async function CaseSearchResultPage({ params }: { params: { searchQuery?: string[] } }) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
-    redirect("/");
-  }
+type Props = {
+  searchQuery: string[],
+}
+
+export default function CaseSearchPage({ searchQuery }: Props) {
 
   const identifierParts = getNumberOfGroupsFromRegexString(getConfig().local_id_separator || "")
 
-  if(!params.searchQuery) {
+  if(!searchQuery) {
     return (
       <CaseSearchForm identifierParts={identifierParts}/>
     )
   }
 
-  const query = createSearchQueryFromUrl(params.searchQuery)
+  const query = createSearchQueryFromUrl(searchQuery)
 
   if(query === null) {
     return (
