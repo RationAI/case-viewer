@@ -4,11 +4,11 @@ import KeycloakProvider from "next-auth/providers/keycloak"
 
 async function refreshAccessToken(token: OAuthToken) {
   try {
-    const response = await fetch(process.env.KEYCLOAK_TOKEN_ENDPOINT!, {
+    const response = await fetch(process.env.NEXT_AUTH_TOKEN_ENDPOINT!, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
-              client_id: process.env.KEYCLOAK_ID || "",
-              // client_secret: process.env.KEYCLOAK_SECRET,
+              client_id: process.env.NEXT_AUTH_CLIENT_ID || "",
+              // client_secret: process.env.NEXT_AUTH_SECRET,
               grant_type: "refresh_token",
               refresh_token: token.refreshToken || "",
             }),
@@ -43,15 +43,15 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     KeycloakProvider({
-      clientId: process.env.KEYCLOAK_ID || "",
-      clientSecret: process.env.KEYCLOAK_SECRET || "",
-      issuer: process.env.KEYCLOAK_ISSUER,
+      clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
+      clientSecret: process.env.NEXT_AUTH_SECRET || "",
+      issuer: process.env.NEXT_AUTH_ISSUER,
       //client: {
       //  redirect_uris: [process.env.KEYCLOAK_REDIRECT_URI || ""]
       //},
       authorization: {
         params: {
-          scope: process.env.KEYCLOAK_OIDC_SCOPE,
+          scope: process.env.NEXT_AUTH_OIDC_SCOPE,
         },
       },
     })
