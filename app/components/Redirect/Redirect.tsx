@@ -8,13 +8,14 @@ type Props = {
   className?: string,
 }
 
-const shallowRedirect = (link: string) => {
+const shallowRedirect = (e: React.MouseEvent,link: string) => {
+  e.preventDefault()
   window.history.pushState(null, '', `${link}`)
 }
 
 const Redirect = ({ children, link, shallow, className }: Props) => {
   if (shallow) {
-    return (<div onClick={() => shallowRedirect(link)} className={className}>{children}</div>);
+    return (<div onClick={(e) => shallowRedirect(e, link)} className={className}>{children}</div>);
   }
   return (
     <Link href={link} className={className}>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Table from '../components/Table/Table'
-import { TableStructureT } from '@/type-definitions';
+import { TableStructureT, VisualizationConfig } from '@/type-definitions';
 import { Session } from 'next-auth';
 import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideThumbnailURL, getSlideVisualizations } from '@/app/utils/data';
 import { useSession } from 'next-auth/react';
@@ -25,7 +25,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thum
         metadata: {
           something: "something",
         },
-        visualizations: slideVisualizations[idx]
+        visualizationConfig: slideVisualizations[idx] as VisualizationConfig
       })
     })
   }

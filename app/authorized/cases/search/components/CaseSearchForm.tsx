@@ -2,13 +2,12 @@
 
 import { FormConfigT, FormFieldT } from '@/type-definitions';
 import React, { useEffect, useState } from 'react'
-import { getCaseExplorer } from '@/app/utils';
-import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
 import Form from '@/app/components/Forms/Form/Form';
-import { useSession } from 'next-auth/react';
+import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
 
 type Props = {
+  caseExplorer: CaseExplorer;
   identifierParts: number;
 }
 
@@ -28,20 +27,17 @@ const createSearchUrl = (paramNames: string[], target: FormType) => {
   }, '');
 }
 
-const CaseSearchForm = ({ identifierParts }: Props) => {
-  const { data: session } = useSession();
-
+const CaseSearchForm = ({ caseExplorer, identifierParts }: Props) => {
   const [tissues, setTissues] = useState<string[]>([])
   const [stains, setStains] = useState<string[]>([])
 
   const router = useRouter()
 
   useEffect(() => {
-    const fetchData = async (session: Session) => {
-      const explorer = await getCaseExplorer(session)
+    const getTissuesStains = async () => {
       try {
-        const tissueOptions = await explorer.tissues();
-        const stainsOptions = await explorer.stains();
+        const tissueOptions = await caseExplorer.tissues();
+        const stainsOptions = await caseExplorer.stains();
         setTissues(tissueOptions || []);
         setStains(stainsOptions || []);
       } catch (e) {
@@ -49,10 +45,10 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
       }
     };
 
-    if (session?.accessToken) {
-      fetchData(session)
+    if (caseExplorer) {
+      getTissuesStains()
     }
-  }, [session])
+  }, [caseExplorer])
 
   const searchRows = [
     ['year', 'month', 'day'],

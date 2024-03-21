@@ -38,6 +38,7 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
               name={caseObj.name}
               desc={caseObj.desc}
               link={caseObj.link}
+              shallow
             />
           ))}
         </div>

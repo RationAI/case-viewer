@@ -1,15 +1,14 @@
 'use client'
 
 import { TableStructureT } from "@/type-definitions";
-import { getCaseSearchResult } from "@/app/utils/data";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Table from "../../components/Table/Table";
 import { CaseSearchParams } from "@/EmpationAPI/src/v3/extensions/types/case-search-params";
-import { Session } from "next-auth";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
+import CaseExplorer from "@/EmpationAPI/src/v3/extensions/case-explorer";
 
 type Props = {
+  caseExplorer: CaseExplorer;
   query: CaseSearchParams[];
 }
 
@@ -26,21 +25,19 @@ const getTableStructureFromSearchResult = (cases: Case[]) => {
   return tableStructure
 }
 
-export default function CaseSearchResult({ query }: Props) {
-  const { data: session } = useSession();
-
+export default function CaseSearchResult({ caseExplorer, query }: Props) {
   const [searchResult, setSearchResult] = useState<Case[] | undefined>()
 
   useEffect(() => {
-    const searchCases = async (session: Session) => {
-      const result = await getCaseSearchResult(session, query)
+    const searchCases = async () => {
+      const result = await caseExplorer.search(query)
       setSearchResult(result)
     };
 
-    if (session?.accessToken) {
-      searchCases(session)
+    if (caseExplorer && query) {
+      searchCases()
     }
-  }, [session, query])
+  }, [caseExplorer, query])
 
   return (
     <div>

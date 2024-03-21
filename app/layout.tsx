@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import { getServerSession } from 'next-auth'
 import './globals.css'
 import Navbar from './components/Navbar/Navbar'
-import Sidebar from './components/Sidebar/Sidebar'
 import SessionProvider from "./components/SessionProvider/SessionProvider";
 import { authOptions } from './api/auth/[...nextauth]/authOptions'
 
@@ -27,10 +26,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <Navbar />
           <div className="flex overflow-clip pt-[3.5rem] h-screen">
-            <Sidebar />
-            <div className="p-2 overflow-scroll w-full">
-              {children}
-            </div>
+            {children}
           </div>
         </SessionProvider>
       </body>

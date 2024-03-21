@@ -1,16 +1,22 @@
 'use client'
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react"
 import { MenuItemT } from "@/type-definitions";
-import Link from "next/link";
 import Image from "next/image";
 import MenuContent from "../MenuContent/MenuContent";
 import UserBubble from "./UserBubble";
+import { usePathname } from "next/navigation";
+import Redirect from "../Redirect/Redirect";
+import { getPathParts } from "@/app/utils";
 
 const homeLink = "/";
 
 const secondaryMenu: MenuItemT[] = [
+  {
+    label: "Cases",
+    link: "cases/path",
+  },
   {
     label: "Search",
     link: "cases/search",
@@ -27,6 +33,13 @@ const secondaryMenu: MenuItemT[] = [
 
 const Navbar = () => {
   const { data: session } = useSession()
+  const relativePath = usePathname()
+
+  const [pathParts, setPathParts] = useState<string[]>(getPathParts(relativePath));
+
+  useEffect(() => {
+    setPathParts(getPathParts(relativePath));
+  }, [relativePath]);
 
   let menuItems = secondaryMenu.map((item) => {
     const absoluteLink = `/authorized/${item.link}`
@@ -55,28 +68,28 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
-        <Link href={homeLink} className="btn btn-ghost normal-case text-2xl">
+        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl" shallow={false}>
           <Image
             src='/svg/rationai-color.svg'
             alt='RationAI'
             height={120}
             width={120}
           />
-        </Link>
+        </Redirect>
       </div>
       <div className="navbar-center hidden md:flex flex-1">
         <ul className="menu menu-horizontal px-1 py-0">
           {menuItems.map((menuItem) => (
             <li key={menuItem.label}>
               {!menuItem.subItems ? (
-                <Link href={menuItem.link}>{menuItem.label}</Link>
+                <Redirect link={menuItem.link} shallow={pathParts[0] === "authorized"}>{menuItem.label}</Redirect>
               ) : (
                 <details>
                   <summary>{menuItem.label}</summary>
                   <ul className="p-2">
                     {menuItem.subItems.map((subItem) => (
                       <li key={subItem.label}>
-                        <Link href={subItem.link}>{subItem.label}</Link>
+                        <Redirect link={subItem.link} shallow={pathParts[0] === "authorized"}>{subItem.label}</Redirect>
                       </li>
                     ))}
                   </ul>
