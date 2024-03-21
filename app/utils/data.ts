@@ -1,9 +1,7 @@
 import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
-import { getHierarchySpec, getIdentifierSeparator, getSlideMaskSeparator } from './config';
-import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
+import { getIdentifierSeparator, getSlideMaskSeparator } from './config';
 import { CaseSearchParams } from '@/EmpationAPI/src/v3/extensions/types/case-search-params';
-import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 
 export const getRootApi = async (session: Session) => {
 
@@ -19,7 +17,7 @@ export const getRootApi = async (session: Session) => {
 
 export const getRationAIApi = async (session: Session) => {
   const root = await getRootApi(session);
-  await root.rationai.from(session.accessToken)
+  await root.rationai.from(session.accessToken!)
   return root.rationai;
 }
 
@@ -29,29 +27,9 @@ export const getCaseExplorer = async (session: Session) => {
   return api.cases.caseExplorer
 }
 
-export const getUserCaseHierarchy = async (session: Session) => {
-  const explorer = await getCaseExplorer(session)
-
-  let result: CaseHierarchy = { lastLevel: true, items: []};
-  try {
-    const hierarchy_spec = getHierarchySpec()
-    result = await explorer.hierarchy(hierarchy_spec)
-  } catch (e) {
-    console.log("Fetch error")
-  }
- 
-  return result
-}
-
-export const getCaseSearchResult = async (session: Session, query: CaseSearchParams[]) => {
-  const explorer = await getCaseExplorer(session)
-  
-  let result: Case[] = [];
-  try {
-    result = (await explorer.search(query))
-  } catch (e) {
-    console.log("Fetch error")
-  }
+export const getCaseSearchResult = async (casesClass: V3.Cases, query: CaseSearchParams[]) => {
+  await casesClass.caseExplorer.use(getIdentifierSeparator());
+  const result = casesClass.caseExplorer.search(query);
  
   return result
 }
@@ -87,22 +65,31 @@ export const getSlideThumbnailURL = async (session: Session, slideId: string) =>
 }
 
 export const getSlideVisualizations = async (slideId: string, rationaiApi: V3.RationAI) => {
-  const defaultVis = {    
-    data: [slideId],
-    background: [
-        {
-            dataReference: 0,
-            lossless: false,
-        }
-    ],
+  const defaultParams = {
+    locale: "en",
+    activeBackgroundIndex: 0,
+    activeVisualizationIndex: 0
   }
+  const defaultBg = [{    
+      dataReference: 0,
+      lossless: false,
+  }];
+  const defaultData = [slideId];
+  let fetchedVis;
   try {
-    const vis = await rationaiApi.globalStorage.wsiMetadata.getVisualizations(slideId);
-    return {
-      ...defaultVis,
-      ...vis,
-    }
+    fetchedVis = await rationaiApi.globalStorage.wsiMetadata.getVisualizations(slideId);
   } catch (e) {
-    return defaultVis;
+    fetchedVis = {}
+  }
+
+  return {
+    params: fetchedVis.params || defaultParams,
+    data: fetchedVis.data || defaultData,
+    background: fetchedVis.background && fetchedVis.background.data ? [fetchedVis.background] : defaultBg,
+    visualizations: (fetchedVis.visualizations as Array<object> || []).concat([{
+      "name": "Pure background",
+      "lossless": true,
+      "shaders": []
+    }])
   }
 }

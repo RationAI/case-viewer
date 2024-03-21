@@ -1,31 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import CaseTree from "../CaseTree";
-import { useSession } from "next-auth/react";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
-import { getRootApi } from "@/app/utils/data";
-import { Session } from "next-auth";
-import { getHierarchySpec, getIdentifierSeparator } from "@/app/utils";
 
-const Sidebar = () => {
-  const { data: session } = useSession();
+type Props = {
+  caseHierarchy?: CaseHierarchy,
+}
 
-  const [caseHierarchy, setCaseHierarchy] = useState<CaseHierarchy | undefined>();
+const Sidebar = ({caseHierarchy}: Props) => {
   const [extended, setExtended] = useState(false);
-
-  useEffect(() => {
-    const getCaseHierarchy = async (session: Session) => {
-      const casesClass = (await getRootApi(session)).cases;
-      casesClass.caseExplorer.use(getIdentifierSeparator());
-      const hierarchy = await casesClass.caseExplorer.hierarchy(getHierarchySpec());
-      setCaseHierarchy(hierarchy);
-    };
-
-    if (session?.accessToken) {
-      getCaseHierarchy(session);
-    }
-  }, [session, session?.accessToken])
 
   const sidebarIconMenu = [
     {

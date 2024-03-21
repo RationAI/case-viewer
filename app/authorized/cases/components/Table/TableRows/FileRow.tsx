@@ -19,11 +19,11 @@ const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: Table
     visName: { value: string };
   };
 
-  const chosenVis = slide.visualizationConfig.visualization.find((vis) => vis.name === target.visName.value)
+  const chosenVis = slide.visualizationConfig.visualizations.find((vis) => vis.name === target.visName.value)
 
   const xOpatVisualizationConfig: VisualizationConfig = { 
     ...slide.visualizationConfig,
-    visualization: chosenVis ? [chosenVis] : undefined
+    visualizations: [chosenVis!]
   }
 
   if(xOpatVisualizationConfig) {
@@ -64,7 +64,7 @@ const FileRow = ({ slide, rowNo }: Props) => {
           }
           {slide.visualizationConfig &&
             <div className="flex w-[12.5rem] items-center justify-center z-10">
-              <FileRowSelect options={slide.visualizationConfig.visualization.map((vis) => vis.name)} />
+              <FileRowSelect options={slide.visualizationConfig.visualizations.map((vis) => vis.name)} />
             </div>
           }
           <div className="w-16 z-10">

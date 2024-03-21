@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case"
+import Redirect from "./Redirect/Redirect";
 
 type Props = {
   root: boolean,
@@ -19,9 +19,9 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
             <li key={item.levelName} className="max-w-full truncate">
               <details open={item.lastLevel !== undefined && !item.lastLevel} className="max-w-full *:open:after:rotate-[-135deg]">
                 <summary className="flex flex-row-reverse justify-end py-0 active:!bg-gray-50 hover:bg-gray-50">
-                  <Link href={`${rootLink}/${item.levelName}`} className="flex-1">
+                  <Redirect link={`${rootLink}/${item.levelName}`} className="flex-1" shallow>
                     <div className="truncate hover:bg-gray-200 rounded-md px-[0.375rem] py-[0.25rem]">{item.levelName}</div>
-                  </Link>
+                  </Redirect>
                   {/* <Image
                       src='/file_icons/folder.svg'
                       alt='Folder'
@@ -36,7 +36,7 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
           ) : 
           (hierarchy.items as Case[]).map((item) => (
             <li key={item.id} className="truncate">
-              <Link href={`/authorized/cases/case/${item.id}`} className="flex flex-row max-w-full">
+              <Redirect link={`/authorized/cases/case/${item.id}`} className="flex flex-row max-w-full" shallow>
                 <Image
                   src={'/file_icons/folder.svg' }
                   alt='Icon'
@@ -46,7 +46,7 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
                 <div className="truncate">
                   {item.local_id}
                 </div>
-              </Link>
+              </Redirect>
             </li>
             )
           )

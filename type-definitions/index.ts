@@ -47,14 +47,14 @@ type MetadataT = {
 
 export type Visualization = {
   shaders: object,
-  name?: string,
+  name: string,
 }
 
 export type VisualizationConfig = {
   params?: object,
   data: string[],
   background?: object,
-  visualization?: Visualization[],
+  visualizations: Visualization[],
 };
 
 export type TableSlideRowT = {
@@ -65,7 +65,7 @@ export type TableSlideRowT = {
   metadata: MetadataT,
   masks?: MaskT[],
   annotations?: AnnotationT[],
-  visualizationConfig?: VisualizationConfig,
+  visualizationConfig: VisualizationConfig,
 }
 
 export type ImageT = {
