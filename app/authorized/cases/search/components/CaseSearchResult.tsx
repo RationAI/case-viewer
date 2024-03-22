@@ -8,7 +8,7 @@ import { Case } from "@/EmpationAPI/src/v3/root/types/case";
 import CaseExplorer from "@/EmpationAPI/src/v3/extensions/case-explorer";
 
 type Props = {
-  caseExplorer: CaseExplorer;
+  caseExplorer: CaseExplorer | undefined,
   query: CaseSearchParams[];
 }
 
@@ -30,7 +30,7 @@ export default function CaseSearchResult({ caseExplorer, query }: Props) {
 
   useEffect(() => {
     const searchCases = async () => {
-      const result = await caseExplorer.search(query)
+      const result = await caseExplorer!.search(query)
       setSearchResult(result)
     };
 

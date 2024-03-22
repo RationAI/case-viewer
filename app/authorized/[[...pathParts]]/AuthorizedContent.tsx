@@ -12,7 +12,7 @@ import UserPage from '../user/UserPage';
 import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
 
 type Props = {
-  caseExplorer: CaseExplorer,
+  caseExplorer: CaseExplorer | undefined,
   caseHierarchy: CaseHierarchy | undefined,
   pathParts: string[],
 }
