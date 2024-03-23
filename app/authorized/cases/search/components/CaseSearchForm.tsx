@@ -7,7 +7,7 @@ import Form from '@/app/components/Forms/Form/Form';
 import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
 
 type Props = {
-  caseExplorer: CaseExplorer;
+  caseExplorer: CaseExplorer | undefined,
   identifierParts: number;
 }
 
@@ -36,8 +36,8 @@ const CaseSearchForm = ({ caseExplorer, identifierParts }: Props) => {
   useEffect(() => {
     const getTissuesStains = async () => {
       try {
-        const tissueOptions = await caseExplorer.tissues();
-        const stainsOptions = await caseExplorer.stains();
+        const tissueOptions = await caseExplorer!.tissues();
+        const stainsOptions = await caseExplorer!.stains();
         setTissues(tissueOptions || []);
         setStains(stainsOptions || []);
       } catch (e) {

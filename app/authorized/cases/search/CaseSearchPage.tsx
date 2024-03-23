@@ -7,7 +7,7 @@ import CaseSearchResult from "./components/CaseSearchResult";
 import CaseExplorer from "@/EmpationAPI/src/v3/extensions/case-explorer";
 
 type Props = {
-  caseExplorer: CaseExplorer,
+  caseExplorer: CaseExplorer | undefined,
   searchQuery: string[],
 }
 
