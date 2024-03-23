@@ -18,7 +18,7 @@ const Redirect = ({ children, link, shallow, className }: Props) => {
     return (<div onClick={(e) => shallowRedirect(e, link)} className={className}>{children}</div>);
   }
   return (
-    <Link href={link} className={className}>
+    <Link prefetch={false} href={link} className={className}>
       {children}
     </Link>
   )
