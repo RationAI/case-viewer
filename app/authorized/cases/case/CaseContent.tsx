@@ -11,11 +11,12 @@ import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 
 type Props = {
   caseId: string;
+  showCaseName: boolean;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: (string | undefined)[], slideVisualizations: object[]) => {
+const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: (string | undefined)[], slideVisualizations: object[], showCaseName: boolean) => {
   const tableStructure: TableStructureT = { 
-    name: caseInfo.local_id || caseInfo.id,
+    name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
       return ({
         uuid: slide.id,
@@ -32,73 +33,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thum
   return tableStructure;
 }
 
-/* const exampleFolder: TableStructureT = {
-  name: 'folder',
-  slides: [
-    {
-      uuid: 'dasdiasuidasodisnasodsa',
-      name: 'report.pdf',
-      previewURL: '/file_icons/image_file.svg',
-      format: 'pdf',
-      created: timestamp,
-      createdBy: 'John Doe',
-      metadata: {
-        something: 'something',
-        dsasdasda: 'dasdsadasd',
-      },
-      masks: [
-        {
-          name: 'mask1',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask2',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask3sadasdasdasdsadasdas',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask4',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask5',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask6',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask7',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask8',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask9',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask10',
-          imageLink: '/file_icons/image_file.svg',
-        },
-      ],
-      annotations: [
-        {
-          name: 'mask',
-          imageLink: '/file_icons/image_file.svg',
-        },
-      ]
-    }
-  ]
-} */
-
-const CaseContent = ({ caseId }: Props) => {
+const CaseContent = ({ caseId, showCaseName }: Props) => {
   const { data: session } = useSession();
 
   const [caseInfo, setCaseInfo] = useState<Case | undefined>();
@@ -138,7 +73,7 @@ const CaseContent = ({ caseId }: Props) => {
   if (caseInfo && caseSlides && thumbnailUrls && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls, slideVisualizations)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls, slideVisualizations, showCaseName)}/>
       </div>
     )
   }

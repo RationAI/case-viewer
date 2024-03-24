@@ -28,6 +28,7 @@ export type TableStructureT = {
   folders?: TableFolderRowT[],
   cases?: TableCaseRowT[],
   slides?: TableSlideRowT[],
+  mergeCases?: boolean,
 };
 
 type TableFolderRowT = {
@@ -35,7 +36,8 @@ type TableFolderRowT = {
   link: string,
 }
 
-type TableCaseRowT = {
+export type TableCaseRowT = {
+  caseId: string,
   name: string,
   desc?: string,
   link: string,

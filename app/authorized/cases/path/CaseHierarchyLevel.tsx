@@ -40,10 +40,12 @@ const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string
     }) : undefined,
     cases: currLvl.lastLevel ? (currLvl.items as Case[]).map((item) => {
       return { 
+        caseId: item.id,
         name: item.local_id || item.id,
         desc: item.description || undefined,
         link: `${basePageLink}/case/${item.id}`}
     }) : undefined,
+    mergeCases: true,
   }
   return tableStructure
 }

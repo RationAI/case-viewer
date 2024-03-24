@@ -37,7 +37,7 @@ const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) =>
     case "cases":
       switch (pathParts[2]) {
         case "case":
-          return <CaseContent caseId={pathParts[3]}/>;
+          return <CaseContent caseId={pathParts[3]} showCaseName={true} />;
         case "path":
           return <CaseHierarchyLevel caseHierarchy={caseHierarchy}/>;
         case "search":

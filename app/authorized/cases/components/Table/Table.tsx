@@ -2,6 +2,7 @@ import { TableStructureT } from "@/type-definitions";
 import React from "react";
 import FolderRow from "./TableRows/FolderRow";
 import FileRow from "./TableRows/FileRow";
+import CollapseCaseRow from "./TableRows/CollapseCaseRow";
 
 type Props = {
   tableStructure: TableStructureT;
@@ -10,7 +11,7 @@ type Props = {
 
 const Table = ({ tableStructure, advancedUser = false }: Props) => {
   return (
-    <div className="overflow-x-auto">
+    <div>
       <div className='font-sans font-semibold text-slate-500 text-xl pl-2'>{tableStructure.name}</div>
       {tableStructure.folders &&
         <div className="flex flex-col gap-1">
@@ -32,15 +33,29 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
           {tableStructure.parent && (
             <FolderRow name=".." link={tableStructure.parent} shallow/>
           )}
-          {tableStructure.cases.map((caseObj) => (
-            <FolderRow
-              key={caseObj.link}
-              name={caseObj.name}
-              desc={caseObj.desc}
-              link={caseObj.link}
-              shallow
-            />
-          ))}
+          {tableStructure.mergeCases ? 
+          (
+          <>
+            <ul className="menu p-0">
+            {tableStructure.cases.map((caseObj) => (
+              <CollapseCaseRow key={caseObj.caseId} caseRow={caseObj}/>
+            ))}
+            </ul>
+          </>
+          ) : 
+          (
+          <>
+            {tableStructure.cases.map((caseObj) => (
+              <FolderRow
+                key={caseObj.caseId}
+                name={caseObj.name}
+                desc={caseObj.desc}
+                link={caseObj.link}
+                shallow
+              />
+            ))}
+          </>
+          )}
         </div>
       }
       {tableStructure.slides && tableStructure.slides.length > 0 &&
