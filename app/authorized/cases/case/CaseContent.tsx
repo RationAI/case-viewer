@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import Table from '../components/Table/Table'
 import { TableStructureT, VisualizationConfig } from '@/type-definitions';
-import { Session } from 'next-auth';
-import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideThumbnailURL, getSlideVisualizations } from '@/app/utils/data';
-import { useSession } from 'next-auth/react';
+import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideVisualizations } from '@/app/utils/data';
+import { getSession } from 'next-auth/react';
 import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 
@@ -14,14 +13,13 @@ type Props = {
   showCaseName: boolean;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: (string | undefined)[], slideVisualizations: object[], showCaseName: boolean) => {
+const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
   const tableStructure: TableStructureT = { 
     name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
       return ({
-        uuid: slide.id,
+        slideId: slide.id,
         name: slide.local_id?.split('.')[-1] || slide.id,
-        previewURL: thumbnailUrls[idx],
         created: new Date(slide.created_at).toISOString(),
         metadata: {
           something: "something",
@@ -34,46 +32,38 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thum
 }
 
 const CaseContent = ({ caseId, showCaseName }: Props) => {
-  const { data: session } = useSession();
-
   const [caseInfo, setCaseInfo] = useState<Case | undefined>();
   const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
-  const [thumbnailUrls, setThumbnailUrls] = useState<(string | undefined)[]>([]);
   const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
 
   useEffect(() => {
-    const getCaseContent = async (session: Session) => {
-      const caseObj = await getCaseInfo(session, caseId)
-      const slides = await getCaseSlides(session, caseId)
-      setCaseInfo(caseObj);
-      setCaseSlides(slides);
+    const getCaseContent = async () => {
+      const session = await getSession()
+      if (session && session.accessToken) {
+        const caseObj = await getCaseInfo(session, caseId)
+        const slides = await getCaseSlides(session, caseId)
+        setCaseInfo(caseObj);
+        setCaseSlides(slides);
 
-      const slideThumbnails = await Promise.all(slides.map(async (slide) => {
-        const previewURL = await getSlideThumbnailURL(session, slide.id)
-        return previewURL;
-      }))
+        const rationaiApi = await getRationAIApi(session)
 
-      setThumbnailUrls(slideThumbnails)
+        const visualizations = await Promise.all(slides.map(async (slide) => {
+          const vis = await getSlideVisualizations(slide.id, rationaiApi)
+          return vis;
+        }))
 
-      const rationaiApi = await getRationAIApi(session)
-
-      const visualizations = await Promise.all(slides.map(async (slide) => {
-        const vis = await getSlideVisualizations(slide.id, rationaiApi)
-        return vis;
-      }))
-
-      setSlideVisualizations(visualizations)
+        setSlideVisualizations(visualizations)
+      }
     };
 
-    if (session?.accessToken) {
-      getCaseContent(session);
-    }
-  }, [caseId, session, session?.accessToken])
+    getCaseContent();
+  }, [caseId])
 
-  if (caseInfo && caseSlides && thumbnailUrls && slideVisualizations) {
+  if (caseInfo && caseSlides && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls, slideVisualizations, showCaseName)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, slideVisualizations, showCaseName)}/>
+        {caseSlides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
       </div>
     )
   }

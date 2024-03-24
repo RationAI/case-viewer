@@ -8,7 +8,7 @@ type Props = {
   className?: string,
 }
 
-const shallowRedirect = (e: React.MouseEvent,link: string) => {
+export const shallowRedirect = (e: React.MouseEvent,link: string) => {
   e.preventDefault()
   window.history.pushState(null, '', `${link}`)
 }

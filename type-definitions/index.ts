@@ -60,9 +60,8 @@ export type VisualizationConfig = {
 };
 
 export type TableSlideRowT = {
-  uuid: string,
+  slideId: string,
   name: string,
-  previewURL?: string,
   created: string,
   metadata: MetadataT,
   masks?: MaskT[],
