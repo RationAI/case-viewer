@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
-import { Case } from "@/EmpationAPI/src/v3/root/types/case"
 import Redirect from "./Redirect/Redirect";
+import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 
 type Props = {
   root: boolean,
@@ -34,7 +34,7 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
             </li>
             )
           ) : 
-          (hierarchy.items as Case[]).map((item) => (
+          (hierarchy.items as CaseH[]).map((item) => (
             <li key={item.id} className="truncate">
               <Redirect link={`/authorized/cases/case/${item.id}`} className="flex flex-row max-w-full" shallow>
                 <Image

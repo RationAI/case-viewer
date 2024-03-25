@@ -10,7 +10,8 @@ import UploadPage from '../upload/UploadPage';
 import InvalidPathPage from '../../components/InvalidPathPage/InvalidPathPage';
 import UserPage from '../user/UserPage';
 import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
-import { useSession } from 'next-auth/react';
+import { getHierarchySpec } from '@/app/utils';
+import SlideContent from '../cases/path/SlideContent';
 
 type Props = {
   caseExplorer: CaseExplorer | undefined,
@@ -18,18 +19,14 @@ type Props = {
   pathParts: string[],
 }
 
-const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) => {
-  const { data: session } = useSession();  
+const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) => { 
   if (!caseHierarchy || !pathParts) {
     return (
-      <div>
-        <div>Session: {JSON.stringify(session)}</div>
-        <div>Hierarchy: {JSON.stringify(caseHierarchy)}</div>
-        <div>Pathparts: {pathParts}</div>
-        <div>Loading...</div>
-      </div>
+      <div>Loading...</div>
     )
   }
+
+  const hierarchyDepth = getHierarchySpec().length;
 
   switch (pathParts[1]) {
     case "annotations":
@@ -39,6 +36,9 @@ const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) =>
         case "case":
           return <CaseContent caseId={pathParts[3]} showCaseName={true} />;
         case "path":
+          if (pathParts.length === hierarchyDepth + 4) {
+            return <SlideContent slideId={pathParts[hierarchyDepth + 3]}/>
+          }
           return <CaseHierarchyLevel caseHierarchy={caseHierarchy}/>;
         case "search":
           return <CaseSearchPage caseExplorer={caseExplorer} searchQuery={pathParts.slice(3)}/>;

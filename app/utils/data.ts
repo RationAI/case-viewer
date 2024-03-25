@@ -17,7 +17,6 @@ export const getRootApi = async (session: Session) => {
 
 export const getRationAIApi = async (session: Session) => {
   const root = await getRootApi(session);
-  await root.rationai.from(session.accessToken!)
   return root.rationai;
 }
 
