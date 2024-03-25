@@ -68,7 +68,7 @@ const FileRow = ({ slide, rowNo }: Props) => {
             </div>
           }
           <div className="w-16 z-10">
-            <FileRowActions />
+            <FileRowActions slidePath={`${slide.casePath}/${slide.slideId}`} />
           </div>
         </form>
       </div>

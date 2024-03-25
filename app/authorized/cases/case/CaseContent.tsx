@@ -10,15 +10,17 @@ import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 
 type Props = {
   caseId: string;
+  caseHierPath: string
   showCaseName: boolean;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
+const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
   const tableStructure: TableStructureT = { 
     name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
       return ({
         slideId: slide.id,
+        casePath: caseHierPath,
         name: slide.local_id?.split('.')[-1] || slide.id,
         created: new Date(slide.created_at).toISOString(),
         metadata: {
@@ -31,7 +33,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], slid
   return tableStructure;
 }
 
-const CaseContent = ({ caseId, showCaseName }: Props) => {
+const CaseContent = ({ caseId, caseHierPath, showCaseName }: Props) => {
   const [caseInfo, setCaseInfo] = useState<Case | undefined>();
   const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
   const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
@@ -40,9 +42,9 @@ const CaseContent = ({ caseId, showCaseName }: Props) => {
     const getCaseContent = async () => {
       const session = await getSession()
       if (session && session.accessToken) {
-        const caseObj = await getCaseInfo(session, caseId)
+        const caseInfo = await getCaseInfo(session, caseId)
         const slides = await getCaseSlides(session, caseId)
-        setCaseInfo(caseObj);
+        setCaseInfo(caseInfo);
         setCaseSlides(slides);
 
         const rationaiApi = await getRationAIApi(session)
@@ -62,7 +64,7 @@ const CaseContent = ({ caseId, showCaseName }: Props) => {
   if (caseInfo && caseSlides && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, slideVisualizations, showCaseName)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseHierPath, caseSlides, slideVisualizations, showCaseName)}/>
         {caseSlides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
       </div>
     )

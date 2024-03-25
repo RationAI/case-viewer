@@ -1,3 +1,5 @@
+import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
+import { Case } from "@/EmpationAPI/src/v3/root/types/case";
 import { JWT } from "next-auth/jwt";
 
 export type AppConfigT = {
@@ -37,10 +39,7 @@ type TableFolderRowT = {
 }
 
 export type TableCaseRowT = {
-  caseId: string,
-  name: string,
-  desc?: string,
-  link: string,
+  caseObj: Case | CaseH;
 };
 
 type MetadataT = {
@@ -61,6 +60,7 @@ export type VisualizationConfig = {
 
 export type TableSlideRowT = {
   slideId: string,
+  casePath: string,
   name: string,
   created: string,
   metadata: MetadataT,

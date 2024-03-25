@@ -16,9 +16,8 @@ const getTableStructureFromSearchResult = (cases: Case[]) => {
   const tableStructure: TableStructureT = {
     cases: cases.map((caseObj) => {
       return { 
-        name: caseObj.local_id || caseObj.id,
-        desc: caseObj.description || undefined,
-        link: `/authorized/cases/case/${caseObj.id}`}
+        caseObj: caseObj,
+      }
     }),
     slides: [],
   }

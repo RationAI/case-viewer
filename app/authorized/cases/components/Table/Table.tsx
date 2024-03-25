@@ -38,19 +38,19 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
           {tableStructure.mergeCases ? (
             <>
               <ul className="menu p-0">
-                {tableStructure.cases.map((caseObj) => (
-                  <CollapseCaseRow key={caseObj.caseId} caseRow={caseObj} />
+                {tableStructure.cases.map((c) => (
+                  <CollapseCaseRow key={c.caseObj.id} caseRow={c} />
                 ))}
               </ul>
             </>
           ) : (
             <>
-              {tableStructure.cases.map((caseObj) => (
+              {tableStructure.cases.map((c) => (
                 <FolderRow
-                  key={caseObj.caseId}
-                  name={caseObj.name}
-                  desc={caseObj.desc}
-                  link={caseObj.link}
+                  key={c.caseObj.id}
+                  name={c.caseObj.local_id || c.caseObj.id}
+                  desc={c.caseObj.description || undefined}
+                  link={`/authorized/cases/case/${c.caseObj.id}`}
                   shallow
                 />
               ))}

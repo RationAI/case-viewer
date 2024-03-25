@@ -19,6 +19,10 @@ type Props = {
   pathParts: string[],
 }
 
+const getHierPathForCase = (caseHierarchy: CaseHierarchy, caseId: string) => {
+  return
+}
+
 const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) => { 
   if (!caseHierarchy || !pathParts) {
     return (
@@ -34,7 +38,8 @@ const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) =>
     case "cases":
       switch (pathParts[2]) {
         case "case":
-          return <CaseContent caseId={pathParts[3]} showCaseName={true} />;
+          // TODO get case path in hierarchy
+          return <CaseContent caseId={pathParts[3]} caseHierPath='/' showCaseName={true} />;
         case "path":
           if (pathParts.length === hierarchyDepth + 4) {
             return <SlideContent slideId={pathParts[hierarchyDepth + 3]}/>

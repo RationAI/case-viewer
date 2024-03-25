@@ -2,12 +2,12 @@
 
 import { TableStructureT } from "@/type-definitions";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
-import { Case } from "@/EmpationAPI/src/v3/root/types/case"
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Table from "../components/Table/Table";
 import SegmentedPathLink from "../components/SegmentedPathLink/SegmentedPathLink";
 import { getPathParts } from "@/app/utils";
+import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 
 const basePageLink = '/authorized/cases'
 
@@ -38,12 +38,10 @@ const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string
         name: item.levelName || "",
         link: `${basePageLink}/path${relativePath.reduce((path, param) => `${path}/${param}`, '')}/${item.levelName}`}
     }) : undefined,
-    cases: currLvl.lastLevel ? (currLvl.items as Case[]).map((item) => {
+    cases: currLvl.lastLevel ? (currLvl.items as CaseH[]).map((item) => {
       return { 
-        caseId: item.id,
-        name: item.local_id || item.id,
-        desc: item.description || undefined,
-        link: `${basePageLink}/case/${item.id}`}
+        caseObj: item,
+      }
     }) : undefined,
     mergeCases: true,
   }
