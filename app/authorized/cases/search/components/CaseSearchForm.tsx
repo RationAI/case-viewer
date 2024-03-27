@@ -36,8 +36,8 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
   useEffect(() => {
     const getTissuesStains = async () => {
       try {
-        const tissueOptions = await rootApi.cases.caseExplorer.tissues();
-        const stainsOptions = await rootApi.cases.caseExplorer.stains();
+        const tissueOptions = await rootApi!.cases.caseExplorer.tissues();
+        const stainsOptions = await rootApi!.cases.caseExplorer.stains();
         setTissues(tissueOptions || []);
         setStains(stainsOptions || []);
       } catch (e) {

@@ -40,10 +40,10 @@ const CaseContent = ({ caseObj, showCaseName }: Props) => {
 
   useEffect(() => {
     const getCaseContent = async () => {
-      const slides = await getCaseSlides(rootApi, caseObj.id)
+      const slides = await getCaseSlides(rootApi!, caseObj.id)
       setCaseSlides(slides);
 
-      const rationaiApi = rootApi.rationai;
+      const rationaiApi = rootApi!.rationai;
 
       const visualizations = await Promise.all(slides.map(async (slide) => {
         const vis = await getSlideVisualizations(slide.id, rationaiApi)

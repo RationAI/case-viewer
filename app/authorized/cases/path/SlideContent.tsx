@@ -13,7 +13,7 @@ const SlideContent = ({ slideId }: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const thumbnailUrl = await getSlideThumbnailURL(rootApi, slideId)
+      const thumbnailUrl = await getSlideThumbnailURL(rootApi!, slideId)
       setImageUrl(thumbnailUrl);
     };
 

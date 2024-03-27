@@ -17,7 +17,7 @@ const CasePage = ({ caseId }: Props) => {
     const getCaseObj = async () => {
       const session = await getSession()
       if (session && session.accessToken) {
-        const cs = await rootApi.cases.caseExplorer.getCase(caseId)
+        const cs = await rootApi!.cases.caseExplorer.getCase(caseId)
         setCaseObj(cs);
       }
     };

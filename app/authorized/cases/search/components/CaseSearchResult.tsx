@@ -30,7 +30,7 @@ export default function CaseSearchResult({ query }: Props) {
 
   useEffect(() => {
     const searchCases = async () => {
-      const result = await rootApi.cases.caseExplorer.search(query)
+      const result = await rootApi!.cases.caseExplorer.search(query)
       setSearchResult(result)
     };
 
