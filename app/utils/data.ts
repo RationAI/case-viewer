@@ -1,7 +1,7 @@
 import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
-import { getIdentifierSeparator, getSlideMaskSeparator } from './config';
-import { CaseSearchParams } from '@/EmpationAPI/src/v3/extensions/types/case-search-params';
+import { getSlideMaskSeparator } from './config';
+import { Root } from '@/EmpationAPI/src/v3';
 
 export const getRootApi = async (session: Session) => {
 
@@ -15,34 +15,9 @@ export const getRootApi = async (session: Session) => {
   return api;
 }
 
-export const getRationAIApi = async (session: Session) => {
-  const root = await getRootApi(session);
-  return root.rationai;
-}
-
-export const getCaseExplorer = async (session: Session) => {
-  const api = await getRootApi(session)
-  api.cases.caseExplorer.use(getIdentifierSeparator())
-  return api.cases.caseExplorer
-}
-
-export const getCaseSearchResult = async (casesClass: V3.Cases, query: CaseSearchParams[]) => {
-  await casesClass.caseExplorer.use(getIdentifierSeparator());
-  const result = casesClass.caseExplorer.search(query);
- 
-  return result
-}
-
-export const getCaseInfo = async (session: Session, caseId: string) => {
-  const api = await getRootApi(session);
-  const caseObj = (await api.cases.get(caseId))
-  return caseObj
-}
-
-export const getCaseSlides = async (session: Session, caseId: string) => {
-  const api = await getRootApi(session);
-  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
-  const slides = (await api.cases.wsiExplorer.slides(caseId)).filter((slide) => !slide.deleted)
+export const getCaseSlides = async (rootApi: Root, caseId: string) => {
+  rootApi.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
+  const slides = (await rootApi.cases.wsiExplorer.slides(caseId)).filter((slide) => !slide.deleted)
   return slides
 }
 
@@ -53,10 +28,9 @@ export const getCaseMasks = async (session: Session, caseId: string) => {
   return masks
 }
 
-export const getSlideThumbnailURL = async (session: Session, slideId: string) => {
-  const api = await getRootApi(session)
+export const getSlideThumbnailURL = async (rootApi: Root, slideId: string) => {
   try {
-    const thumbnail = await api.slides.slideThumbnail(slideId, 500, 500);
+    const thumbnail = await rootApi.slides.slideThumbnail(slideId, 500, 500);
     return URL.createObjectURL(thumbnail)
   } catch (e) {
     return;

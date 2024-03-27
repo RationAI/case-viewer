@@ -1,26 +1,24 @@
 import { getSlideThumbnailURL } from '@/app/utils';
-import { getSession } from 'next-auth/react';
 import Image from "next/image";
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
 
 type Props = {
   slideId: string;
 }
 
 const SlideContent = ({ slideId }: Props) => {
+  const rootApi = useContext(RootApiContext);
   const [imageUrl, setImageUrl] = useState<string | undefined>()
 
   useEffect(() => {
     const fetchData = async () => {
-      const session = await getSession();
-      if (session && session.accessToken) {
-        const thumbnailUrl = await getSlideThumbnailURL(session, slideId)
-        setImageUrl(thumbnailUrl);
-      }
+      const thumbnailUrl = await getSlideThumbnailURL(rootApi, slideId)
+      setImageUrl(thumbnailUrl);
     };
 
     fetchData()
-  }, [slideId])
+  }, [slideId, rootApi])
 
   return (
     <div className='flex flex-row justify-between'>

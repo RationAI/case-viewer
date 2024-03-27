@@ -1,16 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Table from '../components/Table/Table'
 import { TableStructureT, VisualizationConfig } from '@/type-definitions';
-import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideVisualizations } from '@/app/utils/data';
-import { getSession } from 'next-auth/react';
+import { getCaseSlides, getSlideVisualizations } from '@/app/utils/data';
 import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
+import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
+import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
 
 type Props = {
-  caseId: string;
-  caseHierPath: string
+  caseObj: CaseH;
   showCaseName: boolean;
 }
 
@@ -33,38 +33,33 @@ const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string,
   return tableStructure;
 }
 
-const CaseContent = ({ caseId, caseHierPath, showCaseName }: Props) => {
-  const [caseInfo, setCaseInfo] = useState<Case | undefined>();
+const CaseContent = ({ caseObj, showCaseName }: Props) => {
+  const rootApi = useContext(RootApiContext);
   const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
   const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
 
   useEffect(() => {
     const getCaseContent = async () => {
-      const session = await getSession()
-      if (session && session.accessToken) {
-        const caseInfo = await getCaseInfo(session, caseId)
-        const slides = await getCaseSlides(session, caseId)
-        setCaseInfo(caseInfo);
-        setCaseSlides(slides);
+      const slides = await getCaseSlides(rootApi, caseObj.id)
+      setCaseSlides(slides);
 
-        const rationaiApi = await getRationAIApi(session)
+      const rationaiApi = rootApi.rationai;
 
-        const visualizations = await Promise.all(slides.map(async (slide) => {
-          const vis = await getSlideVisualizations(slide.id, rationaiApi)
-          return vis;
-        }))
+      const visualizations = await Promise.all(slides.map(async (slide) => {
+        const vis = await getSlideVisualizations(slide.id, rationaiApi)
+        return vis;
+      }))
 
-        setSlideVisualizations(visualizations)
-      }
+      setSlideVisualizations(visualizations)
     };
 
     getCaseContent();
-  }, [caseId])
+  }, [caseObj, rootApi])
 
-  if (caseInfo && caseSlides && slideVisualizations) {
+  if (caseObj && caseSlides && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseHierPath, caseSlides, slideVisualizations, showCaseName)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseObj, caseObj.pathInHierarchy, caseSlides, slideVisualizations, showCaseName)}/>
         {caseSlides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
       </div>
     )

@@ -20,7 +20,7 @@ const FileRowActions = ({slidePath}: Props) => {
       </button>
       <button
         title="Slide details"
-        onClick={(e) => {shallowRedirect(e, slidePath)}}
+        onClick={(e) => {shallowRedirect(e, slidePath, false)}}
         className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200"
       >
         <Image src="/svg/info.svg" alt="Slide details" height={20} width={20} />

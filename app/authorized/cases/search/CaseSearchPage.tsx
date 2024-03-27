@@ -4,20 +4,18 @@ import { createSearchQueryFromUrl, getNumberOfGroupsFromRegexString } from "@/ap
 import { getConfig } from "@/app/utils/config";
 import CaseSearchForm from "./components/CaseSearchForm";
 import CaseSearchResult from "./components/CaseSearchResult";
-import CaseExplorer from "@/EmpationAPI/src/v3/extensions/case-explorer";
 
 type Props = {
-  caseExplorer: CaseExplorer | undefined,
   searchQuery: string[],
 }
 
-export default function CaseSearchPage({ caseExplorer, searchQuery }: Props) {
+export default function CaseSearchPage({ searchQuery }: Props) {
 
   const identifierParts = getNumberOfGroupsFromRegexString(getConfig().local_id_separator || "")
 
   if(searchQuery.length === 0) {
     return (
-      <CaseSearchForm caseExplorer={caseExplorer} identifierParts={identifierParts}/>
+      <CaseSearchForm identifierParts={identifierParts}/>
     )
   }
 
@@ -31,6 +29,6 @@ export default function CaseSearchPage({ caseExplorer, searchQuery }: Props) {
     )
   }
   return (
-    <CaseSearchResult caseExplorer={caseExplorer} query={query}/>
+    <CaseSearchResult query={query}/>
   );
 }

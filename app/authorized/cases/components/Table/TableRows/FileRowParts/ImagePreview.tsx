@@ -1,9 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Image from "next/image";
-import { getSession } from 'next-auth/react';
 import { getSlideThumbnailURL } from '@/app/utils/data';
 import ModalImagePreview from '../../ModalImagePreview/ModalImagePreview';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
 
 type Props = {
   modalId: string;
@@ -11,19 +11,17 @@ type Props = {
 }
 
 const ImagePreview = ({ modalId, slideId }: Props) => {
+  const rootApi = useContext(RootApiContext);
   const [imageUrl, setImageUrl] = useState<string | undefined>()
 
   useEffect(() => {
     const fetchData = async () => {
-      const session = await getSession();
-      if (session && session.accessToken) {
-        const thumbnailUrl = await getSlideThumbnailURL(session, slideId)
-        setImageUrl(thumbnailUrl);
-      }
+      const thumbnailUrl = await getSlideThumbnailURL(rootApi, slideId)
+      setImageUrl(thumbnailUrl);
     };
 
     fetchData()
-  }, [slideId])
+  }, [slideId, rootApi])
 
   return (
     <>

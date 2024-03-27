@@ -1,33 +1,36 @@
 'use client'
 
 import Sidebar from '@/app/components/Sidebar/Sidebar'
-import { getHierarchySpec, getIdentifierSeparator, getPathParts, getRootApi } from '@/app/utils'
+import { getHierarchySpec, getIdentifierSeparator, getRootApi } from '@/app/utils'
 import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result'
 import { getSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import AuthorizedContent from './AuthorizedContent'
-import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer'
+import { Root } from '@/EmpationAPI/src/v3'
+
+export const RootApiContext = createContext<Root | undefined>(undefined)
 
 const AuthorizedLayout = () => {
-  const relativePath = usePathname();
 
-  const [caseExplorer, setCaseExplorer] = useState<CaseExplorer | undefined>();
+  const [rootApi, setRootApi] = useState<Root | undefined>();
   const [caseHierarchy, setCaseHierarchy] = useState<CaseHierarchy | undefined>();
-  const [pathParts, setPathParts] = useState<string[]>(getPathParts(relativePath));
-
-  useEffect(() => {
-    setPathParts(getPathParts(relativePath));
-  }, [relativePath]);
 
   useEffect(() => {
     const getCaseClass = async () => {
       const session = await getSession()
       if (session && session.accessToken) {
-        const casesClass = (await getRootApi(session)).cases;
-        casesClass.caseExplorer.use(getIdentifierSeparator());
-        setCaseExplorer(casesClass.caseExplorer);
-        const hierarchy = await casesClass.caseExplorer.hierarchy(getHierarchySpec());
+        const root = (await getRootApi(session));
+
+        async function refreshTokenHandler(event: object) {
+          console.log("EVENT HANDLER EXECUTED")
+          event["newToken"] = (await getSession())?.accessToken
+        }
+
+        root.addHandler("token-refresh", refreshTokenHandler, {}, 0)
+        setRootApi(root);
+
+        root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec());
+        const hierarchy = await root.cases.caseExplorer.hierarchy();
         setCaseHierarchy(hierarchy);
       }
     };
@@ -38,7 +41,12 @@ const AuthorizedLayout = () => {
     <>
       <Sidebar caseHierarchy={caseHierarchy}/>
       <div className="p-2 overflow-scroll w-full">
-        <AuthorizedContent caseExplorer={caseExplorer} caseHierarchy={caseHierarchy} pathParts={pathParts}/>
+        {(!rootApi || !caseHierarchy) ?
+          <div>Loading...</div> :
+          <RootApiContext.Provider value={rootApi}>
+            <AuthorizedContent caseHierarchy={caseHierarchy}/>
+          </RootApiContext.Provider>
+        }
       </div>
     </>
   )
