@@ -15,7 +15,7 @@ const CollapseCaseRow = ({ caseRow }: Props) => {
             <div className="truncate rounded-md px-[0.375rem] py-[0.25rem] font-sans font-semibold text-gray-800">{caseRow.caseObj.local_id || caseRow.caseObj.id}</div>
         </summary>
         <div className='p-1'>
-          <CaseContent caseObj={caseRow.caseObj as CaseH} showCaseName={false} />
+          <CaseContent caseObj={caseRow.caseObj as CaseH} showCaseName={false} basePath="/authorized/cases/path" />
         </div>
       </details>
     </li>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import CaseContent from './CaseContent';
-import { getSession } from 'next-auth/react';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
 
@@ -15,8 +14,7 @@ const CasePage = ({ caseId }: Props) => {
 
   useEffect(() => {
     const getCaseObj = async () => {
-      const session = await getSession()
-      if (session && session.accessToken) {
+      if (rootApi) {
         const cs = await rootApi!.cases.caseExplorer.getCase(caseId)
         setCaseObj(cs);
       }
@@ -30,7 +28,7 @@ const CasePage = ({ caseId }: Props) => {
   }
 
   return (
-    <CaseContent caseObj={caseObj} showCaseName={true} />
+    <CaseContent caseObj={caseObj} showCaseName={true} basePath="/authorized/cases/path"/>
   )
 }
 

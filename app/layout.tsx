@@ -23,7 +23,7 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="winter">
       <body className={inter.className}>
-        <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus refetchInterval={60}>
           <Navbar />
           <div className="flex overflow-clip pt-[3.5rem] h-screen">
             {children}

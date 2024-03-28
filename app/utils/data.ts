@@ -37,6 +37,17 @@ export const getSlideThumbnailURL = async (rootApi: Root, slideId: string) => {
   }
 }
 
+export const getSlideMetadata = async (rootApi: Root, slideId: string,) => {
+  let metadata;
+  try {
+    metadata = await rootApi.rationai.globalStorage.wsiMetadata.getSlideMetadata(slideId);
+  } catch (e) {
+    metadata = {}
+  }
+
+  return metadata;
+}
+
 export const getSlideVisualizations = async (slideId: string, rationaiApi: V3.RationAI) => {
   const defaultParams = {
     locale: "en",

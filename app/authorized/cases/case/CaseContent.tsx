@@ -12,6 +12,7 @@ import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
 type Props = {
   caseObj: CaseH;
   showCaseName: boolean;
+  basePath: string;
 }
 
 const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
@@ -33,7 +34,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string,
   return tableStructure;
 }
 
-const CaseContent = ({ caseObj, showCaseName }: Props) => {
+const CaseContent = ({ caseObj, showCaseName, basePath }: Props) => {
   const rootApi = useContext(RootApiContext);
   const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
   const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
@@ -59,7 +60,7 @@ const CaseContent = ({ caseObj, showCaseName }: Props) => {
   if (caseObj && caseSlides && slideVisualizations) {
     return (
       <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseObj, caseObj.pathInHierarchy, caseSlides, slideVisualizations, showCaseName)}/>
+        <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, caseSlides, slideVisualizations, showCaseName)}/>
         {caseSlides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
       </div>
     )
