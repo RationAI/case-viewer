@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import {v4 as uuidv4} from 'uuid';
+import React, { useContext, useEffect, useState } from 'react'
 import Image from "next/image";
 import AnnotationPreset from './AnnotationPreset'
 import { AnnotationPresetT } from '@/type-definitions'
 import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
+import AnnotationButtons from './AnnotationButtons';
 
 const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
 
-const presetGroupExample: AnnotationPresetT[] = [
+/* const presetsExample: AnnotationPresetT[] = [
   {
-    "id": 0,
+    "id": "0",
     "color": "#003fff",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -30,7 +33,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 1,
+    "id": "1",
     "color": "#7f00ff",
     "factoryID": "rectangle",
     "presetID": "Ignore*",
@@ -42,7 +45,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 2,
+    "id": "2",
     "color": "#ff0000",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -54,7 +57,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 3,
+    "id": "3",
     "color": "#7fff00",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -66,7 +69,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 4,
+    "id": "4",
     "color": "#ffbf00",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -78,7 +81,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 5,
+    "id": "5",
     "color": "#ffbf00",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -90,7 +93,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 6,
+    "id": "6",
     "color": "#ffbf00",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -102,7 +105,7 @@ const presetGroupExample: AnnotationPresetT[] = [
     },
   },
   {
-    "id": 7,
+    "id": "7",
     "color": "#ffbf00",
     "factoryID": "polygon",
     "presetID": "Ignore*",
@@ -113,25 +116,41 @@ const presetGroupExample: AnnotationPresetT[] = [
       },  
     },
   },
-]
+] */
 
 const AnnotationPresetGrid = () => {
-  const [presetGroup, setPresetGroup] = useState<AnnotationPresetT[]>(presetGroupExample)
-  const [presetIdCurrent, setPresetIdCurrent] = useState(presetGroup.length)
-  const [deletePresetId, setDeletePresetId] = useState<number | undefined>(undefined)
+  const rootApi = useContext(RootApiContext);
+  const [presets, setPresets] = useState<AnnotationPresetT[]>([]);
+  const [lastModified, setLastModified] = useState(0);
+  const [currentColorIdx, setCurrentColorIdx] = useState(presets.length);
+  const [deletePresetId, setDeletePresetId] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(true)
 
-  const handleEditPreset = (id: number, editedPreset: AnnotationPresetT) => {
-    const newGroup = [...presetGroup];
-    const editedIdx = newGroup.findIndex((preset) => preset.id === id);
-    newGroup[editedIdx] = editedPreset;
-    // console.log(newGroup)
-    setPresetGroup(newGroup);
+  useEffect(() => {
+    const getAnnotPresets = async () => {
+      const presetsResult = await rootApi!.rationai.globalStorage.annotPresets.getAnnotPresets();
+      setPresets(presetsResult.presets);
+      setLastModified(presetsResult.lastModifiedAt);
+      setLoading(false);
+    };
+
+    if(rootApi) {
+      getAnnotPresets();
+    }
+  }, [rootApi])
+
+  const handleEditPreset = (id: string, editedPreset: AnnotationPresetT) => {
+    const newPresets = [...presets];
+    const editedIdx = newPresets.findIndex((preset) => preset.id === id);
+    newPresets[editedIdx] = editedPreset;
+    // console.log(newPresets)
+    setPresets(newPresets);
   }
 
   const handleNewPreset: () => void = () => {
-    const id = presetIdCurrent;
-    setPresetIdCurrent(presetIdCurrent + 1)
-    const color = defaultColors[presetIdCurrent % defaultColors.length]
+    const id = uuidv4();
+    setCurrentColorIdx(currentColorIdx + 1)
+    const color = defaultColors[currentColorIdx % defaultColors.length]
     const newPreset = {
       id: id,
       color: color,
@@ -144,50 +163,77 @@ const AnnotationPresetGrid = () => {
         },  
       },
     }
-    const newGroup = [...presetGroup];
+    const newGroup = [...presets];
     newGroup.push(newPreset);
-    setPresetGroup(newGroup);
+    setPresets(newGroup);
   }
 
-  const handleCopyPreset = (id: number) => {
-    const currId = presetIdCurrent;
-    setPresetIdCurrent(presetIdCurrent + 1)
-    const oldPresetIdx = presetGroup.findIndex((grp) => grp.id === id);
+  const handleCopyPreset = (id: string) => {
+    const currId = uuidv4();
+    const oldPresetIdx = presets.findIndex((grp) => grp.id === id);
     const copiedPreset: AnnotationPresetT = {
-      ...presetGroup[oldPresetIdx],
+      ...presets[oldPresetIdx],
       id: currId,
     };
-    const newGroup = [...presetGroup];
-    setPresetGroup(newGroup.slice(0, oldPresetIdx).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx)))
+    const newGroup = [...presets];
+    setPresets(newGroup.slice(0, oldPresetIdx).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx)))
   }
 
-  const handleRemovePreset = (id: number) => {
-    const newGroup = presetGroup.filter((preset) => preset.id != id);
-    setPresetGroup(newGroup);
+  const handleRemovePreset = (id: string) => {
+    const newGroup = presets.filter((preset) => preset.id != id);
+    setPresets(newGroup);
   }
 
-  const handlePopUpOpen = (presetId: number) => {
+  const handlePopUpOpen = (presetId: string) => {
     setDeletePresetId(presetId);
     (document.getElementById('annotPopUp') as HTMLDialogElement).showModal()
   }
 
+  const handleRevertClick = async () => {
+    if(rootApi) {
+      setLoading(true);
+      const refetchedPresets = await rootApi.rationai.globalStorage.annotPresets.getAnnotPresets(true);
+      setPresets(refetchedPresets.presets);
+      setLastModified(refetchedPresets.lastModifiedAt);
+      setLoading(false);
+    }
+  }
+
+  const handleSaveClick = async () => {
+    if(rootApi) {
+      setLoading(true);
+      const updatedPresets = await rootApi.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
+      setPresets(updatedPresets.presets);
+      setLastModified(updatedPresets.lastModifiedAt);
+      setLoading(false);
+    }
+  }
 
   return (
-    <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
-      {presetGroup.map((annotPreset) => {
-        return (
-          <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handlePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
-        )
-      })}
-      <div>
-        <div className='flex border border-gray-400 rounded-lg p-2 border-dashed'>
-          <button onClick={() => handleNewPreset()} className="btn btn-sm flex justify-start border-gray-300 bg-gray-50 hover:bg-gray-200 w-full">
-            <Image src="/svg/plus.svg" alt="Remove" height={27} width={27} />
-            New preset
-          </button>
-        </div>
+    <div className='flex flex-col items-center gap-2 md:w-5/6 lg:w-9/12'>
+      <div className='w-full flex justify-between items-center gap-2'>
+        <div className='font-sans font-semibold text-slate-500 text-2xl pl-1'>Annotations presets</div>
+        <AnnotationButtons handleRevertClick={handleRevertClick} handleSaveClick={handleSaveClick}/>
       </div>
-      <APConfirmationPopUp presetId={deletePresetId!} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
+      {loading ? 
+        <div>Loading...</div> :
+        <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
+        {presets.map((annotPreset) => {
+          return (
+            <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handlePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
+          )
+        })}
+        <div>
+          <div className='flex border border-gray-400 rounded-lg p-2 border-dashed'>
+            <button onClick={() => handleNewPreset()} className="btn btn-sm flex justify-start border-gray-300 bg-gray-50 hover:bg-gray-200 w-full">
+              <Image src="/svg/plus.svg" alt="Remove" height={27} width={27} />
+              New preset
+            </button>
+          </div>
+        </div>
+        <APConfirmationPopUp presetId={deletePresetId!} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
+      </div>
+      }
     </div>
   )
 }

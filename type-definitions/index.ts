@@ -87,7 +87,7 @@ type MaskT = ImageT & MaskSpecificT;
 type AnnotationT = ImageT & AnnotationSpecificT;
 
 export type AnnotationPresetT = {
-  id: number,
+  id: string,
   color: string,
   factoryID: string,
   presetID: string,

@@ -10,9 +10,9 @@ import { getRandomString } from "../../../../utils";
 
 type Props = {
   annotationPreset: AnnotationPresetT;
-  removePresetHandler: (id: number) => void;
-  copyPresetHandler: (id: number) => void;
-  editPresetHandler: (id: number, editedPreset: AnnotationPresetT) => void;
+  removePresetHandler: (id: string) => void;
+  copyPresetHandler: (id: string) => void;
+  editPresetHandler: (id: string, editedPreset: AnnotationPresetT) => void;
 };
 
 const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHandler, editPresetHandler }: Props) => {
@@ -55,10 +55,10 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHan
             </div>
             {/* copy/remove preset */}
             <div className="flex flex-row gap-1">
-              <button type="button" onClick={() => copyPresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
+              <button title="Copy preset" type="button" onClick={() => copyPresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
                 <Image src="/svg/copy.svg" alt="Copy" height={33} width={33} />
               </button>
-              <button type="button" onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
+              <button title="Delete preset" type="button" onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
                 <Image src="/svg/cross.svg" alt="Remove" height={33} width={33} />
               </button>
             </div>

@@ -27,7 +27,7 @@ const Sidebar = ({caseHierarchy}: Props) => {
         (extended ? " min-w-[13rem] max-w-[13rem]" : "")
       }
     >
-      <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto bg-gray-50">
+      <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto">
         {extended ? (
           <div>
             <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>

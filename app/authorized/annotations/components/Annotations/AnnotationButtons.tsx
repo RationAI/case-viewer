@@ -2,16 +2,16 @@
 
 import React from 'react'
 
-const AnnotationButtons = () => {
+type Props = {
+  handleRevertClick: () => void;
+  handleSaveClick: () => void;
+}
 
-  const handleRevertClick = () => {}
-
-  const handleOverwriteClick = () => {}
-
+const AnnotationButtons = ({handleRevertClick, handleSaveClick}: Props) => {
   return (
     <div className='flex flex-row flex-wrap gap-2 justify-end'>
       <button onClick={handleRevertClick} className="btn btn-sm btn-outline font-sans">Revert to project presets</button>
-      <button onClick={handleOverwriteClick} className="btn btn-sm btn-outline btn-error font-sans">! Save for project !</button>
+      <button onClick={handleSaveClick} className="btn btn-sm btn-outline btn-error font-sans">! Save globally !</button>
     </div>
   )
 }

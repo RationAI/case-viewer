@@ -1,9 +1,9 @@
 import React from 'react'
 
 type Props = {
-  presetId: number;
+  presetId: string;
   modalId: string;
-  onConfirm: (id: number) => void;
+  onConfirm: (id: string) => void;
   onCancel: () => void;
 };
 

@@ -39,6 +39,7 @@ const APNewField = ({ annotationPreset, addTextField }: Props) => {
           placeholder={emptyFieldAlert ? "Please input name" : "New field"}
         />
         <button
+          title="Add new field"
           type="submit"
           className="btn btn-sm btn-square border-base-100 bg-base-100 hover:bg-gray-200"
         >
