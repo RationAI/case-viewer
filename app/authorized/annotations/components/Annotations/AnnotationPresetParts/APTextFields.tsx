@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import { AnnotationPresetT } from "@/type-definitions";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   removeTextField: (key: string) => void;
   editFieldInPreset: (key: string, value: string, name?: string) => void;
 };

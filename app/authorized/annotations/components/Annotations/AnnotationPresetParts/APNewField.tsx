@@ -1,10 +1,10 @@
 'use client'
 import React, { useState } from "react";
 import Image from "next/image";
-import { AnnotationPresetT } from "@/type-definitions";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   addTextField: (name: string) => void;
 };
 

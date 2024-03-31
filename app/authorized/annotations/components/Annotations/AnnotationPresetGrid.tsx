@@ -4,123 +4,16 @@ import {v4 as uuidv4} from 'uuid';
 import React, { useContext, useEffect, useState } from 'react'
 import Image from "next/image";
 import AnnotationPreset from './AnnotationPreset'
-import { AnnotationPresetT } from '@/type-definitions'
 import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
 import AnnotationButtons from './AnnotationButtons';
+import { AnnotPreset } from '@/EmpationAPI/src/v3/extensions/types/annot-preset';
 
 const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
 
-/* const presetsExample: AnnotationPresetT[] = [
-  {
-    "id": "0",
-    "color": "#003fff",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },
-      "k1700645671744": {
-        "name": "cancer",
-        "value": "ano"
-      },
-      "k1700645680488": {
-        "name": "no cancer",
-        "value": "neco"
-      }
-    },
-  },
-  {
-    "id": "1",
-    "color": "#7f00ff",
-    "factoryID": "rectangle",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "2",
-    "color": "#ff0000",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "3",
-    "color": "#7fff00",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "4",
-    "color": "#ffbf00",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "5",
-    "color": "#ffbf00",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "6",
-    "color": "#ffbf00",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-  {
-    "id": "7",
-    "color": "#ffbf00",
-    "factoryID": "polygon",
-    "presetID": "Ignore*",
-    "meta": {
-      "category": {
-        "name": "Category",
-        "value": "Ignore*"
-      },  
-    },
-  },
-] */
-
 const AnnotationPresetGrid = () => {
   const rootApi = useContext(RootApiContext);
-  const [presets, setPresets] = useState<AnnotationPresetT[]>([]);
+  const [presets, setPresets] = useState<AnnotPreset[]>([]);
   const [lastModified, setLastModified] = useState(0);
   const [currentColorIdx, setCurrentColorIdx] = useState(presets.length);
   const [deletePresetId, setDeletePresetId] = useState<string | undefined>(undefined);
@@ -139,19 +32,19 @@ const AnnotationPresetGrid = () => {
     }
   }, [rootApi])
 
-  const handleEditPreset = (id: string, editedPreset: AnnotationPresetT) => {
+  const handleEditPreset = (id: string, editedPreset: AnnotPreset) => {
     const newPresets = [...presets];
     const editedIdx = newPresets.findIndex((preset) => preset.id === id);
     newPresets[editedIdx] = editedPreset;
-    // console.log(newPresets)
     setPresets(newPresets);
   }
 
   const handleNewPreset: () => void = () => {
     const id = uuidv4();
+    const currentDate = Date.now();
     setCurrentColorIdx(currentColorIdx + 1)
     const color = defaultColors[currentColorIdx % defaultColors.length]
-    const newPreset = {
+    const newPreset: AnnotPreset = {
       id: id,
       color: color,
       factoryID: "polygon",
@@ -162,6 +55,7 @@ const AnnotationPresetGrid = () => {
           value: "Ignore*",
         },  
       },
+      createdAt: currentDate,
     }
     const newGroup = [...presets];
     newGroup.push(newPreset);
@@ -170,26 +64,32 @@ const AnnotationPresetGrid = () => {
 
   const handleCopyPreset = (id: string) => {
     const currId = uuidv4();
+    const currentDate = Date.now();
     const oldPresetIdx = presets.findIndex((grp) => grp.id === id);
-    const copiedPreset: AnnotationPresetT = {
+    const copiedPreset: AnnotPreset = {
       ...presets[oldPresetIdx],
       id: currId,
+      createdAt: currentDate,
     };
     const newGroup = [...presets];
-    setPresets(newGroup.slice(0, oldPresetIdx).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx)))
+    setPresets(newGroup.slice(0, oldPresetIdx + 1).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx + 1)))
   }
 
-  const handleRemovePreset = (id: string) => {
+  const handleDeletePreset = (id: string) => {
     const newGroup = presets.filter((preset) => preset.id != id);
     setPresets(newGroup);
   }
 
-  const handlePopUpOpen = (presetId: string) => {
+  const handleDeletePopUpOpen = (presetId: string) => {
     setDeletePresetId(presetId);
-    (document.getElementById('annotPopUp') as HTMLDialogElement).showModal()
+    (document.getElementById('presetDeletePopUp') as HTMLDialogElement).showModal()
   }
 
   const handleRevertClick = async () => {
+    (document.getElementById('revertPopUp') as HTMLDialogElement).showModal()
+  }
+
+  const handleRevert = async () => {
     if(rootApi) {
       setLoading(true);
       const refetchedPresets = await rootApi.rationai.globalStorage.annotPresets.getAnnotPresets(true);
@@ -200,6 +100,10 @@ const AnnotationPresetGrid = () => {
   }
 
   const handleSaveClick = async () => {
+    (document.getElementById('savePopUp') as HTMLDialogElement).showModal()
+  }
+
+  const handleSave = async () => {
     if(rootApi) {
       setLoading(true);
       const updatedPresets = await rootApi.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
@@ -220,7 +124,7 @@ const AnnotationPresetGrid = () => {
         <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
         {presets.map((annotPreset) => {
           return (
-            <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handlePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
+            <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleDeletePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
           )
         })}
         <div>
@@ -231,7 +135,9 @@ const AnnotationPresetGrid = () => {
             </button>
           </div>
         </div>
-        <APConfirmationPopUp presetId={deletePresetId!} modalId='annotPopUp' onConfirm={handleRemovePreset} onCancel={() => {setDeletePresetId(undefined)}}/>
+        <APConfirmationPopUp message='Confirm preset deletion:' modalId='presetDeletePopUp' onConfirm={() => handleDeletePreset(deletePresetId!)} onCancel={() => {setDeletePresetId(undefined)}}/>
+        <APConfirmationPopUp message='This will revert to project presets, your local changes will be lost:' modalId='revertPopUp' onConfirm={handleRevert} onCancel={() => {}}/>
+        <APConfirmationPopUp message='This will save the changes globally:' modalId='savePopUp' onConfirm={handleSave} onCancel={() => {}}/>
       </div>
       }
     </div>

@@ -1,18 +1,18 @@
 'use client'
 import React from "react";
 import Image from "next/image";
-import { AnnotationPresetT } from "@/type-definitions";
 import APSelect from "./AnnotationPresetParts/APSelect";
 import APColor from "./AnnotationPresetParts/APColor";
 import APTextFields from "./AnnotationPresetParts/APTextFields";
 import APNewField from "./AnnotationPresetParts/APNewField";
 import { getRandomString } from "../../../../utils";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   removePresetHandler: (id: string) => void;
   copyPresetHandler: (id: string) => void;
-  editPresetHandler: (id: string, editedPreset: AnnotationPresetT) => void;
+  editPresetHandler: (id: string, editedPreset: AnnotPreset) => void;
 };
 
 const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHandler, editPresetHandler }: Props) => {
@@ -28,15 +28,10 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHan
   }
 
   const editFieldInPreset = (key: string, value: string) => {
-    // console.log(key)
     if (key === "factoryID" || key === "color") {
-      // console.log('Old value: ' + annotationPreset[key])
       annotationPreset[key] = value;
-      // console.log('New value: ' + annotationPreset[key])
     } else {
-      // console.log('Old value: ' + annotationPreset.meta[key].value)
       annotationPreset.meta[key].value = value;
-      // console.log('New value: ' + annotationPreset.meta[key].value)
     }
 
     editPresetHandler(annotationPreset.id, annotationPreset);
