@@ -39,7 +39,7 @@ const Table = ({ tableStructure, advancedUser = false }: Props) => {
             <>
               <ul className="menu p-0">
                 {tableStructure.cases.map((c) => (
-                  <CollapseCaseRow key={c.caseObj.id} caseRow={c} />
+                  <CollapseCaseRow key={c.caseObj.id} caseRow={c} defaultOpen={tableStructure.cases ? tableStructure.cases.length <= 1 : false}/>
                 ))}
               </ul>
             </>
