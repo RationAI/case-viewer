@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import Table from "../../components/Table/Table";
 import { CaseSearchParams } from "@/EmpationAPI/src/v3/extensions/types/case-search-params";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
-import { RootApiContext } from "@/app/authorized/[[...pathParts]]/AuthorizedLayout";
+import { RootApiContext } from "@/app/authorized/[[...pathParts]]/AuthorizedApp";
 
 type Props = {
   query: CaseSearchParams[];

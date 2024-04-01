@@ -1,51 +1,33 @@
 'use client'
 
 import Sidebar from '@/app/components/Sidebar/Sidebar'
-import { getHierarchySpec, getIdentifierSeparator, getRootApi } from '@/app/utils'
-import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result'
-import { getSession } from 'next-auth/react'
-import React, { createContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import AuthorizedContent from './AuthorizedContent'
-import { Root } from '@/EmpationAPI/src/v3'
-
-export const RootApiContext = createContext<Root | undefined>(undefined)
+import { useQuery } from '@tanstack/react-query'
+import { RootApiContext } from './AuthorizedApp'
 
 const AuthorizedLayout = () => {
+  const rootApi = useContext(RootApiContext);
 
-  const [rootApi, setRootApi] = useState<Root | undefined>();
-  const [caseHierarchy, setCaseHierarchy] = useState<CaseHierarchy | undefined>();
+  const getCaseHierarchy = async () => {
+    return await rootApi!.cases.caseExplorer.hierarchy()
+  };
 
-  useEffect(() => {
-    const getCaseClass = async () => {
-      const session = await getSession()
-      if (session && session.accessToken) {
-        const root = (await getRootApi(session));
+  const { isPending, isError, data } = useQuery({
+    queryKey: [`case_hierarchy2`],
+    queryFn: getCaseHierarchy,
+  })
 
-        async function refreshTokenHandler(event: object) {
-          console.log("EVENT HANDLER EXECUTED")
-          event["newToken"] = (await getSession())?.accessToken
-        }
-
-        root.addHandler("token-refresh", refreshTokenHandler, {}, 0)
-        setRootApi(root);
-
-        root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec());
-        const hierarchy = await root.cases.caseExplorer.hierarchy();
-        setCaseHierarchy(hierarchy);
-      }
-    };
-
-    getCaseClass();
-  }, []);
   return (
     <>
-      <Sidebar caseHierarchy={caseHierarchy}/>
+      <Sidebar caseHierarchy={data}/>
       <div className="p-2 overflow-scroll w-full">
-        {(!rootApi || !caseHierarchy) ?
-          <div>Loading...</div> :
-          <RootApiContext.Provider value={rootApi}>
-            <AuthorizedContent caseHierarchy={caseHierarchy}/>
-          </RootApiContext.Provider>
+        {isPending ?
+          <div>Loading...</div> : (
+            isError ? 
+            <div>Unable to fetch cases</div> :
+            <AuthorizedContent caseHierarchy={data}/>
+          )
         }
       </div>
     </>

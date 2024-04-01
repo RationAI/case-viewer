@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Image from "next/image";
 import AnnotationPreset from './AnnotationPreset'
 import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
-import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 import AnnotationButtons from './AnnotationButtons';
 import { AnnotPreset } from '@/EmpationAPI/src/v3/extensions/types/annot-preset';
 

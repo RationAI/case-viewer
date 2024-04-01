@@ -4,7 +4,7 @@ import { FormConfigT, FormFieldT } from '@/type-definitions';
 import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import Form from '@/app/components/Forms/Form/Form';
-import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 
 type Props = {
   identifierParts: number;

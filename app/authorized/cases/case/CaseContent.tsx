@@ -1,18 +1,20 @@
 'use client'
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import Table from '../components/Table/Table'
 import { TableStructureT, VisualizationConfig } from '@/type-definitions';
 import { getCaseSlides, getSlideVisualizations } from '@/app/utils/data';
 import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
-import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
+import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   caseObj: CaseH;
   showCaseName: boolean;
   basePath: string;
+  fetchDelayed?: boolean;
 }
 
 const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
@@ -34,40 +36,41 @@ const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string,
   return tableStructure;
 }
 
-const CaseContent = ({ caseObj, showCaseName, basePath }: Props) => {
+const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Props) => {
   const rootApi = useContext(RootApiContext);
-  const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
-  const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
 
-  useEffect(() => {
-    const getCaseContent = async () => {
-      const slides = await getCaseSlides(rootApi!, caseObj.id)
-      setCaseSlides(slides);
+  const getCaseContent = async () => {
+    const slides = await getCaseSlides(rootApi!, caseObj.id)
+    const rationaiApi = rootApi!.rationai;
+    const visualizations = await Promise.all(slides.map(async (slide) => {
+      const vis = await getSlideVisualizations(slide.id, rationaiApi)
+      return vis;
+    }))
+    await rootApi?.scopes.use(caseObj.id);
+    const jobs = await rootApi?.scopes.rawQuery('jobs');
+    console.log(jobs)
+    return {slides: slides, visualizations: visualizations}
+  };
 
-      const rationaiApi = rootApi!.rationai;
+  const { isPending, isError, data } = useQuery({
+    queryKey: [`case_${caseObj.id}_content`],
+    queryFn: getCaseContent,
+    enabled: !fetchDelayed,
+  })
 
-      const visualizations = await Promise.all(slides.map(async (slide) => {
-        const vis = await getSlideVisualizations(slide.id, rationaiApi)
-        return vis;
-      }))
+  if (isPending) {
+    return <div>Loading...</div>
+  }
 
-      setSlideVisualizations(visualizations)
-    };
-
-    getCaseContent();
-  }, [caseObj, rootApi])
-
-  if (caseObj && caseSlides && slideVisualizations) {
-    return (
-      <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, caseSlides, slideVisualizations, showCaseName)}/>
-        {caseSlides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
-      </div>
-    )
+  if (isError) {
+    return <div>Unable to fetch data</div>
   }
 
   return (
-    <div>Loading...</div>
+    <div>
+      <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, data.slides, data.visualizations, showCaseName)}/>
+      {data.slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
+    </div>
   )
 }
 

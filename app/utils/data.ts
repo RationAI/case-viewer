@@ -28,23 +28,22 @@ export const getCaseMasks = async (session: Session, caseId: string) => {
   return masks
 }
 
-export const getSlideThumbnailURL = async (rootApi: Root, slideId: string) => {
+export const getSlideThumbnail = async (rootApi: Root, slideId: string) => {
   try {
     const thumbnail = await rootApi.slides.slideThumbnail(slideId, 500, 500);
-    return URL.createObjectURL(thumbnail)
+    return thumbnail
   } catch (e) {
-    return;
+    try {
+      const thumbnail = await rootApi.slides.slideThumbnail(slideId, 250, 250);
+      return thumbnail
+    } catch (e) {
+      return;
+    }
   }
 }
 
 export const getSlideMetadata = async (rootApi: Root, slideId: string,) => {
-  let metadata;
-  try {
-    metadata = await rootApi.rationai.globalStorage.wsiMetadata.getSlideMetadata(slideId);
-  } catch (e) {
-    metadata = {}
-  }
-
+  const metadata = await rootApi.rationai.globalStorage.wsiMetadata.getSlideMetadata(slideId);
   return metadata;
 }
 

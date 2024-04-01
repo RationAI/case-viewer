@@ -1,9 +1,10 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Image from "next/image";
-import { getSlideThumbnailURL } from '@/app/utils/data';
+import { getSlideThumbnail } from '@/app/utils/data';
 import ModalImagePreview from '../../ModalImagePreview/ModalImagePreview';
-import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedLayout';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   modalId: string;
@@ -12,23 +13,32 @@ type Props = {
 
 const ImagePreview = ({ modalId, slideId }: Props) => {
   const rootApi = useContext(RootApiContext);
-  const [imageUrl, setImageUrl] = useState<string | undefined>()
+
+  const getThumbnailURL = async () => {
+    const thumbnail = await getSlideThumbnail(rootApi!, slideId)
+    return thumbnail ? URL.createObjectURL(thumbnail) : null
+  };
+
+  const { data } = useQuery({
+    queryKey: [`slide_${slideId}_thumbnail`],
+    queryFn: getThumbnailURL,
+  })
 
   useEffect(() => {
-    const fetchData = async () => {
-      const thumbnailUrl = await getSlideThumbnailURL(rootApi!, slideId)
-      setImageUrl(thumbnailUrl);
-    };
-
-    fetchData()
-  }, [slideId, rootApi])
+    // returned function will be called on component unmount 
+    return () => {
+      if(data) {
+        URL.revokeObjectURL(data)};
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
-      <div className="min-w-[8rem] relative z-10 overflow-hidden hover:overflow-visible rounded-l-sm hover:z-50" onClick={() => (document.getElementById(modalId) as HTMLDialogElement).showModal()}>
-        <Image className="object-contain block m-auto transition-all duration-200 ease-linear hover:scale-[200%]" src={imageUrl || '/file_icons/image_file.svg'} alt="Preview" fill/>
+      <div className="min-w-[8rem] relative z-10 overflow-hidden hover:overflow-visible rounded-l-sm hover:z-50" onClick={() => data ? (document.getElementById(modalId) as HTMLDialogElement).showModal() : {}}>
+        <Image className={`object-contain block m-auto ${data ? "transition-all duration-200 ease-linear hover:scale-[200%]" : "opacity-30"}`} src={data || '/file_icons/image_file.svg'} alt="Preview" fill/>
       </div>
-      <ModalImagePreview modalId={modalId} imageLink={imageUrl || '/file_icons/image_file.svg'} />
+      <ModalImagePreview modalId={modalId} imageLink={data || '/file_icons/image_file.svg'} />
     </>
   )
 }

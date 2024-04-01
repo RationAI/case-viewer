@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import CaseContent from './CaseContent';
-import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
-import { RootApiContext } from '../../[[...pathParts]]/AuthorizedLayout';
+import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   caseId: string,
@@ -10,25 +10,26 @@ type Props = {
 const CasePage = ({ caseId }: Props) => {
   const rootApi = useContext(RootApiContext)
 
-  const [caseObj, setCaseObj] = useState<CaseH | undefined>()
+  const getCase = async () => {
+    const cs = await rootApi!.cases.caseExplorer.getCase(caseId)
+    return cs
+  };
 
-  useEffect(() => {
-    const getCaseObj = async () => {
-      if (rootApi) {
-        const cs = await rootApi!.cases.caseExplorer.getCase(caseId)
-        setCaseObj(cs);
-      }
-    };
+  const { isPending, isError, data } = useQuery({
+    queryKey: [`case_${caseId}`],
+    queryFn: getCase,
+  })
 
-    getCaseObj();
-  }, [caseId, rootApi])
-
-  if(!caseObj) {
+  if (isPending) {
     return <div>Loading...</div>
   }
 
+  if (isError) {
+    return <div>Unable to fetch case</div>
+  }
+
   return (
-    <CaseContent caseObj={caseObj} showCaseName={true} basePath="/authorized/cases/path"/>
+    <CaseContent caseObj={data} showCaseName={true} basePath="/authorized/cases/path"/>
   )
 }
 
