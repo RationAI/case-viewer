@@ -25,7 +25,7 @@ async function refreshAccessToken(token: OAuthToken) {
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + (refreshedTokens.expires_in * 1000),
+      accessTokenExpires: Date.now() + ((refreshedTokens.expires_in / 2) * 1000),
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
   } catch (error) {
@@ -70,7 +70,8 @@ export const authOptions: NextAuthOptions = {
       // Initial sign in
       if (account && user)  {
         token = Object.assign({}, token, { accessToken: account.access_token });
-        token = Object.assign({}, token, { accessTokenExpires: account.expires_at! * 1000 });
+        const now = Date.now();
+        token = Object.assign({}, token, { accessTokenExpires: ((account.expires_at! * 1000) - now) / 2 + now});
         token = Object.assign({}, token, { refreshToken: account.refresh_token });
         console.log("Initial sign in")
         return token

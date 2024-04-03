@@ -1,10 +1,10 @@
 'use client'
 import React, { useState } from "react";
 import Image from "next/image";
-import { AnnotationPresetT } from "@/type-definitions";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   addTextField: (name: string) => void;
 };
 
@@ -39,6 +39,7 @@ const APNewField = ({ annotationPreset, addTextField }: Props) => {
           placeholder={emptyFieldAlert ? "Please input name" : "New field"}
         />
         <button
+          title="Add new field"
           type="submit"
           className="btn btn-sm btn-square border-base-100 bg-base-100 hover:bg-gray-200"
         >

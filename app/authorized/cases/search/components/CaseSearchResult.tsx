@@ -1,14 +1,13 @@
 'use client'
 
 import { TableStructureT } from "@/type-definitions";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Table from "../../components/Table/Table";
 import { CaseSearchParams } from "@/EmpationAPI/src/v3/extensions/types/case-search-params";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
-import CaseExplorer from "@/EmpationAPI/src/v3/extensions/case-explorer";
+import { RootApiContext } from "@/app/authorized/[[...pathParts]]/AuthorizedApp";
 
 type Props = {
-  caseExplorer: CaseExplorer | undefined,
   query: CaseSearchParams[];
 }
 
@@ -16,28 +15,29 @@ const getTableStructureFromSearchResult = (cases: Case[]) => {
   const tableStructure: TableStructureT = {
     cases: cases.map((caseObj) => {
       return { 
-        name: caseObj.local_id || caseObj.id,
-        desc: caseObj.description || undefined,
-        link: `/authorized/cases/case/${caseObj.id}`}
+        caseObj: caseObj,
+      }
     }),
     slides: [],
   }
   return tableStructure
 }
 
-export default function CaseSearchResult({ caseExplorer, query }: Props) {
+export default function CaseSearchResult({ query }: Props) {
+  const rootApi = useContext(RootApiContext);
+
   const [searchResult, setSearchResult] = useState<Case[] | undefined>()
 
   useEffect(() => {
     const searchCases = async () => {
-      const result = await caseExplorer!.search(query)
+      const result = await rootApi!.cases.caseExplorer.search(query)
       setSearchResult(result)
     };
 
-    if (caseExplorer && query) {
+    if (rootApi && query) {
       searchCases()
     }
-  }, [caseExplorer, query])
+  }, [rootApi, query])
 
   return (
     <div>

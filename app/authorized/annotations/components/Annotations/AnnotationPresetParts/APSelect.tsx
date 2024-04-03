@@ -1,8 +1,8 @@
 import React from "react";
-import { AnnotationPresetT } from "@/type-definitions";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   editFieldInPreset: (key: string, value: string, name?: string) => void;
 };
 

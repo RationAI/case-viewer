@@ -1,45 +1,34 @@
 'use client'
 
 import Sidebar from '@/app/components/Sidebar/Sidebar'
-import { getHierarchySpec, getIdentifierSeparator, getPathParts, getRootApi } from '@/app/utils'
-import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result'
-import { Session } from 'next-auth'
-import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import AuthorizedContent from './AuthorizedContent'
-import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer'
+import { useQuery } from '@tanstack/react-query'
+import { RootApiContext } from './AuthorizedApp'
 
 const AuthorizedLayout = () => {
-  const { data: session } = useSession();
-  const relativePath = usePathname();
+  const rootApi = useContext(RootApiContext);
 
-  const [caseExplorer, setCaseExplorer] = useState<CaseExplorer | undefined>();
-  const [caseHierarchy, setCaseHierarchy] = useState<CaseHierarchy | undefined>();
-  const [pathParts, setPathParts] = useState<string[]>(getPathParts(relativePath));
+  const getCaseHierarchy = async () => {
+    return await rootApi!.cases.caseExplorer.hierarchy()
+  };
 
-  useEffect(() => {
-    setPathParts(getPathParts(relativePath));
-  }, [relativePath]);
+  const { isPending, isError, data } = useQuery({
+    queryKey: [`case_hierarchy2`],
+    queryFn: getCaseHierarchy,
+  })
 
-  useEffect(() => {
-    const getCaseClass = async (session: Session) => {
-      const casesClass = (await getRootApi(session)).cases;
-      casesClass.caseExplorer.use(getIdentifierSeparator());
-      setCaseExplorer(casesClass.caseExplorer);
-      const hierarchy = await casesClass.caseExplorer.hierarchy(getHierarchySpec());
-      setCaseHierarchy(hierarchy);
-    };
-
-    if (session?.accessToken) {
-      getCaseClass(session);
-    }
-  }, [session, session?.accessToken]);
   return (
     <>
-      <Sidebar caseHierarchy={caseHierarchy}/>
-      <div className="p-2 overflow-scroll w-full">
-        <AuthorizedContent caseExplorer={caseExplorer} caseHierarchy={caseHierarchy} pathParts={pathParts}/>
+      <Sidebar caseHierarchy={data}/>
+      <div className="p-2 overflow-y-scroll w-full">
+        {isPending ?
+          <div>Loading...</div> : (
+            isError ? 
+            <div>Unable to fetch cases</div> :
+            <AuthorizedContent caseHierarchy={data}/>
+          )
+        }
       </div>
     </>
   )

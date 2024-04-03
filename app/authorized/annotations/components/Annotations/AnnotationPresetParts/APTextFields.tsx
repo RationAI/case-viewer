@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import { AnnotationPresetT } from "@/type-definitions";
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   removeTextField: (key: string) => void;
   editFieldInPreset: (key: string, value: string, name?: string) => void;
 };
@@ -28,6 +28,7 @@ const APTextFields = ({
               {key != "category" && (
                 <div className="absolute inset-y-0 end-0 flex items-center pe-1">
                   <button
+                    title="Remove field"
                     onClick={() => removeTextField(key)}
                     className="btn btn-xs btn-square border-gray-50 bg-gray-50 hover:bg-gray-200"
                   >

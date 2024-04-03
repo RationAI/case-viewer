@@ -1,8 +1,8 @@
+import { AnnotPreset } from "@/EmpationAPI/src/v3/extensions/types/annot-preset";
 import React, { useState } from "react";
-import { AnnotationPresetT } from "@/type-definitions";
 
 type Props = {
-  annotationPreset: AnnotationPresetT;
+  annotationPreset: AnnotPreset;
   editFieldInPreset: (key: string, value: string, name?: string) => void;
 }
 
@@ -24,7 +24,7 @@ const APColor = ({ annotationPreset, editFieldInPreset }: Props) => {
       </label>
       <input
         id={"nativeColorPicker1" + annotationPreset.id}
-        className="form-input-custom"
+        className="form-input-custom min-h-8"
         type="color"
         value={color}
         onChange={(e) => handleColorChange(e.target.value)}

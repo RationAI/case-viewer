@@ -1,13 +1,12 @@
 'use client'
 
 import { FormConfigT, FormFieldT } from '@/type-definitions';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import Form from '@/app/components/Forms/Form/Form';
-import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
+import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 
 type Props = {
-  caseExplorer: CaseExplorer | undefined,
   identifierParts: number;
 }
 
@@ -27,7 +26,8 @@ const createSearchUrl = (paramNames: string[], target: FormType) => {
   }, '');
 }
 
-const CaseSearchForm = ({ caseExplorer, identifierParts }: Props) => {
+const CaseSearchForm = ({ identifierParts }: Props) => {
+  const rootApi = useContext(RootApiContext);
   const [tissues, setTissues] = useState<string[]>([])
   const [stains, setStains] = useState<string[]>([])
 
@@ -36,8 +36,8 @@ const CaseSearchForm = ({ caseExplorer, identifierParts }: Props) => {
   useEffect(() => {
     const getTissuesStains = async () => {
       try {
-        const tissueOptions = await caseExplorer!.tissues();
-        const stainsOptions = await caseExplorer!.stains();
+        const tissueOptions = await rootApi!.cases.caseExplorer.tissues();
+        const stainsOptions = await rootApi!.cases.caseExplorer.stains();
         setTissues(tissueOptions || []);
         setStains(stainsOptions || []);
       } catch (e) {
@@ -45,10 +45,10 @@ const CaseSearchForm = ({ caseExplorer, identifierParts }: Props) => {
       }
     };
 
-    if (caseExplorer) {
+    if (rootApi) {
       getTissuesStains()
     }
-  }, [caseExplorer])
+  }, [rootApi])
 
   const searchRows = [
     ['year', 'month', 'day'],

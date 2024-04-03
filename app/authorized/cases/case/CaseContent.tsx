@@ -1,26 +1,31 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import Table from '../components/Table/Table'
 import { TableStructureT, VisualizationConfig } from '@/type-definitions';
-import { Session } from 'next-auth';
-import { getCaseInfo, getCaseSlides, getRationAIApi, getSlideThumbnailURL, getSlideVisualizations } from '@/app/utils/data';
-import { useSession } from 'next-auth/react';
+import { getCaseSlides, getSlideVisualizations } from '@/app/utils/data';
 import { Case } from '@/EmpationAPI/src/v3/root/types/case';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
+import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
+import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
+import { useQuery } from '@tanstack/react-query';
+import JobsInfo from './JobsInfo';
 
 type Props = {
-  caseId: string;
+  caseObj: CaseH;
+  showCaseName: boolean;
+  basePath: string;
+  fetchDelayed?: boolean;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thumbnailUrls: (string | undefined)[], slideVisualizations: object[]) => {
+const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
   const tableStructure: TableStructureT = { 
-    name: caseInfo.local_id || caseInfo.id,
+    name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
       return ({
-        uuid: slide.id,
+        slideId: slide.id,
+        casePath: caseHierPath,
         name: slide.local_id?.split('.')[-1] || slide.id,
-        previewURL: thumbnailUrls[idx],
         created: new Date(slide.created_at).toISOString(),
         metadata: {
           something: "something",
@@ -32,119 +37,40 @@ const getTableStructureFromCaseContents = (caseInfo: Case, slides: Slide[], thum
   return tableStructure;
 }
 
-/* const exampleFolder: TableStructureT = {
-  name: 'folder',
-  slides: [
-    {
-      uuid: 'dasdiasuidasodisnasodsa',
-      name: 'report.pdf',
-      previewURL: '/file_icons/image_file.svg',
-      format: 'pdf',
-      created: timestamp,
-      createdBy: 'John Doe',
-      metadata: {
-        something: 'something',
-        dsasdasda: 'dasdsadasd',
-      },
-      masks: [
-        {
-          name: 'mask1',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask2',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask3sadasdasdasdsadasdas',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask4',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask5',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask6',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask7',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask8',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask9',
-          imageLink: '/file_icons/image_file.svg',
-        },
-        {
-          name: 'mask10',
-          imageLink: '/file_icons/image_file.svg',
-        },
-      ],
-      annotations: [
-        {
-          name: 'mask',
-          imageLink: '/file_icons/image_file.svg',
-        },
-      ]
-    }
-  ]
-} */
+const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Props) => {
+  const rootApi = useContext(RootApiContext);
 
-const CaseContent = ({ caseId }: Props) => {
-  const { data: session } = useSession();
+  const getCaseContent = async () => {
+    const slides = await getCaseSlides(rootApi!, caseObj.id)
+    const rationaiApi = rootApi!.rationai;
+    const visualizations = await Promise.all(slides.map(async (slide) => {
+      const vis = await getSlideVisualizations(slide.id, rationaiApi)
+      return vis;
+    }))
+    await rootApi?.scopes.use(caseObj.id);
+    return {slides: slides, visualizations: visualizations}
+  };
 
-  const [caseInfo, setCaseInfo] = useState<Case | undefined>();
-  const [caseSlides, setCaseSlides] = useState<Slide[] | undefined>();
-  const [thumbnailUrls, setThumbnailUrls] = useState<(string | undefined)[]>([]);
-  const [slideVisualizations, setSlideVisualizations] = useState<(object[])>([])
+  const { isPending, isError, data: caseContent } = useQuery({
+    queryKey: [`case_${caseObj.id}_content`],
+    queryFn: getCaseContent,
+    enabled: !fetchDelayed && rootApi !== undefined,
+  })
 
-  useEffect(() => {
-    const getCaseContent = async (session: Session) => {
-      const caseObj = await getCaseInfo(session, caseId)
-      const slides = await getCaseSlides(session, caseId)
-      setCaseInfo(caseObj);
-      setCaseSlides(slides);
+  if (isPending) {
+    return <div>Loading...</div>
+  }
 
-      const slideThumbnails = await Promise.all(slides.map(async (slide) => {
-        const previewURL = await getSlideThumbnailURL(session, slide.id)
-        return previewURL;
-      }))
-
-      setThumbnailUrls(slideThumbnails)
-
-      const rationaiApi = await getRationAIApi(session)
-
-      const visualizations = await Promise.all(slides.map(async (slide) => {
-        const vis = await getSlideVisualizations(slide.id, rationaiApi)
-        return vis;
-      }))
-
-      setSlideVisualizations(visualizations)
-    };
-
-    if (session?.accessToken) {
-      getCaseContent(session);
-    }
-  }, [caseId, session, session?.accessToken])
-
-  if (caseInfo && caseSlides && thumbnailUrls && slideVisualizations) {
-    return (
-      <div>
-        <Table tableStructure={getTableStructureFromCaseContents(caseInfo, caseSlides, thumbnailUrls, slideVisualizations)}/>
-      </div>
-    )
+  if (isError) {
+    return <div>Unable to fetch data</div>
   }
 
   return (
-    <div>Loading...</div>
+    <div className='py-1 flex flex-col gap-2'>
+      <JobsInfo caseId={caseObj.id} fetchDelayed={fetchDelayed}/>
+      <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, caseContent.slides, caseContent.visualizations, showCaseName)} showHeader={false} />
+      {caseContent.slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
+    </div>
   )
 }
 

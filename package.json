@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.28.9",
     "next": "^14.1.0",
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.48.2"
+    "react-hook-form": "^7.48.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.28.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

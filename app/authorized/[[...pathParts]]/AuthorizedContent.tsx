@@ -1,60 +1,57 @@
 'use client'
 
 import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
-import React from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import AnnotationsPage from '../annotations/AnnotationsPage';
-import CaseContent from '../cases/case/CaseContent';
-import CaseHierarchyLevel from '../cases/path/CaseHierarchyLevel';
-import CaseSearchPage from '../cases/search/CaseSearchPage';
 import UploadPage from '../upload/UploadPage';
 import InvalidPathPage from '../../components/InvalidPathPage/InvalidPathPage';
 import UserPage from '../user/UserPage';
-import CaseExplorer from '@/EmpationAPI/src/v3/extensions/case-explorer';
-import { useSession } from 'next-auth/react';
+import CasesPage from '../cases/CasesPage';
+import { usePathname } from 'next/navigation';
+import { getPathParts } from '@/app/utils';
+
+export const PathPartsContext = createContext<string[]>([])
 
 type Props = {
-  caseExplorer: CaseExplorer | undefined,
-  caseHierarchy: CaseHierarchy | undefined,
-  pathParts: string[],
+  caseHierarchy: CaseHierarchy,
 }
 
-const AuthorizedContent = ({ caseExplorer, caseHierarchy, pathParts }: Props) => {
-  const { data: session } = useSession();  
-  if (!caseHierarchy || !pathParts) {
-    return (
-      <div>
-        <div>Session: {JSON.stringify(session)}</div>
-        <div>Hierarchy: {JSON.stringify(caseHierarchy)}</div>
-        <div>Pathparts: {pathParts}</div>
-        <div>Loading...</div>
-      </div>
-    )
-  }
+const AuthorizedContent = ({ caseHierarchy }: Props) => { 
+  const relativePath = usePathname();
 
-  switch (pathParts[1]) {
-    case "annotations":
-      return <AnnotationsPage />;
-    case "cases":
-      switch (pathParts[2]) {
-        case "case":
-          return <CaseContent caseId={pathParts[3]}/>;
-        case "path":
-          return <CaseHierarchyLevel caseHierarchy={caseHierarchy}/>;
-        case "search":
-          return <CaseSearchPage caseExplorer={caseExplorer} searchQuery={pathParts.slice(3)}/>;
-        default:
-          <InvalidPathPage />;
-      }
-    case "upload":
-      return <UploadPage />;
-    case "user":
-      return <UserPage />;
-    default:
-        <InvalidPathPage />;
+  const [pathParts, setPathParts] = useState<string[]>(getPathParts(relativePath));
+
+  useEffect(() => {
+    setPathParts(getPathParts(relativePath));
+  }, [relativePath]);
+
+  let pageToRender;
+
+  if(pathParts.length > 1) {
+    switch (pathParts[1]) {
+      case "annotations":
+        pageToRender = <AnnotationsPage />;
+        break;
+      case "cases":
+        pageToRender = <CasesPage caseHierarchy={caseHierarchy}/>;
+        break;
+      case "upload":
+        pageToRender = <UploadPage />;
+        break;
+      case "user":
+        pageToRender = <UserPage />;
+        break;
+      default:
+        pageToRender = <InvalidPathPage />;
+    }
+  } else {
+    pageToRender = <div>Congrats! You are authorized!</div>
   }
   
   return (
-    <div>Congrats! You are authorized!</div>
+    <PathPartsContext.Provider value={pathParts}>
+      {pageToRender}
+    </PathPartsContext.Provider>
   )
 }
 

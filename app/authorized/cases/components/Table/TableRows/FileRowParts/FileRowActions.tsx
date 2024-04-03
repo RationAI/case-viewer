@@ -2,29 +2,28 @@
 
 import React from "react";
 import Image from "next/image";
+import { shallowRedirect } from "@/app/components/Redirect/Redirect";
 
+type Props = {
+  slidePath: string
+}
 
-const FileRowActions = () => {
-
-  const handleDownload = () => {
-
-  }
-
+const FileRowActions = ({slidePath}: Props) => {
   return (
     <div className="flex flex-col items-center justify-center h-full gap-1 py-1">
       <button
         type="submit"
         title="Open in xOpat"
-        className="btn btn-sm btn-square p-1 bg-primary hover:bg-primary"
+        className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200"
       >
-        <Image src="/svg/xopat.svg" alt="Open in xOpat" height={33} width={33} />
+        <Image src="/svg/xopat.svg" alt="Open in xOpat" height={25} width={25} />
       </button>
       <button
-        title="Download"
-        onClick={handleDownload}
-        className="btn btn-sm btn-square p-1 bg-primary hover:bg-primary"
+        title="Slide details"
+        onClick={(e) => {shallowRedirect(e, slidePath, false, false)}}
+        className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200"
       >
-        <Image src="/svg/download.svg" alt="Open in xOpat" height={33} width={33} />
+        <Image src="/svg/info.svg" alt="Slide details" height={20} width={20} />
       </button>
     </div>
   );
