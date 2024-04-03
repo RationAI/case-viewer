@@ -9,6 +9,7 @@ import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
 import { useQuery } from '@tanstack/react-query';
+import JobsInfo from './JobsInfo';
 
 type Props = {
   caseObj: CaseH;
@@ -47,15 +48,13 @@ const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Pro
       return vis;
     }))
     await rootApi?.scopes.use(caseObj.id);
-    const jobs = await rootApi?.scopes.rawQuery('jobs');
-    console.log(jobs)
     return {slides: slides, visualizations: visualizations}
   };
 
-  const { isPending, isError, data } = useQuery({
+  const { isPending, isError, data: caseContent } = useQuery({
     queryKey: [`case_${caseObj.id}_content`],
     queryFn: getCaseContent,
-    enabled: !fetchDelayed,
+    enabled: !fetchDelayed && rootApi !== undefined,
   })
 
   if (isPending) {
@@ -67,9 +66,10 @@ const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Pro
   }
 
   return (
-    <div>
-      <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, data.slides, data.visualizations, showCaseName)}/>
-      {data.slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
+    <div className='py-1 flex flex-col gap-2'>
+      <JobsInfo caseId={caseObj.id} fetchDelayed={fetchDelayed}/>
+      <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, caseContent.slides, caseContent.visualizations, showCaseName)} showHeader={false} />
+      {caseContent.slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
     </div>
   )
 }

@@ -9,7 +9,7 @@ type Props = {
 }
 
 const CollapseCaseRow = ({ caseRow, defaultOpen }: Props) => {
-  const [openedOnce, setOpenedOnce] = useState(false);
+  const [openedOnce, setOpenedOnce] = useState(defaultOpen);
 
   return (
     <li key={caseRow.caseObj.id} className="max-w-full truncate py-[2px]">

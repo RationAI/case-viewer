@@ -29,7 +29,12 @@ const CasePage = ({ caseId }: Props) => {
   }
 
   return (
-    <CaseContent caseObj={data} showCaseName={true} basePath="/authorized/cases/path"/>
+    <div>
+      <div className="font-sans font-semibold text-slate-500 text-xl pl-2">
+        {data.local_id || data.id}
+      </div>
+      <CaseContent caseObj={data} showCaseName={false} basePath="/authorized/cases/path"/>
+    </div>
   )
 }
 

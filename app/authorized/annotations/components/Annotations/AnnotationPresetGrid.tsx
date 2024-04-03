@@ -1,36 +1,51 @@
 'use client'
 
 import {v4 as uuidv4} from 'uuid';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Image from "next/image";
 import AnnotationPreset from './AnnotationPreset'
 import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 import AnnotationButtons from './AnnotationButtons';
 import { AnnotPreset } from '@/EmpationAPI/src/v3/extensions/types/annot-preset';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
 
 const AnnotationPresetGrid = () => {
+  const queryClient = useQueryClient()
+
   const rootApi = useContext(RootApiContext);
   const [presets, setPresets] = useState<AnnotPreset[]>([]);
   const [lastModified, setLastModified] = useState(0);
   const [currentColorIdx, setCurrentColorIdx] = useState(presets.length);
   const [deletePresetId, setDeletePresetId] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const getAnnotPresets = async () => {
-      const presetsResult = await rootApi!.rationai.globalStorage.annotPresets.getAnnotPresets();
-      setPresets(presetsResult.presets);
-      setLastModified(presetsResult.lastModifiedAt);
-      setLoading(false);
-    };
+  const getAnnotPresets = async () => {
+    const presetsResult = await rootApi!.rationai.globalStorage.annotPresets.getAnnotPresets(true);
+    setPresets(presetsResult.presets)
+    setLastModified(presetsResult.lastModifiedAt)
+    return { presets: presetsResult.presets, lastModifiedAt: presetsResult.lastModifiedAt}
+  };
 
-    if(rootApi) {
-      getAnnotPresets();
-    }
-  }, [rootApi])
+  const postAnnotPresets = async () => {
+    const updatedPresets = await rootApi!.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
+    // TODO handle results
+  }
+
+  const { isFetching, isError, refetch } = useQuery({
+    queryKey: [`annot_preset`],
+    queryFn: getAnnotPresets,
+    refetchInterval: Infinity,
+    refetchOnReconnect: false,
+  })
+
+  const mutation = useMutation({
+    mutationFn: postAnnotPresets,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['annot_preset'] })
+    },
+  })
 
   const handleEditPreset = (id: string, editedPreset: AnnotPreset) => {
     const newPresets = [...presets];
@@ -91,11 +106,7 @@ const AnnotationPresetGrid = () => {
 
   const handleRevert = async () => {
     if(rootApi) {
-      setLoading(true);
-      const refetchedPresets = await rootApi.rationai.globalStorage.annotPresets.getAnnotPresets(true);
-      setPresets(refetchedPresets.presets);
-      setLastModified(refetchedPresets.lastModifiedAt);
-      setLoading(false);
+      refetch();
     }
   }
 
@@ -104,12 +115,9 @@ const AnnotationPresetGrid = () => {
   }
 
   const handleSave = async () => {
+    // TODO handle different outcomes of save
     if(rootApi) {
-      setLoading(true);
-      const updatedPresets = await rootApi.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
-      setPresets(updatedPresets.presets);
-      setLastModified(updatedPresets.lastModifiedAt);
-      setLoading(false);
+      mutation.mutate()
     }
   }
 
@@ -119,8 +127,10 @@ const AnnotationPresetGrid = () => {
         <div className='font-sans font-semibold text-slate-500 text-2xl pl-1'>Annotations presets</div>
         <AnnotationButtons handleRevertClick={handleRevertClick} handleSaveClick={handleSaveClick}/>
       </div>
-      {loading ? 
+      {isFetching ? 
         <div>Loading...</div> :
+        isError ? 
+        <div>Unable to fetch presets</div> :
         <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
         {presets.map((annotPreset) => {
           return (

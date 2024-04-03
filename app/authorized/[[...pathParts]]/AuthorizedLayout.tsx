@@ -21,7 +21,7 @@ const AuthorizedLayout = () => {
   return (
     <>
       <Sidebar caseHierarchy={data}/>
-      <div className="p-2 overflow-scroll w-full">
+      <div className="p-2 overflow-y-scroll w-full">
         {isPending ?
           <div>Loading...</div> : (
             isError ? 
