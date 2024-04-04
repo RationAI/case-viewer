@@ -72,7 +72,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
-        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl" shallow={false}>
+        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl">
           <Image
             src='/svg/rationai-color.svg'
             alt='RationAI'
