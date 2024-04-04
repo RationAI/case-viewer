@@ -37,6 +37,7 @@ const AnnotationPresetGrid = () => {
     queryKey: [`annot_preset`],
     queryFn: getAnnotPresets,
     refetchInterval: Infinity,
+    refetchOnMount: true,
     refetchOnReconnect: false,
   })
 

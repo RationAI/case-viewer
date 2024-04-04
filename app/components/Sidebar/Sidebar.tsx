@@ -30,7 +30,21 @@ const Sidebar = ({caseHierarchy}: Props) => {
       <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto">
         {extended ? (
           <div>
-            <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
+            <div className="flex flex-row justify-between items-center">
+              <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
+              <label
+                tabIndex={0}
+                className="btn btn-sm btn-ghost"
+                onClick={() => setExtended(!extended)}
+              >
+                <Image
+                  src="/svg/expand-left.svg"
+                  alt="Extend"
+                  height={15}
+                  width={15}
+                />
+              </label>
+            </div>
             {caseHierarchy && 
               <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
             }
@@ -54,7 +68,7 @@ const Sidebar = ({caseHierarchy}: Props) => {
           </ul>
         )}
       </div>
-      <div className="flex-none w-full border-t border-neutral">
+      {/* <div className="flex-none w-full border-t border-neutral">
         <div className={"flex flex-row p-1" + (extended ? " justify-end" : " justify-center")}>
           <label
             tabIndex={0}
@@ -69,7 +83,7 @@ const Sidebar = ({caseHierarchy}: Props) => {
             />
           </label>
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 };

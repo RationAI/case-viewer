@@ -2,9 +2,10 @@
 
 import { Job } from '@/EmpationAPI/src/v3/root/types/job';
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext } from 'react'
-import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
+import React from 'react'
 import { JobList } from '@/EmpationAPI/src/v3/scope/types/job-list';
+import { getRootApi } from '@/app/utils';
+import { getSession } from 'next-auth/react';
 
 const PROCESSING_STATES = ['ASSEMBLY', 'RUNNING', 'SCHEDULED'];
 const COMPLETED_STATES = ['COMPLETED'];
@@ -30,20 +31,23 @@ type Props = {
 }
 
 const JobsInfo = ({caseId, fetchDelayed = false}: Props) => {
-  const rootApi = useContext(RootApiContext);
-
   const getCaseJobs = async () => {
-    await rootApi?.scopes.use(caseId);
-    const jobs = await rootApi?.scopes.rawQuery('jobs') as JobList;
-    console.log(jobs)
-    return jobs.items as Job[];
+    const session = await getSession()
+    if (session && session.accessToken) {
+      const root = await getRootApi(session);
+      await root?.scopes.use(caseId);
+      const jobs = await root?.scopes.rawQuery('jobs') as JobList;
+      console.log(jobs)
+      return jobs.items as Job[];
+    }
+    return [];
   };
 
   const { isPending, isError, data: caseJobs } = useQuery({
     queryKey: [`case_${caseId}_jobs`],
     queryFn: getCaseJobs,
-    refetchInterval: 1000 * 10,
-    enabled: !fetchDelayed && (rootApi !== undefined),
+    refetchInterval: 1000 * 20,
+    enabled: !fetchDelayed,
   })
 
   if (isPending) {

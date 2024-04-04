@@ -22,11 +22,12 @@ const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string,
   const tableStructure: TableStructureT = { 
     name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
+      const date = new Date(slide.created_at * 1000);
       return ({
         slideId: slide.id,
         casePath: caseHierPath,
         name: slide.local_id?.split('.')[-1] || slide.id,
-        created: new Date(slide.created_at).toISOString(),
+        created: `${date.toLocaleString("cs")}`,
         metadata: {
           something: "something",
         },

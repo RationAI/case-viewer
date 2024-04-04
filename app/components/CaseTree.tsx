@@ -13,7 +13,7 @@ type Props = {
 const CaseTree = ({root, rootLink, hierarchy }: Props) => {
   return (
     <div className="max-w-full">
-      <ul className={root ? "menu pl-0 menu-xs rounded-lg" : "pl-0"}>
+      <ul className={root ? "menu pl-0 pt-0 menu-xs rounded-lg" : "pl-0"}>
         {!hierarchy.lastLevel ? (
           hierarchy.items as CaseHierarchy[]).map((item) => (
             <li key={item.levelName} className="max-w-full truncate">
