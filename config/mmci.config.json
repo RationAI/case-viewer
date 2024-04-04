@@ -5,5 +5,8 @@
   "hierarchy_spec": ["year", "id_part_1", "id_part_2"],
   "slide_mask_separator": "\\w{4}.\\w{4}.(\\w)..*",
 
-  "searchKeys": ["year", "month", "day", "description", "identifier", "tissues", "stains", "id_part_1", "id_part_2"]
+  "searchKeys": ["year", "month", "day", "description", "identifier", "tissues", "stains", "id_part_1", "id_part_2"],
+  "settings": {
+    "allowAnnotationPresets": false
+  }
 }

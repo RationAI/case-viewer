@@ -10,18 +10,17 @@ export type AppConfigT = {
   slide_mask_separator?: string,
   
   searchKeys?: string[],
+
+  settings?: object,
 }
 
 export type MenuItemT = {
   label: string,
   link: string,
   icon?: string, 
-  subItems?: SubMenuItemT[],
-}
-
-type SubMenuItemT = {
-  label: string,
-  link: string,
+  subItems?: MenuItemT[],
+  external?: boolean,
+  shallowLink?: boolean,
 }
 
 export type TableStructureT = {
