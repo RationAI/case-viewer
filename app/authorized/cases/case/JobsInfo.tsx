@@ -35,8 +35,12 @@ const JobsInfo = ({caseId, fetchDelayed = false}: Props) => {
     const session = await getSession()
     if (session && session.accessToken) {
       const root = await getRootApi(session);
-      await root?.scopes.use(caseId);
-      const jobs = await root?.scopes.rawQuery('jobs') as JobList;
+      const examinations = await root.examinations.query({
+        cases: [caseId],
+      });
+      console.log(examinations)
+      await root.scopes.use(caseId);
+      const jobs = await root.scopes.rawQuery('jobs') as JobList;
       console.log(jobs)
       return jobs.items as Job[];
     }
