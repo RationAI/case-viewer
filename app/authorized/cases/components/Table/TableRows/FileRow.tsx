@@ -85,16 +85,18 @@ const FileRow = ({ slide, rowNo }: Props) => {
             </div>
           </form>
         </div>
-        <div className="collapse-content px-2">
-          <div className="pt-2">
-            {Object.entries(slide.metadata).map(([key, value]) => (
-              <div key={key} className="flex gap-1">
-                <p className="font-medium">{key + ":"}</p>
-                <p>{value}</p>
-              </div>
-            ))}
+        {slide.metadata && 
+          <div className="collapse-content px-2">
+            <div className="pt-2">
+              {Object.entries(slide.metadata).map(([key, value]) => (
+                <div key={key} className="flex gap-1">
+                  <p className="font-medium">{key + ":"}</p>
+                  <p>{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        }
       </div>
     </a>
   );

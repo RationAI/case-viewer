@@ -26,6 +26,10 @@ const navbarMenu: MenuItemT[] = [
     link: process.env.NEXT_PUBLIC_UPLOADER_LINK || "https://rationai.cloud.trusted.e-infra.cz",
     external: true,
   },
+  {
+    label: "Feedback",
+    link: "feedback",
+  }
 ];
 
 if(getSettings()['allowAnnotationPresets']) {

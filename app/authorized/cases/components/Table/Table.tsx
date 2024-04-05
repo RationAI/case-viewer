@@ -13,9 +13,6 @@ type Props = {
 const Table = ({ tableStructure, showHeader = true, advancedUser = false }: Props) => {
   return (
     <div>
-      <div className="font-sans font-semibold text-slate-500 text-xl pl-2">
-        {tableStructure.name}
-      </div>
       {tableStructure.folders && (
         <div className="flex flex-col gap-1">
           {tableStructure.parent && (

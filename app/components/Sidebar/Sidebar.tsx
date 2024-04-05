@@ -6,10 +6,12 @@ import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierar
 
 type Props = {
   caseHierarchy?: CaseHierarchy,
+  isPending: boolean,
+  isError: boolean,
 }
 
-const Sidebar = ({caseHierarchy}: Props) => {
-  const [extended, setExtended] = useState(false);
+const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
+  const [extended, setExtended] = useState(true);
 
   const sidebarIconMenu = [
     {
@@ -31,7 +33,7 @@ const Sidebar = ({caseHierarchy}: Props) => {
         {extended ? (
           <div>
             <div className="flex flex-row justify-between items-center">
-              <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
+              <div className="px-2 font-sans font-semibold text-gray-800">{"Cases"}</div>
               <label
                 tabIndex={0}
                 className="btn btn-sm btn-ghost"
@@ -45,6 +47,12 @@ const Sidebar = ({caseHierarchy}: Props) => {
                 />
               </label>
             </div>
+            {isPending && 
+              <div className="pl-2 text-xs">Loading...</div>
+            }
+            {isError && 
+              <div className="pl-2 text-xs">Unable to fetch</div>
+            }
             {caseHierarchy && 
               <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
             }
@@ -55,12 +63,15 @@ const Sidebar = ({caseHierarchy}: Props) => {
               <li key={menuItem.label}>
                 <div onClick={menuItem.onClick}>
                   {menuItem.icon &&
-                    <Image
-                      src={menuItem.icon}
-                      alt={menuItem.label}
-                      height={30}
-                      width={30}
-                    />
+                    <div className="flex flex-col items-center">
+                      <Image
+                        src={menuItem.icon}
+                        alt={menuItem.label}
+                        height={30}
+                        width={30}
+                      />
+                      <div className="font-sans text-xs font-semibold text-slate-700">{menuItem.label}</div>
+                    </div>
                   }
                 </div>
               </li>

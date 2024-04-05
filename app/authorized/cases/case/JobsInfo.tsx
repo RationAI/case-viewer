@@ -39,8 +39,8 @@ const JobsInfo = ({caseId, fetchDelayed = false}: Props) => {
         cases: [caseId],
       });
       console.log(examinations)
-      await root.scopes.use(caseId);
-      const jobs = await root.scopes.rawQuery('jobs') as JobList;
+      const scope = await root.getScopeUse(caseId);
+      const jobs = await scope.rawQuery('jobs') as JobList;
       console.log(jobs)
       return jobs.items as Job[];
     }

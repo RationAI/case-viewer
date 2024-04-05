@@ -24,7 +24,6 @@ export type MenuItemT = {
 }
 
 export type TableStructureT = {
-  name?: string,
   parent?: string,
   folders?: TableFolderRowT[],
   cases?: TableCaseRowT[],
@@ -62,7 +61,7 @@ export type TableSlideRowT = {
   casePath: string,
   name: string,
   created: string,
-  metadata: MetadataT,
+  metadata?: MetadataT,
   masks?: MaskT[],
   annotations?: AnnotationT[],
   visualizationConfig: VisualizationConfig,

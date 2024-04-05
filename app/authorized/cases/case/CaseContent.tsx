@@ -13,24 +13,19 @@ import JobsInfo from './JobsInfo';
 
 type Props = {
   caseObj: CaseH;
-  showCaseName: boolean;
   basePath: string;
   fetchDelayed?: boolean;
 }
 
-const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string, slides: Slide[], slideVisualizations: object[], showCaseName: boolean) => {
+const getTableStructureFromCaseContents = (caseObj: CaseH, basePath: string, slides: Slide[], slideVisualizations: object[]) => {
   const tableStructure: TableStructureT = { 
-    name: showCaseName ? (caseInfo.local_id || caseInfo.id) : undefined,
     slides: slides.map((slide, idx) => { 
       const date = new Date(slide.created_at * 1000);
       return ({
         slideId: slide.id,
-        casePath: caseHierPath,
+        casePath: `${basePath}${caseObj.pathInHierarchy}`,
         name: slide.local_id?.split('.')[-1] || slide.id,
         created: `${date.toLocaleString("cs")}`,
-        metadata: {
-          something: "something",
-        },
         visualizationConfig: slideVisualizations[idx] as VisualizationConfig
       })
     })
@@ -38,7 +33,7 @@ const getTableStructureFromCaseContents = (caseInfo: Case, caseHierPath: string,
   return tableStructure;
 }
 
-const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Props) => {
+const CaseContent = ({ caseObj, basePath, fetchDelayed=false}: Props) => {
   const rootApi = useContext(RootApiContext);
 
   const getCaseContent = async () => {
@@ -48,7 +43,8 @@ const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Pro
       const vis = await getSlideVisualizations(slide.id, rationaiApi)
       return vis;
     }))
-    await rootApi?.scopes.use(caseObj.id);
+    console.log(caseObj.examinations)
+    
     return {slides: slides, visualizations: visualizations}
   };
 
@@ -69,7 +65,7 @@ const CaseContent = ({ caseObj, showCaseName, basePath, fetchDelayed=false}: Pro
   return (
     <div className='py-1 flex flex-col gap-2'>
       <JobsInfo caseId={caseObj.id} fetchDelayed={fetchDelayed}/>
-      <Table tableStructure={getTableStructureFromCaseContents(caseObj, `${basePath}${caseObj.pathInHierarchy}`, caseContent.slides, caseContent.visualizations, showCaseName)} showHeader={false} />
+      <Table tableStructure={getTableStructureFromCaseContents(caseObj, basePath, caseContent.slides, caseContent.visualizations)} showHeader={false} />
       {caseContent.slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
     </div>
   )

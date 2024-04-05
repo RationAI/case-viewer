@@ -9,6 +9,7 @@ import UserPage from '../user/UserPage';
 import CasesPage from '../cases/CasesPage';
 import { usePathname } from 'next/navigation';
 import { getPathParts } from '@/app/utils';
+import FeedbackPage from '../feedback/FeedbackPage';
 
 export const PathPartsContext = createContext<string[]>([])
 
@@ -40,6 +41,9 @@ const AuthorizedContent = ({ caseHierarchy }: Props) => {
         break;
       case "user":
         pageToRender = <UserPage />;
+        break;
+      case "feedback":
+        pageToRender = <FeedbackPage />
         break;
       default:
         pageToRender = <InvalidPathPage />;
