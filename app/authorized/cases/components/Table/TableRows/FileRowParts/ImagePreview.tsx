@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import Image from "next/image";
 import { getSlideThumbnail } from '@/app/utils/data';
 import ModalImagePreview from '../../ModalImagePreview/ModalImagePreview';
@@ -24,14 +24,14 @@ const ImagePreview = ({ modalId, slideId }: Props) => {
     queryFn: getThumbnailURL,
   })
 
-  useEffect(() => {
+  /* useEffect(() => {
     // returned function will be called on component unmount 
     return () => {
       if(data) {
         URL.revokeObjectURL(data)};
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []) */
 
   return (
     <>
