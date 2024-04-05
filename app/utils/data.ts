@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
 import { getSlideMaskSeparator } from './config';
 import { Root } from '@/EmpationAPI/src/v3';
+import { DEFAULT_BG_CONFIG, DEFAULT_PARAMS_CONFIG } from './constants';
 
 export const getRootApi = async (session: Session) => {
 
@@ -48,16 +49,6 @@ export const getSlideMetadata = async (rootApi: Root, slideId: string,) => {
 }
 
 export const getSlideVisualizations = async (slideId: string, rationaiApi: V3.RationAI) => {
-  const defaultParams = {
-    locale: "en",
-    activeBackgroundIndex: 0,
-    activeVisualizationIndex: 0
-  }
-  const defaultBg = [{    
-      dataReference: 0,
-      lossless: false,
-  }];
-  const defaultData = [slideId];
   let fetchedVis;
   try {
     fetchedVis = await rationaiApi.globalStorage.wsiMetadata.getVisualizations(slideId);
@@ -65,14 +56,9 @@ export const getSlideVisualizations = async (slideId: string, rationaiApi: V3.Ra
     fetchedVis = {}
   }
 
-  return {
-    params: fetchedVis.params || defaultParams,
-    data: fetchedVis.data || defaultData,
-    background: fetchedVis.background && fetchedVis.background.data ? [fetchedVis.background] : defaultBg,
-    visualizations: (fetchedVis.visualizations as Array<object> || []).concat([{
+  return  (fetchedVis.visualizations as Array<object> || []).concat([{
       "name": "Pure background",
       "lossless": true,
       "shaders": []
-    }])
-  }
+  }])
 }

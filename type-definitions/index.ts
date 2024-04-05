@@ -1,5 +1,6 @@
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
+import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
 import { JWT } from "next-auth/jwt";
 
 export type AppConfigT = {
@@ -27,9 +28,14 @@ export type TableStructureT = {
   parent?: string,
   folders?: TableFolderRowT[],
   cases?: TableCaseRowT[],
-  slides?: TableSlideRowT[],
   mergeCases?: boolean,
 };
+
+export type SlideRow = {
+  slide: Slide,
+  caseObj: CaseH,
+  jobs: JobState[],
+}
 
 type TableFolderRowT = {
   name: string,
@@ -127,6 +133,14 @@ type FormFieldBaseT = {
   label: string;
   defaultValue?: string;
   description?: string;
+}
+
+export type JobState = {
+  status: string,
+  inputs: string[],
+  outputs: string[],
+  visualization?: Visualization,
+  background?: object,
 }
 
 export interface OAuthToken extends JWT {

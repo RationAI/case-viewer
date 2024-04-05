@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export const RootApiContext = createContext<Root | undefined>(undefined)
+export const RootApiContext = createContext<Root | undefined>(undefined);
 
 const AuthorizedApp = () => {
   const [rootApi, setRootApi] = useState<Root | undefined>();

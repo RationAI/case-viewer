@@ -1,39 +1,15 @@
 'use client'
 
-import { TableSlideRowT, VisualizationConfig } from "@/type-definitions";
+import { SlideRow } from "@/type-definitions";
 import React from "react";
-import ImageGrid from "./FileRowParts/ImageGrid";
 import FileRowActions from "./FileRowParts/FileRowActions";
-import FileRowSelect from "./FileRowParts/FileRowSelect";
 import ImagePreview from "./FileRowParts/ImagePreview";
-import { openXOpat } from "@/app/utils/xOpat";
+import SlideVisualizations from "./FileRowParts/SlideVisualizations";
+import { HIERARCHY_ROOT_PATH } from "@/app/utils/constants";
 
 type Props = {
-  slide: TableSlideRowT;
-  rowNo: number;
+  slideRow: SlideRow;
 };
-
-const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: TableSlideRowT) => {
-  event.preventDefault()
-  const target = event.target as typeof event.target & {
-    visName: { value: string };
-  };
-
-  const chosenVis = slide.visualizationConfig.visualizations.find((vis) => vis.name === target.visName.value)
-
-  const xOpatVisualizationConfig: VisualizationConfig = { 
-    ...slide.visualizationConfig,
-    visualizations: [chosenVis!]
-  }
-
-  if(xOpatVisualizationConfig) {
-    openXOpat(xOpatVisualizationConfig);
-    console.log("Opening xOpat with visualization:" + JSON.stringify(xOpatVisualizationConfig));
-    return;
-  }
-
-  console.log(JSON.stringify("No visualization, cannot open xOpat"))
-}
 
 const markSlideVisited = (event, href: string) => {
   console.log(href)
@@ -46,46 +22,30 @@ const markSlideVisited = (event, href: string) => {
   // TODO fix
 }
 
-const FileRow = ({ slide, rowNo }: Props) => {
-  const slideHref = `/cache-${process.env.NEXT_PUBLIC_CACHE_KEY}/${slide.slideId}`
+const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
+  const slideHref = `/cache-${process.env.NEXT_PUBLIC_CACHE_KEY}/${slide.id}`;
+  const date = new Date(slide.created_at * 1000);
 
   return (
-    <a href={slideHref} className="block border rounded-sm visited:border-fuchsia-500" onClick={(e) => markSlideVisited(e, slideHref)}>
-      <div key={slide.slideId} className="collapse collapse-close overflow-visible"> {/* collapse-arrow */}
+    <div className="block border rounded-sm visited:border-fuchsia-500">
+      <div key={slide.id} className="collapse collapse-close overflow-visible"> {/* collapse-arrow */}
         <input type="checkbox" />
         <div className="collapse-title flex flex-row gap-4 py-0 pl-0">
-          <ImagePreview modalId={"modalId" + slide.slideId} slideId={slide.slideId} />
-          <form className="flex-1 flex flex-row gap-4" onSubmit={(e) => handleOpenInXOpat(e, slide)}>
+          <ImagePreview modalId={"modalId" + slide.id} slideId={slide.id} />
+          <div className="flex-1 flex flex-row gap-4">
             <div className="flex flex-col justify-center min-w-[18rem] flex-1 px-2">
-              <p className="font-bold">{slide.name}</p>
-              <p className="">{slide.created}</p>
+              <p className="font-bold">{slide.local_id ?? slide.id}</p>
+              <p className="">{date.toLocaleString("cs")}</p>
             </div>
-            {slide.masks &&
-              <div className="flex w-[12.5rem] items-center justify-center z-10">
-                <FileRowSelect options={slide.masks.map((mask) => mask.name)}/>
-              </div>
-            }
-            {slide.annotations &&
-              <div className="flex items-center justify-center z-10 px-[0.375rem]">
-                <ImageGrid
-                  images={slide.annotations}
-                  count={9}
-                  typeName="annotation"
-                  rowNo={rowNo}
-                />
-              </div>
-            }
-            {slide.visualizationConfig &&
-              <div className="flex w-[12.5rem] items-center justify-center z-10">
-                <FileRowSelect options={slide.visualizationConfig.visualizations.map((vis) => vis.name)} />
-              </div>
-            }
+            <div className="flex w-[12.5rem] items-center justify-center z-10">
+              <SlideVisualizations slide={slide} caseObj={caseObj}/>
+            </div>
             <div className="w-16 z-10">
-              <FileRowActions slidePath={`${slide.casePath}/${slide.slideId}`} />
+              <FileRowActions slidePath={`${HIERARCHY_ROOT_PATH}${caseObj.pathInHierarchy}/${slide.id}`} />
             </div>
-          </form>
+          </div>
         </div>
-        {slide.metadata && 
+        {/* {metadata && 
           <div className="collapse-content px-2">
             <div className="pt-2">
               {Object.entries(slide.metadata).map(([key, value]) => (
@@ -96,10 +56,14 @@ const FileRow = ({ slide, rowNo }: Props) => {
               ))}
             </div>
           </div>
-        }
+        } */}
       </div>
-    </a>
+    </div>
   );
 };
 
 export default FileRow;
+
+{/* <a href={slideHref} className="block border rounded-sm visited:border-fuchsia-500" onClick={(e) => markSlideVisited(e, slideHref)}>
+    </a>
+ */}

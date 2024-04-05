@@ -19,9 +19,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 To add a new app/job to deployment, you need to provide image, EAD (other parts of deployment), and for this case browser, you need to upload a config similar to EAD, that specifies Inputs and Outputs of given job, and rules how to generate visualizations from them. This should be stored as a global item that references the app
 Example:
 { 
+  "name": "..."
   "appId": "..."
   "modes": {
-      "preproccesing": {
+      "preprocessing": {
           "inputs": {
               "analyzed_scan": {
                 "_layer_loc": "background",
@@ -57,9 +58,10 @@ Example:
 }
 
 {
+  "name": "..."
   "appId": "..."
   "modes": {
-      "preproccesing": {
+      "preprocessing": {
           "inputs": {
               "analyzed_scan": {
                 "_layer_loc": "background",
@@ -83,9 +85,10 @@ Example:
 }
 
 {
+  "name": "..."
   "appId": "..."
   "modes": {
-      "preproccesing": {
+      "preprocessing": {
           "inputs": {
               "analyzed_scan": {
                 "_layer_loc": "background",
