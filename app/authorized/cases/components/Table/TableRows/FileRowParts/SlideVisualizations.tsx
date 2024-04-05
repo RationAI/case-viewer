@@ -1,7 +1,10 @@
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 import { getSlideVisualizations } from '@/app/utils';
+import { DEFAULT_BG_CONFIG, DEFAULT_PARAMS_CONFIG } from '@/app/utils/constants';
+import { openXOpat } from '@/app/utils/xOpat';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
+import { Visualization, VisualizationConfig } from '@/type-definitions';
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext } from 'react'
 
@@ -10,17 +13,12 @@ type Props = {
   caseObj: CaseH;
 }
 
-/* const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: TableSlideRowT) => {
-  event.preventDefault()
-  const target = event.target as typeof event.target & {
-    visName: { value: string };
-  };
-
-  const chosenVis = slide.visualizationConfig.visualizations.find((vis) => vis.name === target.visName.value)
-
+const handleOpenInXOpat = (data: string[], visualization: Visualization) => {
   const xOpatVisualizationConfig: VisualizationConfig = { 
-    ...slide.visualizationConfig,
-    visualizations: [chosenVis!]
+    params: DEFAULT_PARAMS_CONFIG,
+    background: DEFAULT_BG_CONFIG,
+    data: data,
+    visualizations: [visualization]
   }
 
   if(xOpatVisualizationConfig) {
@@ -30,7 +28,7 @@ type Props = {
   }
 
   console.log(JSON.stringify("No visualization, cannot open xOpat"))
-} */
+}
 
 const SlideVisualizations = ({slide, caseObj}: Props) => {
   const rootApi = useContext(RootApiContext);
@@ -48,7 +46,7 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
     enabled: rootApi !== undefined,
   })
   return (
-    <div>SlideVisualizations</div>
+    <div></div>
   )
 }
 
