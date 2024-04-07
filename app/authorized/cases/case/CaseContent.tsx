@@ -2,7 +2,7 @@
 
 import React, { useContext } from 'react'
 import { JobState, SlideRow, Visualization } from '@/type-definitions';
-import { getCaseSlides, getSlideVisualizations } from '@/app/utils/data';
+import { getCaseSlides } from '@/app/utils/data';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
@@ -67,7 +67,7 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   };
 
   const { isPending, isError, data: slides } = useQuery({
-    queryKey: [`case_${caseObj.id}_content`],
+    queryKey: [`case_${caseObj.id}_slides`],
     queryFn: getCaseSlidesQuery,
     enabled: !fetchDelayed && rootApi !== undefined,
   })
@@ -81,6 +81,7 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
 
     for(let i = 0; i < examinations.length; i = i+1) {
       const examination = examinations[i];
+      console.log(examinations)
       const appConfig = await rootApi!.rationai.globalStorage.jobConfig.getJobConfig(examination.app_id);
       if(appConfig) {
         const scope = await rootApi!.getScopeFrom(examination);
@@ -93,9 +94,9 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   };
 
   const { isPending: isPendingJobs, isError: isErrorJobs, data: jobs } = useQuery({
-    queryKey: [`case_${caseObj.id}_content`],
+    queryKey: [`case_${caseObj.id}_jobs`],
     queryFn: getCaseJobs,
-    enabled: slides && rootApi !== undefined,
+    enabled: !fetchDelayed && rootApi !== undefined,
   })
 
   if (isPending || isPendingJobs) {
@@ -108,7 +109,6 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
 
   return (
     <div className='py-1 flex flex-col gap-2'>
-      <JobsInfo caseId={caseObj.id} fetchDelayed={fetchDelayed}/>
       <SlideTable slideRows={getSlideRows(caseObj, slides, jobs)} showHeader={false}/>
       {slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
     </div>

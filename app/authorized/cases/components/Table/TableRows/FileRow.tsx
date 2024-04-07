@@ -12,14 +12,12 @@ type Props = {
 };
 
 const markSlideVisited = (event, href: string) => {
-  console.log(href)
   event.preventDefault();
   if (history.replaceState) {
     const current_url = window.location.href;
     history.replaceState({},'',href);
     history.replaceState({},'',current_url);
   }
-  // TODO fix
 }
 
 const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
@@ -27,7 +25,7 @@ const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
   const date = new Date(slide.created_at * 1000);
 
   return (
-    <div className="block border rounded-sm visited:border-fuchsia-500">
+    <div className="block border rounded-sm">
       <div key={slide.id} className="collapse collapse-close overflow-visible"> {/* collapse-arrow */}
         <input type="checkbox" />
         <div className="collapse-title flex flex-row gap-4 py-0 pl-0">
