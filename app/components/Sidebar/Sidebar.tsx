@@ -25,7 +25,7 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
   return (
     <aside
       className={
-        "flex flex-col items-center bg-base-100 border-r border-neutral shadow max-h-full" +
+        "flex flex-col items-center bg-base-100 border-r border-neutral dark:border-color-dark shadow max-h-full" +
         (extended ? " min-w-[13rem] max-w-[13rem]" : "")
       }
     >
@@ -33,13 +33,14 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
         {extended ? (
           <div>
             <div className="flex flex-row justify-between items-center">
-              <div className="px-2 font-sans font-semibold text-gray-800">{"Cases"}</div>
+              <div className="px-2 font-sans font-semibold text-gray-800 dark:text-base-dark">{"Cases"}</div>
               <label
                 tabIndex={0}
                 className="btn btn-sm btn-ghost"
                 onClick={() => setExtended(!extended)}
               >
                 <Image
+                  className="dark:svg-filter-dark"
                   src="/svg/expand-left.svg"
                   alt="Extend"
                   height={15}
@@ -65,12 +66,13 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
                   {menuItem.icon &&
                     <div className="flex flex-col items-center">
                       <Image
+                        className="dark:svg-filter-dark"
                         src={menuItem.icon}
                         alt={menuItem.label}
                         height={30}
                         width={30}
                       />
-                      <div className="font-sans text-xs font-semibold text-slate-700">{menuItem.label}</div>
+                      <div className="font-sans text-xs font-semibold text-slate-700 dark:text-base-dark">{menuItem.label}</div>
                     </div>
                   }
                 </div>

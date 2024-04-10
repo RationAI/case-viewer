@@ -27,7 +27,7 @@ const AvailableVis = ({jobName, jobDescription, href, onClick}: Props) => {
       >
         <Image className='' src="/svg/layer.svg" alt="Slide details" height={25} width={25} />
       </button>
-      <div className="w-max flex flex-col items-center absolute bottom-11 scale-0 transition-all rounded border border-gray-500 bg-white p-[2px] group-hover:scale-100">
+      <div className="w-max flex flex-col items-center absolute bottom-11 scale-0 transition-all rounded border border-gray-500 bg-white dark:bg-dark  p-[2px] group-hover:scale-100">
         <span className='text-xs'>{jobName|| "Job"}</span>
         <span className='text-xs text-green-500 font-semibold'>completed</span>
         {jobDescription && <span>{jobDescription}</span>}

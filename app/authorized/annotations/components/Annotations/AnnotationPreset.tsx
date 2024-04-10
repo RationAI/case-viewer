@@ -39,7 +39,7 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHan
 
   return (
     <div>
-      <div className="border border-gray-400 rounded-lg p-2 border-dashed h-full">
+      <div className="border border-gray-400 dark:border-color-dark rounded-lg p-2 border-dashed h-full">
         <form className="flex flex-col gap-[2px]">
           <div className="flex justify-between">
             <div className="flex gap-2">
@@ -50,11 +50,11 @@ const AnnotationPreset = ({ annotationPreset, removePresetHandler, copyPresetHan
             </div>
             {/* copy/remove preset */}
             <div className="flex flex-row gap-1">
-              <button title="Copy preset" type="button" onClick={() => copyPresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
-                <Image src="/svg/copy.svg" alt="Copy" height={33} width={33} />
+              <button title="Copy preset" type="button" onClick={() => copyPresetHandler(annotationPreset.id)} className="btn btn-sm btn-square default-button-bg-border">
+                <Image className="dark:svg-filter-dark" src="/svg/copy.svg" alt="Copy" height={33} width={33} />
               </button>
-              <button title="Delete preset" type="button" onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square border-gray-300 bg-gray-50 hover:bg-gray-200">
-                <Image src="/svg/cross.svg" alt="Remove" height={33} width={33} />
+              <button title="Delete preset" type="button" onClick={() => removePresetHandler(annotationPreset.id)} className="btn btn-sm btn-square default-button-bg-border">
+                <Image className="dark:svg-filter-dark" src="/svg/cross.svg" alt="Remove" height={33} width={33} />
               </button>
             </div>
           </div>

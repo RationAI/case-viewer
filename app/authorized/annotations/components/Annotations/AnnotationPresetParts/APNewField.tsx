@@ -35,15 +35,15 @@ const APNewField = ({ annotationPreset, addTextField }: Props) => {
           type="text"
           id={"newField" + annotationPreset.id}
           value={newFieldContent}
-          className={"form-input-custom" + (emptyFieldAlert ? " placeholder-red-700 border-red-500 bg-red-50" : "")}
+          className={"form-input-custom" + (emptyFieldAlert ? " placeholder-red-700 border-red-500 bg-red-50 dark:bg-red-200" : "")}
           placeholder={emptyFieldAlert ? "Please input name" : "New field"}
         />
         <button
           title="Add new field"
           type="submit"
-          className="btn btn-sm btn-square border-base-100 bg-base-100 hover:bg-gray-200"
+          className="btn btn-sm btn-square border-0 bg-inherit hover:bg-gray-200 dark:hover:bg-gray-700"
         >
-          <Image src="/svg/add-row.svg" alt="Add" height={33} width={33} />
+          <Image className="dark:svg-filter-dark" src="/svg/add-row.svg" alt="Add" height={33} width={33} />
         </button>
       </form>
     </div>

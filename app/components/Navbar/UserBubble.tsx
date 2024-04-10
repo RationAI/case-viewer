@@ -36,7 +36,7 @@ const UserBubble = () => {
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-circle btn-md avatar">
           <div className="w-8 rounded-full">
-            <Image src="/svg/user2.svg" alt="User" height={8} width={8} />
+            <Image className='dark:svg-filter-dark' src="/svg/user2.svg" alt="User" height={8} width={8} />
           </div>
         </label>
         <ul

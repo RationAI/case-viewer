@@ -16,7 +16,7 @@ const ProcessingVis = ({jobName, jobDescription}: Props) => {
       >
         <Image className='animate-spin opacity-30' src="/svg/loader2.svg" alt="Slide details" height={20} width={20} />
       </button>
-      <div className="flex flex-col items-center w-max absolute bottom-11 scale-0 transition-all rounded border border-gray-500 bg-white p-[2px] group-hover:scale-100">
+      <div className="flex flex-col items-center w-max absolute bottom-11 scale-0 transition-all rounded border border-gray-500 bg-white dark:bg-dark  p-[2px] group-hover:scale-100">
         <span className='text-xs'>{jobName || "Job"}</span>
         <span className='text-xs text-lime-500 font-semibold animate-pulse'>processing</span>
         {jobDescription && <span className='text-xs text-slate-500'>{jobDescription}</span>}
