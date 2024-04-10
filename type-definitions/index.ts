@@ -27,7 +27,7 @@ export type MenuItemT = {
 export type TableStructureT = {
   parent?: string,
   folders?: TableFolderRowT[],
-  cases?: TableCaseRowT[],
+  cases?: (Case | CaseH)[];
   mergeCases?: boolean,
 };
 
@@ -41,10 +41,6 @@ type TableFolderRowT = {
   name: string,
   link: string,
 }
-
-export type TableCaseRowT = {
-  caseObj: Case | CaseH;
-};
 
 type MetadataT = {
   [key: string]: string,
@@ -136,11 +132,14 @@ type FormFieldBaseT = {
 }
 
 export type JobState = {
+  id: string,
   status: string,
   inputs: string[],
   outputs: string[],
   visualization?: Visualization,
   background?: object,
+  name?: string,
+  description?: string,
 }
 
 export interface OAuthToken extends JWT {

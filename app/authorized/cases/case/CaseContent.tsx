@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { JobState, SlideRow, Visualization } from '@/type-definitions';
 import { getCaseSlides } from '@/app/utils/data';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
 import { useQuery } from '@tanstack/react-query';
-import JobsInfo from './JobsInfo';
 import SlideTable from '../components/Table/SlideTable';
 import { Job } from '@/EmpationAPI/src/v3/scope/types/job';
 
@@ -19,6 +18,8 @@ type Props = {
   caseObj: CaseH;
   fetchDelayed?: boolean;
 }
+
+export const ValidJobsContext = createContext<JobState[]>([])
 
 const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
   const jobStates: JobState[] = [];
@@ -47,7 +48,7 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
       status = "processing";
     }
 
-    jobStates.push({status: status, inputs: inputIds, outputs: outputIds, visualization: visualization, background: background})
+    jobStates.push({id: job.id, status: status, inputs: inputIds, outputs: outputIds, visualization: visualization, background: background})
   })
 
   return jobStates;
@@ -89,7 +90,6 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
         validJobs = validJobs.concat(getJobStatesFromJobs(jobs, appConfig))
       }
     }
-    console.log(validJobs)
     return validJobs;
   };
 
@@ -97,6 +97,7 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
     queryKey: [`case_${caseObj.id}_jobs`],
     queryFn: getCaseJobs,
     enabled: !fetchDelayed && rootApi !== undefined,
+    refetchInterval: 1000 * 30
   })
 
   if (isPending || isPendingJobs) {
@@ -108,10 +109,13 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   }
 
   return (
-    <div className='py-1 flex flex-col gap-2'>
-      <SlideTable slideRows={getSlideRows(caseObj, slides, jobs)} showHeader={false}/>
-      {slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
-    </div>
+    <ValidJobsContext.Provider value={jobs}>
+      <div className='py-1 flex flex-col gap-2'>
+        <div className='text-sm font-normal'>{caseObj.description}</div>
+        <SlideTable slideRows={getSlideRows(caseObj, slides, jobs)} showHeader={false}/>
+        {slides.length === 0 && <div className='font-sans font-semibold text-slate-300 px-3 pt-1'>Case has no slides</div>}
+      </div>
+    </ValidJobsContext.Provider>
   )
 }
 

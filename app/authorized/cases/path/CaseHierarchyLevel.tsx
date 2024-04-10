@@ -38,9 +38,7 @@ const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string
         link: `${basePageLink}/path${relativePath.reduce((path, param) => `${path}/${param}`, '')}/${item.levelName}`}
     }) : undefined,
     cases: currLvl.lastLevel ? (currLvl.items as CaseH[]).map((item) => {
-      return { 
-        caseObj: item,
-      }
+      return item;
     }) : undefined,
     mergeCases: true,
   }

@@ -1,8 +1,8 @@
 import { TableStructureT } from "@/type-definitions";
 import React from "react";
 import FolderRow from "./TableRows/FolderRow";
-import FileRow from "./TableRows/FileRow";
 import CollapseCaseRow from "./TableRows/CollapseCaseRow";
+import { getCaseNameFromLocalID } from "@/app/utils";
 
 type Props = {
   tableStructure: TableStructureT;
@@ -35,7 +35,7 @@ const Table = ({ tableStructure }: Props) => {
             <>
               <ul className="menu p-0">
                 {tableStructure.cases.map((c) => (
-                  <CollapseCaseRow key={c.caseObj.id} caseRow={c} defaultOpen={tableStructure.cases ? tableStructure.cases.length <= 1 : false}/>
+                  <CollapseCaseRow key={c.id} caseRow={c} defaultOpen={tableStructure.cases ? tableStructure.cases.length <= 1 : false}/>
                 ))}
               </ul>
             </>
@@ -43,10 +43,10 @@ const Table = ({ tableStructure }: Props) => {
             <>
               {tableStructure.cases.map((c) => (
                 <FolderRow
-                  key={c.caseObj.id}
-                  name={c.caseObj.local_id || c.caseObj.id}
-                  desc={c.caseObj.description || undefined}
-                  link={`/authorized/cases/case/${c.caseObj.id}`}
+                  key={c.id}
+                  name={getCaseNameFromLocalID(c.local_id) || c.id}
+                  desc={c.description || undefined}
+                  link={`/authorized/cases/case/${c.id}`}
                   shallow
                 />
               ))}

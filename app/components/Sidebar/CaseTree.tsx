@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
-import Redirect from "./Redirect/Redirect";
+import Redirect from "../Redirect/Redirect";
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
+import { getCaseNameFromLocalID } from "@/app/utils";
 
 type Props = {
   root: boolean,
@@ -30,12 +31,6 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
                       <div className="truncate hover:bg-gray-200 rounded-md px-[0.375rem] py-[0.25rem]">{item.levelName}</div>
                     </Redirect>
                   </div>
-                  {/* <Image
-                      src='/file_icons/folder.svg'
-                      alt='Folder'
-                      height={14}
-                      width={14}
-                    /> */}
                 </summary>
                 <CaseTree root={false} rootLink={rootLink + `/${item.levelName}`} hierarchy={item} />
               </details>
@@ -52,7 +47,7 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
                   width={14}
                 />
                 <div className="truncate">
-                  {item.local_id}
+                  {getCaseNameFromLocalID(item.local_id)}
                 </div>
               </Redirect>
             </li>

@@ -1,4 +1,4 @@
-import { SlideRow, TableStructureT } from "@/type-definitions";
+import { SlideRow } from "@/type-definitions";
 import React from "react";
 import FileRow from "./TableRows/FileRow";
 

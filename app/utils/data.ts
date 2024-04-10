@@ -2,7 +2,6 @@ import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
 import { getSlideMaskSeparator } from './config';
 import { Root } from '@/EmpationAPI/src/v3';
-import { DEFAULT_BG_CONFIG, DEFAULT_PARAMS_CONFIG } from './constants';
 
 export const getRootApi = async (session: Session) => {
 
