@@ -1,6 +1,9 @@
+import { useThemeDetector } from '@/app/components/useThemeDetector';
 import React, { useEffect } from 'react'
 
 const FeedbackPage = () => {
+  const isDarkTheme = useThemeDetector();
+
   useEffect(() => {
     const script = document.createElement('script');
   
@@ -17,7 +20,7 @@ const FeedbackPage = () => {
         window.YTFeedbackForm.renderInline(document.getElementById("youtrack-rationai-feedback"), {
           backendURL: "https://youtrack.rationai.cloud.e-infra.cz",
           formUUID: "c5d3a8aa-1400-496a-9258-93bf0a2d2df3",
-          theme: "light",
+          theme: isDarkTheme ? "dark" : "light",
           language: "en",
         });
       } else {
@@ -26,7 +29,7 @@ const FeedbackPage = () => {
     };
   
     document.getElementsByTagName('head')[0].appendChild(script);
-  }, []);
+  }, [isDarkTheme]);
   
   return (
     <div id="youtrack-rationai-feedback"></div> 
