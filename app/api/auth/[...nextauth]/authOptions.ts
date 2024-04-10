@@ -26,7 +26,7 @@ async function refreshAccessToken(token: OAuthToken) {
       ...token,
       accessToken: refreshedTokens.access_token,
       accessTokenExpires: Date.now() + ((refreshedTokens.expires_in / 2) * 1000),
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+      refreshToken: token.refreshToken, // refreshedTokens.refresh_token ?? token.refreshToken Fall back to old refresh token, currently always use new one
     }
   } catch (error) {
     console.log(error)
