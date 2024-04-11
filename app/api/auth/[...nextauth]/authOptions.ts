@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import { OAuthRefreshResponse, OAuthToken } from "@/type-definitions"
 import KeycloakProvider from "next-auth/providers/keycloak"
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 async function refreshAccessToken(token: OAuthToken) {
   try {
@@ -39,8 +39,8 @@ async function refreshAccessToken(token: OAuthToken) {
   }
 }
 
-const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
-const hostName = useSecureCookies ? process.env.NEXTAUTH_URL!.split(".").slice(1).join(".") : process.env.NEXTAUTH_URL!;
+/* const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
+const hostName = useSecureCookies ? process.env.NEXTAUTH_URL!.split(".").slice(1).join(".") : process.env.NEXTAUTH_URL!; */
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -66,14 +66,14 @@ export const authOptions: NextAuthOptions = {
         const now = Date.now();
         token = Object.assign({}, token, { accessTokenExpires: ((account.expires_at! * 1000) - now) / 2 + now});
         token = Object.assign({}, token, { refreshToken: account.refresh_token });
-        cookies().set({
+        /* cookies().set({
           name: '_sharedEmpaiaRefreshToken',
           value: account.refresh_token!,
           httpOnly: true,
           domain: hostName,
           sameSite: "lax",
           secure: true,
-        })
+        }) */
         console.log("Initial sign in")
         return token
       }
