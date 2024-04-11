@@ -88,14 +88,14 @@ export const authOptions: NextAuthOptions = {
       
       // Access token has expired, try to update it
       const newTokens = await refreshAccessToken(token as OAuthToken);
-      cookies().set({
+      /* cookies().set({
         name: '_sharedEmpaiaRefreshToken',
         value: newTokens.refreshToken!,
         httpOnly: true,
         domain: hostName,
         sameSite: "lax",
         secure: true,
-      })
+      }) */
       return newTokens;
     },
     async session({session, token}) {
