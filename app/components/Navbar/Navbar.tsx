@@ -66,7 +66,7 @@ const Navbar = () => {
     <nav className="navbar px-2 p-0 bg-base-100 border-b border-neutral dark:border-color-dark shadow fixed z-10 min-h-[3.5rem]">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost md:hidden">
-          <Image src="/svg/menu.svg" alt="Menu" height={25} width={25} />
+          <Image className="dark:svg-filter-dark" src="/svg/menu.svg" alt="Menu" height={25} width={25} />
         </label>
         <ul
           tabIndex={0}

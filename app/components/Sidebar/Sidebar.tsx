@@ -30,73 +30,54 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
       }
     >
       <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto">
-        {extended ? (
-          <div>
-            <div className="flex flex-row justify-between items-center">
-              <div className="px-2 font-sans font-semibold text-gray-800 dark:text-base-dark">{"Cases"}</div>
-              <label
-                tabIndex={0}
-                className="btn btn-sm btn-ghost"
-                onClick={() => setExtended(!extended)}
-              >
-                <Image
-                  className="dark:svg-filter-dark"
-                  src="/svg/expand-left.svg"
-                  alt="Extend"
-                  height={15}
-                  width={15}
-                />
-              </label>
-            </div>
-            {isPending && 
-              <div className="pl-2 text-xs">Loading...</div>
-            }
-            {isError && 
-              <div className="pl-2 text-xs">Unable to fetch</div>
-            }
-            {caseHierarchy && 
-              <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
-            }
+        <div className={`${extended ? "" : "hidden"}`}>
+          <div className="flex flex-row justify-between items-center">
+            <div className="px-2 font-sans font-semibold text-gray-800 dark:text-base-dark">{"Cases"}</div>
+            <label
+              tabIndex={0}
+              className="btn btn-sm btn-ghost"
+              onClick={() => setExtended(!extended)}
+            >
+              <Image
+                className="dark:svg-filter-dark"
+                src="/svg/expand-left.svg"
+                alt="Extend"
+                height={15}
+                width={15}
+              />
+            </label>
           </div>
-        ) : (
-          <ul className="menu p-0 min-w-max">
-            {sidebarIconMenu.map((menuItem) => (
-              <li key={menuItem.label}>
-                <div onClick={menuItem.onClick}>
-                  {menuItem.icon &&
-                    <div className="flex flex-col items-center">
-                      <Image
-                        className="dark:svg-filter-dark"
-                        src={menuItem.icon}
-                        alt={menuItem.label}
-                        height={30}
-                        width={30}
-                      />
-                      <div className="font-sans text-xs font-semibold text-slate-700 dark:text-base-dark">{menuItem.label}</div>
-                    </div>
-                  }
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      {/* <div className="flex-none w-full border-t border-neutral">
-        <div className={"flex flex-row p-1" + (extended ? " justify-end" : " justify-center")}>
-          <label
-            tabIndex={0}
-            className="btn btn-ghost"
-            onClick={() => setExtended(!extended)}
-          >
-            <Image
-              src={extended ? "/svg/expand-left.svg" : "/svg/expand-right.svg"}
-              alt="Extend"
-              height={25}
-              width={25}
-            />
-          </label>
+          {isPending && 
+            <div className="pl-2 text-xs">Loading...</div>
+          }
+          {isError && 
+            <div className="pl-2 text-xs">Unable to fetch</div>
+          }
+          {caseHierarchy && 
+            <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
+          }
         </div>
-      </div> */}
+        <ul className={`menu p-0 min-w-max${extended ? " hidden" : ""}`}>
+          {sidebarIconMenu.map((menuItem) => (
+            <li key={menuItem.label}>
+              <div onClick={menuItem.onClick}>
+                {menuItem.icon &&
+                  <div className="flex flex-col items-center">
+                    <Image
+                      className="dark:svg-filter-dark"
+                      src={menuItem.icon}
+                      alt={menuItem.label}
+                      height={30}
+                      width={30}
+                    />
+                    <div className="font-sans text-xs font-semibold text-slate-700 dark:text-base-dark">{menuItem.label}</div>
+                  </div>
+                }
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </aside>
   );
 };

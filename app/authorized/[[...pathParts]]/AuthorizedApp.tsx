@@ -43,6 +43,22 @@ const AuthorizedApp = () => {
     setupRootApi();
   }, []);
 
+  // load feedback form
+  useEffect(() => {
+    const script = document.createElement('script');
+  
+    script.src = "https://youtrack.rationai.cloud.e-infra.cz/static/simplified/form/form-entry.js";
+    script.async = true;
+
+    script.id="c5d3a8aa-1400-496a-9258-93bf0a2d2df3";
+    script.setAttribute("data-yt-url", "https://youtrack.rationai.cloud.e-infra.cz");
+  
+    document.getElementsByTagName('head')[0].appendChild(script);
+    return () => {
+      document.getElementsByTagName('head')[0].removeChild(script);
+    }
+  }, []);
+
   if(!rootApi) {
     <div>Loading...</div>
   }

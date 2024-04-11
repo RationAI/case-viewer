@@ -41,7 +41,7 @@ const UserBubble = () => {
         </label>
         <ul
           tabIndex={0}
-          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-1"
+          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-1 dark:border dark:border-color-dark"
         >
           <MenuContent menuItems={userMenu} />
           <li key="signOutButton" className="w-[100%]">
