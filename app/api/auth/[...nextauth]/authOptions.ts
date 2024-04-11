@@ -39,8 +39,9 @@ async function refreshAccessToken(token: OAuthToken) {
 }
 
 const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
-const cookiePrefix = useSecureCookies ? "__Secure-" : ""; 
-const hostName = new URL(process.env.NEXTAUTH_URL!).hostname;
+const cookiePrefix = useSecureCookies ? "__Secure-" : "";
+const fullHostName = new URL(process.env.NEXTAUTH_URL!).hostname
+const hostName = useSecureCookies ? fullHostName.split(".").slice(2).join(".") : fullHostName;
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
