@@ -10,7 +10,7 @@ export default function AuthForm({ provider }: Props) {
   const { data: session } = useSession();
 
   const handleSignIn = async () => {
-    await signIn(provider, { callbackUrl: '/' })
+    await signIn(provider, { callbackUrl: '/authorized/cases/path' })
   };
 
   const handleSignOut = async () => {

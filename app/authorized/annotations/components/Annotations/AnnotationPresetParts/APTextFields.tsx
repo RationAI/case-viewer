@@ -30,9 +30,10 @@ const APTextFields = ({
                   <button
                     title="Remove field"
                     onClick={() => removeTextField(key)}
-                    className="btn btn-xs btn-square border-gray-50 bg-gray-50 hover:bg-gray-200"
+                    className="btn btn-xs btn-square border-0 bg-inherit hover:bg-gray-200 dark:hover:bg-gray-600"
                   >
                     <Image
+                      className="dark:svg-filter-dark"
                       src="/svg/trash.svg"
                       alt="Remove"
                       height={17}

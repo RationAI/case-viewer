@@ -1,5 +1,6 @@
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
+import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
 import { JWT } from "next-auth/jwt";
 
 export type AppConfigT = {
@@ -10,37 +11,36 @@ export type AppConfigT = {
   slide_mask_separator?: string,
   
   searchKeys?: string[],
+
+  settings?: object,
 }
 
 export type MenuItemT = {
   label: string,
   link: string,
   icon?: string, 
-  subItems?: SubMenuItemT[],
-}
-
-type SubMenuItemT = {
-  label: string,
-  link: string,
+  subItems?: MenuItemT[],
+  external?: boolean,
+  shallowLink?: boolean,
 }
 
 export type TableStructureT = {
-  name?: string,
   parent?: string,
   folders?: TableFolderRowT[],
-  cases?: TableCaseRowT[],
-  slides?: TableSlideRowT[],
+  cases?: (Case | CaseH)[];
   mergeCases?: boolean,
 };
+
+export type SlideRow = {
+  slide: Slide,
+  caseObj: CaseH,
+  jobs: JobState[],
+}
 
 type TableFolderRowT = {
   name: string,
   link: string,
 }
-
-export type TableCaseRowT = {
-  caseObj: Case | CaseH;
-};
 
 type MetadataT = {
   [key: string]: string,
@@ -63,7 +63,7 @@ export type TableSlideRowT = {
   casePath: string,
   name: string,
   created: string,
-  metadata: MetadataT,
+  metadata?: MetadataT,
   masks?: MaskT[],
   annotations?: AnnotationT[],
   visualizationConfig: VisualizationConfig,
@@ -129,6 +129,17 @@ type FormFieldBaseT = {
   label: string;
   defaultValue?: string;
   description?: string;
+}
+
+export type JobState = {
+  id: string,
+  status: string,
+  inputs: string[],
+  outputs: string[],
+  visualization?: Visualization,
+  background?: object,
+  name?: string,
+  description?: string,
 }
 
 export interface OAuthToken extends JWT {

@@ -8,11 +8,11 @@ import MenuContent from "../MenuContent/MenuContent";
 import UserBubble from "./UserBubble";
 import { usePathname } from "next/navigation";
 import Redirect from "../Redirect/Redirect";
-import { getPathParts } from "@/app/utils";
+import { getPathParts, getSettings } from "@/app/utils";
 
 const homeLink = "/";
 
-const secondaryMenu: MenuItemT[] = [
+const navbarMenu: MenuItemT[] = [
   {
     label: "Cases",
     link: "cases/path",
@@ -23,13 +23,21 @@ const secondaryMenu: MenuItemT[] = [
   },
   {
     label: "Upload",
-    link: "upload",
+    link: process.env.NEXT_PUBLIC_UPLOADER_LINK || "https://rationai.cloud.trusted.e-infra.cz",
+    external: true,
   },
   {
+    label: "Feedback",
+    link: "feedback",
+  }
+];
+
+if(getSettings()['allowAnnotationPresets']) {
+  navbarMenu.push({
     label: "Annotations",
     link: "annotations",
-  },
-];
+  })
+}
 
 const Navbar = () => {
   const { data: session } = useSession()
@@ -41,8 +49,8 @@ const Navbar = () => {
     setPathParts(getPathParts(relativePath));
   }, [relativePath]);
 
-  let menuItems = secondaryMenu.map((item) => {
-    const absoluteLink = `/authorized/${item.link}`
+  let menuItems = navbarMenu.map((item) => {
+    const absoluteLink = item.external ? item.link : `/authorized/${item.link}`
     const newItem = {
       ...item,
       link: absoluteLink
@@ -55,10 +63,10 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar px-2 p-0 bg-base-100 border-b border-neutral shadow fixed z-10 min-h-[3.5rem]">
+    <nav className="navbar px-2 p-0 bg-base-100 border-b border-neutral dark:border-color-dark shadow fixed z-10 min-h-[3.5rem]">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost md:hidden">
-          <Image src="/svg/menu.svg" alt="Menu" height={25} width={25} />
+          <Image className="dark:svg-filter-dark" src="/svg/menu.svg" alt="Menu" height={25} width={25} />
         </label>
         <ul
           tabIndex={0}
@@ -68,8 +76,9 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
-        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl" shallow={false}>
+        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl">
           <Image
+            className="dark:svg-soft-filter-dark"
             src='/svg/rationai-color.svg'
             alt='RationAI'
             height={120}
@@ -82,14 +91,14 @@ const Navbar = () => {
           {menuItems.map((menuItem) => (
             <li key={menuItem.label}>
               {!menuItem.subItems ? (
-                <Redirect link={menuItem.link} shallow={pathParts[0] === "authorized"}>{menuItem.label}</Redirect>
+                <Redirect link={menuItem.link} external={menuItem.external} shallow={pathParts[0] === "authorized"}>{menuItem.label}</Redirect>
               ) : (
                 <details>
                   <summary>{menuItem.label}</summary>
                   <ul className="p-2">
                     {menuItem.subItems.map((subItem) => (
                       <li key={subItem.label}>
-                        <Redirect link={subItem.link} shallow={pathParts[0] === "authorized"}>{subItem.label}</Redirect>
+                        <Redirect link={subItem.link} external={menuItem.external} shallow={pathParts[0] === "authorized"}>{subItem.label}</Redirect>
                       </li>
                     ))}
                   </ul>

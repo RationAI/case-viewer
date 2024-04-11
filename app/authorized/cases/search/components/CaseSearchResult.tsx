@@ -14,11 +14,8 @@ type Props = {
 const getTableStructureFromSearchResult = (cases: Case[]) => {
   const tableStructure: TableStructureT = {
     cases: cases.map((caseObj) => {
-      return { 
-        caseObj: caseObj,
-      }
+      return caseObj;
     }),
-    slides: [],
   }
   return tableStructure
 }
@@ -41,7 +38,7 @@ export default function CaseSearchResult({ query }: Props) {
 
   return (
     <div>
-      <div>{!searchResult ? "Loading..." : (searchResult.length > 0 ? "Search results:" : "No cases match the search")}</div>
+      <div className="font-sans font-semibold text-slate-500 text-xl pl-1 dark:text-base-dark">{!searchResult ? "Loading..." : (searchResult.length > 0 ? "Search results:" : "No cases match the search")}</div>
       {searchResult && searchResult.length > 0 &&
         <Table tableStructure={getTableStructureFromSearchResult(searchResult)} />
       }

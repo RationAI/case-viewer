@@ -4,26 +4,25 @@ import React from 'react'
 type Props = {
   children: React.ReactNode,
   link: string,
-  shallow: boolean,
-  propagateEvent?: boolean, 
-  parentElementDetails?: boolean,
+  external?: boolean,
+  shallow?: boolean,
   className?: string,
 }
 
-export const shallowRedirect = (e: React.MouseEvent,link: string, propagate: boolean, parentElementDetails: boolean) => {
-  if (parentElementDetails) {
-    if((e.currentTarget.parentElement?.parentElement as HTMLDetailsElement).open) {
-      e.preventDefault();
-    }
-  } else if (!propagate) {
-    e.preventDefault();
-  }
+const openNewTab = (link: string) => {
+  window.open(encodeURI(`${link}`));
+}
+
+export const shallowRedirect = (link: string) => {
   window.history.pushState(null, '', `${link}`)
 }
 
-const Redirect = ({ children, link, shallow, propagateEvent=false, parentElementDetails=false, className }: Props) => {
-  if (shallow) {
-    return (<div onClick={(e) => shallowRedirect(e, link, propagateEvent, parentElementDetails)} className={className}>{children}</div>);
+const Redirect = ({ children, link, external=false, shallow=false, className }: Props) => {
+  if(external) {
+    return (<div onClick={() => openNewTab(link)} className={className}>{children}</div>);
+  }
+  if(shallow) {
+    return (<div onClick={() => shallowRedirect(link)} className={className}>{children}</div>);
   }
   return (
     <Link prefetch={false} href={link} className={className}>

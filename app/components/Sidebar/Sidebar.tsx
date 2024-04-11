@@ -1,15 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import CaseTree from "../CaseTree";
+import CaseTree from "./CaseTree";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
 
 type Props = {
   caseHierarchy?: CaseHierarchy,
+  isPending: boolean,
+  isError: boolean,
 }
 
-const Sidebar = ({caseHierarchy}: Props) => {
-  const [extended, setExtended] = useState(false);
+const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
+  const [extended, setExtended] = useState(true);
 
   const sidebarIconMenu = [
     {
@@ -23,52 +25,58 @@ const Sidebar = ({caseHierarchy}: Props) => {
   return (
     <aside
       className={
-        "flex flex-col items-center bg-base-100 border-r border-neutral shadow max-h-full" +
+        "flex flex-col items-center bg-base-100 border-r border-neutral dark:border-color-dark shadow max-h-full" +
         (extended ? " min-w-[13rem] max-w-[13rem]" : "")
       }
     >
       <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto">
-        {extended ? (
-          <div>
-            <div className="px-2 font-sans font-semibold text-gray-800">{caseHierarchy ? "Cases" : "Log in to see your cases"}</div>
-            {caseHierarchy && 
-              <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
-            }
+        <div className={`${extended ? "" : "hidden"}`}>
+          <div className="flex flex-row justify-between items-center">
+            <div className="px-2 font-sans font-semibold text-gray-800 dark:text-base-dark">{"Cases"}</div>
+            <label
+              tabIndex={0}
+              className="btn btn-sm btn-ghost"
+              onClick={() => setExtended(!extended)}
+            >
+              <Image
+                className="dark:svg-filter-dark"
+                src="/svg/expand-left.svg"
+                alt="Extend"
+                height={15}
+                width={15}
+              />
+            </label>
           </div>
-        ) : (
-          <ul className="menu p-0 min-w-max">
-            {sidebarIconMenu.map((menuItem) => (
-              <li key={menuItem.label}>
-                <div onClick={menuItem.onClick}>
-                  {menuItem.icon &&
+          {isPending && 
+            <div className="pl-2 text-xs">Loading...</div>
+          }
+          {isError && 
+            <div className="pl-2 text-xs">Unable to fetch</div>
+          }
+          {caseHierarchy && 
+            <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
+          }
+        </div>
+        <ul className={`menu p-0 min-w-max${extended ? " hidden" : ""}`}>
+          {sidebarIconMenu.map((menuItem) => (
+            <li key={menuItem.label}>
+              <div onClick={menuItem.onClick}>
+                {menuItem.icon &&
+                  <div className="flex flex-col items-center">
                     <Image
+                      className="dark:svg-filter-dark"
                       src={menuItem.icon}
                       alt={menuItem.label}
                       height={30}
                       width={30}
                     />
-                  }
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="flex-none w-full border-t border-neutral">
-        <div className={"flex flex-row p-1" + (extended ? " justify-end" : " justify-center")}>
-          <label
-            tabIndex={0}
-            className="btn btn-ghost"
-            onClick={() => setExtended(!extended)}
-          >
-            <Image
-              src={extended ? "/svg/expand-left.svg" : "/svg/expand-right.svg"}
-              alt="Extend"
-              height={25}
-              width={25}
-            />
-          </label>
-        </div>
+                    <div className="font-sans text-xs font-semibold text-slate-700 dark:text-base-dark">{menuItem.label}</div>
+                  </div>
+                }
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </aside>
   );

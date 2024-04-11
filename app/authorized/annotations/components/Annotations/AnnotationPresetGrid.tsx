@@ -37,6 +37,7 @@ const AnnotationPresetGrid = () => {
     queryKey: [`annot_preset`],
     queryFn: getAnnotPresets,
     refetchInterval: Infinity,
+    refetchOnMount: true,
     refetchOnReconnect: false,
   })
 
@@ -124,7 +125,7 @@ const AnnotationPresetGrid = () => {
   return (
     <div className='flex flex-col items-center gap-2 md:w-5/6 lg:w-9/12'>
       <div className='w-full flex justify-between items-center gap-2'>
-        <div className='font-sans font-semibold text-slate-500 text-2xl pl-1'>Annotations presets</div>
+        <div className='font-sans font-semibold text-slate-500 text-2xl pl-1 dark:text-base-dark'>Annotations presets</div>
         <AnnotationButtons handleRevertClick={handleRevertClick} handleSaveClick={handleSaveClick}/>
       </div>
       {isFetching ? 
@@ -139,8 +140,8 @@ const AnnotationPresetGrid = () => {
         })}
         <div>
           <div className='flex border border-gray-400 rounded-lg p-2 border-dashed'>
-            <button onClick={() => handleNewPreset()} className="btn btn-sm flex justify-start border-gray-300 bg-gray-50 hover:bg-gray-200 w-full">
-              <Image src="/svg/plus.svg" alt="Remove" height={27} width={27} />
+            <button onClick={() => handleNewPreset()} className="btn btn-sm flex justify-start default-button-bg-border w-full">
+              <Image className="dark:svg-filter-dark" src="/svg/plus.svg" alt="Remove" height={27} width={27} />
               New preset
             </button>
           </div>

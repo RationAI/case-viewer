@@ -12,14 +12,15 @@ type Props = {
 
 const FolderRow = ({name, desc, link, shallow = false}: Props) => {
   return (
-    <div className="flex flex-row gap-4 items-center border-b-[1px] max-w-full">
+    <div className="flex flex-row gap-4 items-center border-b-[1px] dark:border-neutral max-w-full">
       <div className="p-[6px] flex-1 min-w-max">
         <Redirect
           link={link}
           shallow={shallow}
-          className="flex flex-row items-center gap-3 link-hover font-sans font-semibold text-gray-800 cursor-pointer"
+          className="flex flex-row items-center gap-3 link-hover font-sans font-semibold text-gray-800 cursor-pointer dark:text-base-dark"
         >
           <Image
+            className="dark:svg-filter-dark"
             src="/file_icons/folder.svg"
             alt="Folder"
             height={16}

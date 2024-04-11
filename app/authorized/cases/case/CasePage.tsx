@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import CaseContent from './CaseContent';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
 import { useQuery } from '@tanstack/react-query';
+import { getCaseNameFromLocalID } from '@/app/utils';
 
 type Props = {
   caseId: string,
@@ -15,7 +16,7 @@ const CasePage = ({ caseId }: Props) => {
     return cs
   };
 
-  const { isPending, isError, data } = useQuery({
+  const { isPending, isError, data: caseObj } = useQuery({
     queryKey: [`case_${caseId}`],
     queryFn: getCase,
   })
@@ -30,10 +31,10 @@ const CasePage = ({ caseId }: Props) => {
 
   return (
     <div>
-      <div className="font-sans font-semibold text-slate-500 text-xl pl-2">
-        {data.local_id || data.id}
+      <div className="font-sans font-semibold text-slate-500 text-xl">
+        {getCaseNameFromLocalID(caseObj.local_id) || caseObj.id}
       </div>
-      <CaseContent caseObj={data} showCaseName={false} basePath="/authorized/cases/path"/>
+      <CaseContent caseObj={caseObj} />
     </div>
   )
 }

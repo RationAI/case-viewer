@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import Image from "next/image";
 import { getSlideThumbnail } from '@/app/utils/data';
 import ModalImagePreview from '../../ModalImagePreview/ModalImagePreview';
@@ -24,19 +24,19 @@ const ImagePreview = ({ modalId, slideId }: Props) => {
     queryFn: getThumbnailURL,
   })
 
-  useEffect(() => {
+  /* useEffect(() => {
     // returned function will be called on component unmount 
     return () => {
       if(data) {
         URL.revokeObjectURL(data)};
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []) */
 
   return (
     <>
       <div className="min-w-[8rem] relative z-10 overflow-hidden hover:overflow-visible rounded-l-sm hover:z-50" onClick={() => data ? (document.getElementById(modalId) as HTMLDialogElement).showModal() : {}}>
-        <Image className={`object-contain block m-auto ${data ? "transition-all duration-200 ease-linear hover:scale-[200%] " : "opacity-30"}`} src={data || '/file_icons/image_file.svg'} alt="Preview" fill/>
+        <Image className={`object-contain block m-auto ${data ? "transition-all duration-200 ease-linear hover:scale-[200%] " : "opacity-30 dark:svg-filter-dark"}`} src={data || '/file_icons/image_file.svg'} alt="Preview" fill/>
       </div>
       <ModalImagePreview modalId={modalId} imageLink={data || '/file_icons/image_file.svg'} />
     </>

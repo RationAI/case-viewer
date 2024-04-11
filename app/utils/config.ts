@@ -1,11 +1,11 @@
 import { AppConfigT } from "@/type-definitions";
 
 export const createConfig = async (project: string | null) => {
-  const defaultConfig: AppConfigT = (await import('../../config/config.json'))
+  const defaultConfig: AppConfigT = (await import('../../config/config.json')).default
   let finalConfig: AppConfigT;
   
   if (project) {
-    const projectConfig: AppConfigT = (await import(`../../config/${project}.config.json`))
+    const projectConfig: AppConfigT = (await import(`../../config/${project}.config.json`)).default
     finalConfig = {
       ...defaultConfig,
       ...projectConfig,
@@ -37,4 +37,9 @@ export const getHierarchySpec = () => {
 export const getSlideMaskSeparator = () => {
   const config = getConfig()
   return config.slide_mask_separator!
+}
+
+export const getSettings = () => {
+  const config = getConfig()
+  return config.settings || {}
 }

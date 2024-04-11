@@ -12,7 +12,7 @@ const MenuContent = ({ menuItems }: Props) => {
     <>
       {menuItems.map((menuItem) => (
         <li key={menuItem.label} className="w-[100%]">
-          <Redirect link={menuItem.link} className="text-base max-w-[100%]" shallow={false}>
+          <Redirect link={menuItem.link} className="text-base max-w-[100%]" external={menuItem.external} shallow={menuItem.shallowLink}>
             {menuItem.icon &&
               <Image src={menuItem.icon} alt={menuItem.label} height={25} width={25} />
             }

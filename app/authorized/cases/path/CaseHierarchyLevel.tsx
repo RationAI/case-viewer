@@ -38,9 +38,7 @@ const getTableStructureFromLevel = (currLvl: CaseHierarchy, relativePath: string
         link: `${basePageLink}/path${relativePath.reduce((path, param) => `${path}/${param}`, '')}/${item.levelName}`}
     }) : undefined,
     cases: currLvl.lastLevel ? (currLvl.items as CaseH[]).map((item) => {
-      return { 
-        caseObj: item,
-      }
+      return item;
     }) : undefined,
     mergeCases: true,
   }
@@ -67,7 +65,7 @@ export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
     <div className="flex flex-col gap-4 p-1">
       {getPathParts(relativePath, 3).length > 0 ?
         <SegmentedPathLink homelink="/authorized/cases/path" segments={getPathParts(relativePath, 3).map((part) => ({label: part, linkSegment: part}))} /> :
-        <div className="font-sans font-semibold text-slate-500 text-xl pl-1">All cases</div>
+        <div className="font-sans font-semibold text-slate-500 text-xl pl-1 dark:text-base-dark">All cases</div>
       }
       {currentLevel ? 
         <Table tableStructure={getTableStructureFromLevel(currentLevel, getPathParts(relativePath, 3))}/> :

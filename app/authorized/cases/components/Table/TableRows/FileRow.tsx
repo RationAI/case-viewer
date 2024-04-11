@@ -1,86 +1,63 @@
 'use client'
 
-import { TableSlideRowT, VisualizationConfig } from "@/type-definitions";
+import { SlideRow } from "@/type-definitions";
 import React from "react";
-import ImageGrid from "./FileRowParts/ImageGrid";
-import FileRowActions from "./FileRowParts/FileRowActions";
-import FileRowSelect from "./FileRowParts/FileRowSelect";
 import ImagePreview from "./FileRowParts/ImagePreview";
-import { openXOpat } from "@/app/utils/xOpat";
+import SlideVisualizations from "./FileRowParts/SlideVisualizations";
+import SlideTags from "./FileRowParts/SlideTags";
+import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
 
 type Props = {
-  slide: TableSlideRowT;
-  rowNo: number;
+  slideRow: SlideRow;
 };
 
-const handleOpenInXOpat = (event: React.FormEvent<HTMLFormElement>, slide: TableSlideRowT) => {
-  event.preventDefault()
-  const target = event.target as typeof event.target & {
-    visName: { value: string };
-  };
-
-  const chosenVis = slide.visualizationConfig.visualizations.find((vis) => vis.name === target.visName.value)
-
-  const xOpatVisualizationConfig: VisualizationConfig = { 
-    ...slide.visualizationConfig,
-    visualizations: [chosenVis!]
+const getSlideTags = (slide: Slide) => {
+  const tags: string[] = [];
+  if(slide.tissue?.mappings["EN"]){
+    tags.push(slide.tissue.mappings["EN"])
   }
-
-  if(xOpatVisualizationConfig) {
-    openXOpat(xOpatVisualizationConfig);
-    console.log("Opening xOpat with visualization:" + JSON.stringify(xOpatVisualizationConfig));
-    return;
+  if(slide.stain?.mappings["EN"]){
+    tags.push(slide.stain.mappings["EN"])
   }
-
-  console.log(JSON.stringify("No visualization, cannot open xOpat"))
+  return tags;
 }
 
-const FileRow = ({ slide, rowNo }: Props) => {
+const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
+  const date = new Date(slide.created_at * 1000);
+  console.log(slide)
 
   return (
-    <div key={slide.slideId} className="collapse collapse-arrow border rounded-sm overflow-visible">
-      <input type="checkbox" />
-      <div className="collapse-title flex flex-row gap-4 py-0 pl-0">
-        <ImagePreview modalId={"modalId" + slide.slideId} slideId={slide.slideId} />
-        <form className="flex-1 flex flex-row gap-4" onSubmit={(e) => handleOpenInXOpat(e, slide)}>
-          <div className="flex flex-col justify-center min-w-[18rem] flex-1 px-2">
-            <p className="font-bold">{slide.name}</p>
-            <p className="">{slide.created}</p>
-          </div>
-          {slide.masks &&
+    <div className="block border dark:border-color-dark rounded-sm">
+      <div key={slide.id} className="collapse collapse-close overflow-visible"> {/* collapse-arrow */}
+        <input type="checkbox" />
+        <div className="collapse-title flex flex-row gap-4 py-0 pl-0 pr-20">
+          <ImagePreview modalId={"modalId" + slide.id} slideId={slide.id} />
+          <div className="flex-1 flex flex-row gap-4">
+            <div className="flex flex-col justify-center min-w-[18rem] flex-1 px-2">
+              <p className="font-bold text-gray-800 dark:text-base-dark">{slide.local_id ?? slide.id}</p>
+              <p className="">{date.toLocaleString("cs")}</p>
+            </div>
             <div className="flex w-[12.5rem] items-center justify-center z-10">
-              <FileRowSelect options={slide.masks.map((mask) => mask.name)}/>
+              <SlideVisualizations slide={slide} caseObj={caseObj}/>
             </div>
-          }
-          {slide.annotations &&
-            <div className="flex items-center justify-center z-10 px-[0.375rem]">
-              <ImageGrid
-                images={slide.annotations}
-                count={9}
-                typeName="annotation"
-                rowNo={rowNo}
-              />
-            </div>
-          }
-          {slide.visualizationConfig &&
-            <div className="flex w-[12.5rem] items-center justify-center z-10">
-              <FileRowSelect options={slide.visualizationConfig.visualizations.map((vis) => vis.name)} />
-            </div>
-          }
-          <div className="w-16 z-10">
-            <FileRowActions slidePath={`${slide.casePath}/${slide.slideId}`} />
+            {/* <div className="w-16 z-10">
+              <FileRowActions slidePath={`${HIERARCHY_ROOT_PATH}${caseObj.pathInHierarchy}/${slide.id}`} />
+            </div> */}
+            <SlideTags tags={getSlideTags(slide)} />
           </div>
-        </form>
-      </div>
-      <div className="collapse-content px-2">
-        <div className="pt-2">
-          {Object.entries(slide.metadata).map(([key, value]) => (
-            <div key={key} className="flex gap-1">
-              <p className="font-medium">{key + ":"}</p>
-              <p>{value}</p>
-            </div>
-          ))}
         </div>
+        {/* {metadata && 
+          <div className="collapse-content px-2">
+            <div className="pt-2">
+              {Object.entries(slide.metadata).map(([key, value]) => (
+                <div key={key} className="flex gap-1">
+                  <p className="font-medium">{key + ":"}</p>
+                  <p>{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        } */}
       </div>
     </div>
   );

@@ -1,6 +1,14 @@
+import { getServerSession } from "next-auth";
 import AuthForm from "./components/Forms/AuthForm/AuthForm";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
+import { redirect } from "next/navigation";
 
 const WelcomePage = async () => {
+  const session = await getServerSession(authOptions);
+  if (session && session.user) {
+    redirect("/authorized/cases/path");
+  }
+
   return (
     <main className="flex flex-row justify-center w-full">
       <div className="flex flex-col gap-3 items-center pt-16">

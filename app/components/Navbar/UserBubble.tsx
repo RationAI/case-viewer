@@ -36,12 +36,12 @@ const UserBubble = () => {
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-circle btn-md avatar">
           <div className="w-8 rounded-full">
-            <Image src="/svg/user2.svg" alt="User" height={8} width={8} />
+            <Image className='dark:svg-filter-dark' src="/svg/user2.svg" alt="User" height={8} width={8} />
           </div>
         </label>
         <ul
           tabIndex={0}
-          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-1"
+          className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-1 dark:border dark:border-color-dark"
         >
           <MenuContent menuItems={userMenu} />
           <li key="signOutButton" className="w-[100%]">

@@ -21,9 +21,9 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en" data-theme="winter">
+    <html lang="en" data-theme="">
       <body className={inter.className}>
-        <SessionProvider session={session} refetchInterval={60}>
+        <SessionProvider session={session} /* refetchInterval={60} */>
           <Navbar />
           <div className="flex overflow-clip pt-[3.5rem] h-screen">
             {children}

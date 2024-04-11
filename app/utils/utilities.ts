@@ -6,6 +6,10 @@ export const getRandomString = (length: number) => {
   return randomString.substring(3, Math.min(3 + length, randomString.length - 1));
 }
 
+export const getCaseNameFromLocalID = (localId: string | null) => {
+  return localId ? (localId.split(".")[3] || localId ): undefined;
+}
+
 export const createSearchQueryFromUrl = (searchQueryParts: string[]) => {
   if(searchQueryParts.length % 2 !== 0) {
     return null
