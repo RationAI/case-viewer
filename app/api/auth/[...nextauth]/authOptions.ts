@@ -26,7 +26,7 @@ async function refreshAccessToken(token: OAuthToken) {
       ...token,
       accessToken: refreshedTokens.access_token,
       accessTokenExpires: Date.now() + ((refreshedTokens.expires_in / 2) * 1000),
-      refreshToken: token.refreshToken, // refreshedTokens.refresh_token ?? token.refreshToken Fall back to old refresh token, currently always use new one
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, //  Fall back to old refresh token
     }
   } catch (error) {
     console.log(error)
@@ -38,6 +38,9 @@ async function refreshAccessToken(token: OAuthToken) {
   }
 }
 
+const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
+const cookiePrefix = useSecureCookies ? "__Secure-" : ""; 
+const hostName = new URL(process.env.NEXTAUTH_URL!).hostname;
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -46,9 +49,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
       clientSecret: process.env.NEXT_AUTH_SECRET || "",
       issuer: process.env.NEXT_AUTH_ISSUER,
-      //client: {
-      //  redirect_uris: [process.env.KEYCLOAK_REDIRECT_URI || ""]
-      //},
       authorization: {
         params: {
           scope: process.env.NEXT_AUTH_OIDC_SCOPE,
@@ -57,13 +57,18 @@ export const authOptions: NextAuthOptions = {
     })
     // ...add more providers here  
   ],
-  /* pages: {
-    signIn: '/',
-    signOut: '/',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  }, */
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        domain: "." + hostName,
+        secure: useSecureCookies,
+      },
+    },
+  },
   callbacks: {
     async jwt({token, user, account}) {
 
