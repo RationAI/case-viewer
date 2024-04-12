@@ -39,9 +39,6 @@ async function refreshAccessToken(token: OAuthToken) {
   }
 }
 
-/* const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
-const hostName = useSecureCookies ? process.env.NEXTAUTH_URL!.split(".").slice(1).join(".") : process.env.NEXTAUTH_URL!; */
-
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -66,14 +63,6 @@ export const authOptions: NextAuthOptions = {
         const now = Date.now();
         token = Object.assign({}, token, { accessTokenExpires: ((account.expires_at! * 1000) - now) / 2 + now});
         token = Object.assign({}, token, { refreshToken: account.refresh_token });
-        /* cookies().set({
-          name: '_sharedEmpaiaRefreshToken',
-          value: account.refresh_token!,
-          httpOnly: true,
-          domain: hostName,
-          sameSite: "lax",
-          secure: true,
-        }) */
         console.log("Initial sign in")
         return token
       }
@@ -87,14 +76,6 @@ export const authOptions: NextAuthOptions = {
       
       // Access token has expired, try to update it
       const newTokens = await refreshAccessToken(token as OAuthToken);
-      /* cookies().set({
-        name: '_sharedEmpaiaRefreshToken',
-        value: newTokens.refreshToken!,
-        httpOnly: true,
-        domain: hostName,
-        sameSite: "lax",
-        secure: true,
-      }) */
       return newTokens;
     },
     async session({session, token}) {
