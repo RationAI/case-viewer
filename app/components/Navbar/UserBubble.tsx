@@ -3,6 +3,7 @@ import MenuContent from '../MenuContent/MenuContent'
 import Image from "next/image";
 import { MenuItemT } from '@/type-definitions';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { checkSessionOnClient } from '@/app/utils/auth';
 
 const UserBubble = () => {
   const { data: session } = useSession()
@@ -23,7 +24,7 @@ const UserBubble = () => {
       link: `/authorized/user`,
     },
   ];
-  if (!session) {
+  if (!checkSessionOnClient(session)) {
     return (
       <>
         <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in"}</button>

@@ -2,16 +2,23 @@ import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
 import { getSlideMaskSeparator } from './config';
 import { Root } from '@/EmpationAPI/src/v3';
+import { noAuthActive } from './auth';
+import { getSession } from 'next-auth/react';
 
-export const getRootApi = async (session: Session) => {
-
+export const getRootApi = async (session: Session | null) => {
   const api = new V3.Root({
     workbenchApiUrl: process.env.NEXT_EMPAIA_WB_URL || process.env.NEXT_PUBLIC_EMPAIA_WB_URL || "",
   })
 
-  if(session.accessToken)
+  if(session && session.accessToken) {
     await api.from(session.accessToken);
-
+    async function refreshTokenHandler(event: object) {
+      event["newToken"] = (await getSession())?.accessToken
+    }
+    api.addHandler("token-refresh", refreshTokenHandler)
+  } else {
+    await api.use(process.env.NEXT_PUBLIC_NO_AUTH_USER_ID || "anonymous");
+  }
   return api;
 }
 
@@ -19,13 +26,6 @@ export const getCaseSlides = async (rootApi: Root, caseId: string) => {
   rootApi.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
   const slides = (await rootApi.cases.wsiExplorer.slides(caseId)).filter((slide) => !slide.deleted)
   return slides
-}
-
-export const getCaseMasks = async (session: Session, caseId: string) => {
-  const api = await getRootApi(session);
-  api.cases.wsiExplorer.use(getSlideMaskSeparator(), "m")
-  const masks = await api.cases.wsiExplorer.masks(caseId)
-  return masks
 }
 
 export const getSlideThumbnail = async (rootApi: Root, slideId: string) => {

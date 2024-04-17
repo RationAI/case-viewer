@@ -1,11 +1,10 @@
-import { getServerSession } from "next-auth";
 import AuthForm from "./components/Forms/AuthForm/AuthForm";
-import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import { redirect } from "next/navigation";
+import { checkSessionOnServer } from "./utils/auth";
 
 const WelcomePage = async () => {
-  const session = await getServerSession(authOptions);
-  if (session && session.user) {
+  const hasAccess = await checkSessionOnServer();
+  if (hasAccess) {
     redirect("/authorized/cases/path");
   }
 
