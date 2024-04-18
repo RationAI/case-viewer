@@ -32,11 +32,11 @@ const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
         <div className="collapse-title flex flex-row gap-4 py-0 pl-0 pr-20">
           <ImagePreview modalId={"modalId" + slide.id} slideId={slide.id} />
           <div className="flex-1 flex flex-row gap-4">
-            <div className="flex flex-col justify-center min-w-[18rem] flex-1 px-2">
+            <div className="flex flex-col justify-center min-w-[15rem] flex-1 px-2">
               <p className="font-bold text-gray-800 dark:text-base-dark">{slide.local_id ?? slide.id}</p>
               <p className="">{date.toLocaleString("cs")}</p>
             </div>
-            <div className="flex w-[12.5rem] items-center justify-center z-10">
+            <div className="flex w-[15.5rem] items-center justify-center z-10">
               <SlideVisualizations slide={slide} caseObj={caseObj}/>
             </div>
             {/* <div className="w-16 z-10">

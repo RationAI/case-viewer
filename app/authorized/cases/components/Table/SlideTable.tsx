@@ -15,8 +15,8 @@ const SlideTable = ({ slideRows, showHeader = true}: Props) => {
           {showHeader &&
             <div className="flex gap-4 font-sans font-semibold text-slate-500 pr-12">
               <div className="min-w-[8rem] text-center">Preview</div>
-              <div className="flex-1 px-1 min-w-[18rem]">Info</div>
-              <div className="min-w-[12.5rem] text-center">Visualizations</div>
+              <div className="flex-1 px-1 min-w-[15rem]">Info</div>
+              <div className="min-w-[15.5rem] text-center">Visualizations</div>
               <div className="min-w-[4rem] text-center">Actions</div>
             </div>
           }

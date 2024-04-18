@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import Form from '@/app/components/Forms/Form/Form';
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
+import { CaseTissuesStains } from '@/EmpationAPI/src/v3/extensions/case-explorer';
 
 type Props = {
   identifierParts: number;
@@ -19,17 +20,10 @@ type FormType = {
   stains: { value: string };
 };
 
-const createSearchUrl = (paramNames: string[], target: FormType) => {
-  return paramNames.reduce((prev, currParam) => {
-    const paramValue = target[currParam as keyof FormType].value;
-    return `${prev}${paramValue ? `/${currParam}/${paramValue}` : ''}`
-  }, '');
-}
-
 const CaseSearchForm = ({ identifierParts }: Props) => {
   const rootApi = useContext(RootApiContext);
-  const [tissues, setTissues] = useState<string[]>([])
-  const [stains, setStains] = useState<string[]>([])
+  const [tissues, setTissues] = useState<CaseTissuesStains[]>([])
+  const [stains, setStains] = useState<CaseTissuesStains[]>([])
 
   const router = useRouter()
 
@@ -88,13 +82,13 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
       type: "select",
       fieldID: "tissues",
       label: "Tissues",
-      options: [""].concat(tissues),
+      options: [""].concat(tissues.map((t) => t.locName)),
     },
     "stains": {
         type: "select",
         fieldID: "stains",
         label: "Stains",
-        options: [""].concat(stains),
+        options: [""].concat(stains.map((s) => s.locName)),
     },
   }
 
@@ -118,6 +112,19 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
       }
     ))
   };
+
+  const createSearchUrl = (paramNames: string[], target: FormType) => {
+    return paramNames.reduce((prev, currParam) => {
+      let paramValue = target[currParam as keyof FormType].value;
+      if(paramValue && currParam === "tissues") {
+        paramValue = tissues.find((t) => t.locName === paramValue)?.name || paramValue
+      }
+      if(paramValue && currParam === "stains") {
+        paramValue = stains.find((s) => s.locName === paramValue)?.name || paramValue
+      }
+      return `${prev}${paramValue ? `/${currParam}/${paramValue}` : ''}`
+    }, '');
+  }
 
   const onSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
