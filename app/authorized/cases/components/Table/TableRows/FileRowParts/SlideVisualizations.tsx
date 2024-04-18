@@ -34,7 +34,6 @@ const handleOpenInXOpat = (data: string[], visualizations: Visualization[], back
 const SlideVisualizations = ({slide, caseObj}: Props) => {
   const caseJobs = useContext(ValidJobsContext);
 
-  console.log(caseJobs.filter((job) => job.inputs.includes(slide.id)));
   return (
     <div className='flex flex-col gap-1'>
       <div className='flex flex-row gap-1 w-full'>
@@ -52,29 +51,8 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
             return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>
           }
         })}
-        <AvailableVis jobName='Test' href="temp" onClick={() => {}} />
-        <ProcessingVis jobName='Cancer detection' jobDescription='test desc'/>
         <BGVis tooltipText='Open only slide' onClick={() => handleOpenInXOpat([slide.id], [])}/>
       </div>
-      {/* <div className='flex flex-row gap-1 w-full'>
-        <button
-          title="Job output"
-          onClick={() => {}}
-          className="btn btn-sm !bg-green-500 !border--300"
-        >
-          <Image className='' src="/svg/layer.svg" alt="Slide details" height={20} width={20} />
-          Test
-        </button>
-
-        <button
-          title="Job output"
-          onClick={() => {}}
-          className="btn btn-sm !bg-lime-100 btn-disabled !border-lime-300 animate-pulse"
-        >
-          <Image className='animate-spin opacity-30' src="/svg/loader2.svg" alt="Slide details" height={20} width={20} />
-          test
-        </button>
-      </div> */}
     </div>
   )
 }

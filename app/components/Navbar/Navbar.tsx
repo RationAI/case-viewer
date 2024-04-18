@@ -9,6 +9,7 @@ import UserBubble from "./UserBubble";
 import { usePathname } from "next/navigation";
 import Redirect from "../Redirect/Redirect";
 import { getPathParts, getSettings } from "@/app/utils";
+import { checkSessionOnClient } from "@/app/utils/auth";
 
 const homeLink = "/";
 
@@ -58,7 +59,7 @@ const Navbar = () => {
     return newItem
   })
 
-  if (!session) {
+  if (!checkSessionOnClient(session)) {
     menuItems = []
   }
 

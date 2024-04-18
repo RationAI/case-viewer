@@ -6,6 +6,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { Root } from '@/EmpationAPI/src/v3'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AuthorizedLayout from './AuthorizedLayout'
+import { noAuthActive } from '@/app/utils/auth'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +16,7 @@ const queryClient = new QueryClient({
       refetchOnReconnect: true,
       refetchInterval: 1000 * 60 * 5,
       retry: 1,
+
     },
   },
 });
@@ -27,18 +29,57 @@ const AuthorizedApp = () => {
   useEffect(() => {
     const setupRootApi = async () => {
       const session = await getSession()
-      if (session && session.accessToken) {
-        const root = (await getRootApi(session));
+      if ((session && session.accessToken) || noAuthActive) {
+        const root = await getRootApi(session);
 
-        async function refreshTokenHandler(event: object) {
-          event["newToken"] = (await getSession())?.accessToken
-        }
-
-        root.addHandler("token-refresh", refreshTokenHandler)
         root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec());
         setRootApi(root);
+        /* await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
+        await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
+        await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
+        const jobEAD = { 
+          "name": "Prostate job",
+          "description": "This is a description of prostate job",
+          "appId": "4e485b74-413e-477d-8e09-2c38ae57e582",
+          "modes": {
+              "preprocessing": {
+                  "inputs": {
+                      "my_wsi": {
+                        "_layer_loc": "background",
+                        "lossless": false,
+                        "protocol": "`{\"type\":\"leav3\",\"slide\":\"${data}\"}`"
+                      }
+                  },
+                  "outputs": {
+                      "probability_mask": {
+                        "_layer_loc": "shader",
+                        "name": "Cancer prediction",
+                        "type": "heatmap",
+                        "visible": 1,
+                        "protocol": "`{\"type\":\"leav3\",\"pixelmap\":\"${data}\"}`",
+                        "params": {
+                          "opacity": 0.5,
+                        }
+                      },
+                      "background_mask": {
+                        "_layer_loc": "shader",
+                        "name": "Mask",
+                        "type": "heatmap",
+                        "visible": 1,
+                        "protocol": "`{\"type\":\"leav3\",\"pixelmap\":\"${data}\"}`",
+                        "params": {
+                          "threshold": 0.5,
+                          "use_mode": "mask_clip",
+                        }
+                      },
+                  }
+              }
+          }
+        }
+        await root.rationai.globalStorage.jobConfig.createJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582", jobEAD); */
       }
     };
+
 
     setupRootApi();
   }, []);

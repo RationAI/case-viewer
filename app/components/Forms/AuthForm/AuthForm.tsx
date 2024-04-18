@@ -1,5 +1,6 @@
 'use client';
 
+import { checkSessionOnClient } from '@/app/utils/auth';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 interface Props {
@@ -19,13 +20,13 @@ export default function AuthForm({ provider }: Props) {
 
   return (
     <div>
-      {!session && (
+      {!checkSessionOnClient(session) && (
         <>
           <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in with " + provider }</button>
         </>
       )}
 
-      {session && <button className='btn btn-sm btn-outline font-sans' onClick={handleSignOut}>Sign out</button>}
+      {checkSessionOnClient(session) && <button className='btn btn-sm btn-outline font-sans' onClick={handleSignOut}>Sign out</button>}
       {/* <div className='break-words'>{JSON.stringify(session) ?? ""}</div> */}
     </div>
   );

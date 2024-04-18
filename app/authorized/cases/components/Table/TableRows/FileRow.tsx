@@ -24,7 +24,6 @@ const getSlideTags = (slide: Slide) => {
 
 const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
   const date = new Date(slide.created_at * 1000);
-  console.log(slide)
 
   return (
     <div className="block border dark:border-color-dark rounded-sm">

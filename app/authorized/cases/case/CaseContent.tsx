@@ -24,12 +24,12 @@ export const ValidJobsContext = createContext<JobState[]>([])
 const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
   const jobStates: JobState[] = [];
   jobs.forEach((job) => {
-    const inputs = appConfig["modes"][job.mode || "preprocessing"]["inputs"] ?? {};
-    const outputs = appConfig["modes"][job.mode || "preprocessing"]["outputs"] ?? {};
+    const inputs = appConfig["modes"][job.mode?.toLowerCase() || "preprocessing"]["inputs"] ?? {};
+    const outputs = appConfig["modes"][job.mode?.toLowerCase() || "preprocessing"]["outputs"] ?? {};
     const inputKeys = Object.keys(inputs);
     const outputKeys = Object.keys(outputs);
     const inputIds = inputKeys.map((key) => job.inputs[key]);
-    const outputIds = outputKeys.map((key) => job.inputs[key]);
+    const outputIds = outputKeys.map((key) => job.outputs[key]);
     let status;
     let visualization: Visualization | undefined;
     let background;
@@ -40,7 +40,7 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
       status = "completed";
       visualization = {
         name: `${appConfig["name"] || "Job"} output`,
-        shaders: Object.fromEntries(outputKeys.map((key) => [key, {...outputs[key], _layer_loc: undefined}])),
+        shaders: Object.fromEntries(outputKeys.map((key, idx) => [key, {...outputs[key], _layer_loc: undefined, dataReference: [inputKeys.length + idx]}])),
       }
       background = inputKeys.map((key, idx) => ({...inputs[key], _layer_loc: undefined, dataReference: idx }));
     }
@@ -48,7 +48,16 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
       status = "processing";
     }
 
-    jobStates.push({id: job.id, status: status, inputs: inputIds, outputs: outputIds, visualization: visualization, background: background})
+    jobStates.push({
+      id: job.id, 
+      status: status, 
+      inputs: inputIds, 
+      outputs: outputIds, 
+      visualization: visualization, 
+      background: background,
+      name: appConfig["name"],
+      description: appConfig["description"]
+    })
   })
 
   return jobStates;
@@ -74,6 +83,7 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   })
 
   const getCaseJobs = async () => {
+    console.log("Refetching job info")
     const examinations = (await rootApi!.examinations.query({
       cases: [caseObj.id],
     })).items;
@@ -82,7 +92,6 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
 
     for(let i = 0; i < examinations.length; i = i+1) {
       const examination = examinations[i];
-      console.log(examinations)
       const appConfig = await rootApi!.rationai.globalStorage.jobConfig.getJobConfig(examination.app_id);
       if(appConfig) {
         const scope = await rootApi!.getScopeFrom(examination);
