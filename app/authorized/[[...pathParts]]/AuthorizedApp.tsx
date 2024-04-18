@@ -34,7 +34,7 @@ const AuthorizedApp = () => {
 
         root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec());
         setRootApi(root);
-        await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
+        /* await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         const jobEAD = { 
@@ -76,7 +76,7 @@ const AuthorizedApp = () => {
               }
           }
         }
-        await root.rationai.globalStorage.jobConfig.createJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582", jobEAD);
+        await root.rationai.globalStorage.jobConfig.createJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582", jobEAD); */
       }
     };
 
