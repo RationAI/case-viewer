@@ -49,6 +49,7 @@ type MetadataT = {
 export type Visualization = {
   shaders: object,
   name: string,
+  protocol: string,
 }
 
 export type VisualizationConfig = {
@@ -56,6 +57,7 @@ export type VisualizationConfig = {
   data: string[],
   background?: object,
   visualizations: Visualization[],
+  plugins?: object,
 };
 
 export type TableSlideRowT = {
@@ -132,6 +134,8 @@ type FormFieldBaseT = {
 }
 
 export type JobState = {
+  caseId: string,
+  appId: string,
   id: string,
   status: string,
   inputs: string[],

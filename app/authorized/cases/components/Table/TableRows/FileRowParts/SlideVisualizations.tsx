@@ -14,12 +14,13 @@ type Props = {
   caseObj: CaseH;
 }
 
-const handleOpenInXOpat = (data: string[], visualizations: Visualization[], background?: object) => {
+const handleOpenInXOpat = (data: string[], visualizations: Visualization[], background?: object, plugins?: object) => {
   const xOpatVisualizationConfig: VisualizationConfig = { 
     params: DEFAULT_PARAMS_CONFIG,
     background: background || DEFAULT_BG_CONFIG,
     data: data,
-    visualizations: visualizations
+    visualizations: visualizations,
+    plugins: plugins,
   }
 
   if(xOpatVisualizationConfig) {
@@ -37,7 +38,7 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
   return (
     <div className='flex flex-col gap-1'>
       <div className='flex flex-row gap-1 w-full'>
-        {caseJobs.map((job) => {
+        {caseJobs.filter((job) => job.inputs.includes(slide.id)).map((job) => {
           if(job.status === "completed") {
             const href = `cache/${slide.id}/${job.id}`
             return  <AvailableVis 
@@ -45,7 +46,11 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
                       href={href} 
                       jobName={job.name} 
                       jobDescription={job.description} 
-                      onClick={() => handleOpenInXOpat([slide.id].concat(job.outputs), (job.visualization ? [job.visualization] : []), job.background)}
+                      onClick={() => handleOpenInXOpat([slide.id].concat(job.outputs),
+                         (job.visualization ? [job.visualization] : []), 
+                         job.background, 
+                         {empaia: {caseId: job.caseId, appId: job.appId}}
+                      )}
                     />
           } else if(job.status === "processing") {
             return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>

@@ -9,6 +9,7 @@ import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
 import { useQuery } from '@tanstack/react-query';
 import SlideTable from '../components/Table/SlideTable';
 import { Job } from '@/EmpationAPI/src/v3/scope/types/job';
+import { WorkbenchServiceApiV3CustomModelsExaminationsExamination } from '@/EmpationAPI/src/v3/root/types/workbench-service-api-v-3-custom-models-examinations-examination';
 
 const PROCESSING_STATES = ['ASSEMBLY', 'RUNNING', 'SCHEDULED'];
 const COMPLETED_STATES = ['COMPLETED'];
@@ -21,7 +22,7 @@ type Props = {
 
 export const ValidJobsContext = createContext<JobState[]>([])
 
-const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
+const getJobStatesFromJobs = (jobs: Job[], appConfig: object, examination: WorkbenchServiceApiV3CustomModelsExaminationsExamination) => {
   const jobStates: JobState[] = [];
   jobs.forEach((job) => {
     const inputs = appConfig["modes"][job.mode?.toLowerCase() || "preprocessing"]["inputs"] ?? {};
@@ -40,7 +41,8 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
       status = "completed";
       visualization = {
         name: `${appConfig["name"] || "Job"} output`,
-        shaders: Object.fromEntries(outputKeys.map((key, idx) => [key, {...outputs[key], _layer_loc: undefined, dataReference: [inputKeys.length + idx]}])),
+        protocol: appConfig["visProtocol"],
+        shaders: Object.fromEntries(outputKeys.map((key, idx) => [key, {...outputs[key], _layer_loc: undefined, dataReferences: [inputKeys.length + idx]}])),
       }
       background = inputKeys.map((key, idx) => ({...inputs[key], _layer_loc: undefined, dataReference: idx }));
     }
@@ -49,6 +51,8 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object) => {
     }
 
     jobStates.push({
+      caseId: examination.case_id,
+      appId: examination.app_id,
       id: job.id, 
       status: status, 
       inputs: inputIds, 
@@ -96,7 +100,7 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
       if(appConfig) {
         const scope = await rootApi!.getScopeFrom(examination);
         const jobs = await scope.jobs.getJobs();
-        validJobs = validJobs.concat(getJobStatesFromJobs(jobs, appConfig))
+        validJobs = validJobs.concat(getJobStatesFromJobs(jobs, appConfig, examination))
       }
     }
     return validJobs;
