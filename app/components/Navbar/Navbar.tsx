@@ -77,7 +77,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex-1 justify-center md:flex-none">
-        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl">
+        <Redirect link={homeLink} className="btn btn-ghost normal-case text-2xl btn-disabled !bg-opacity-100 !bg-inherit">
           <Image
             className="dark:svg-soft-filter-dark"
             src='/svg/rationai-color.svg'
@@ -109,7 +109,9 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <UserBubble />
+      {!checkSessionOnClient(session) && 
+        <UserBubble />
+      }
     </nav>
   );
 };
