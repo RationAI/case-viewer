@@ -18,6 +18,7 @@ const preventClickPropagation = (e: React.MouseEvent) => {
 }
 
 const CaseTree = ({root, rootLink, hierarchy }: Props) => {
+  console.log(hierarchy)
   return (
     <div className="max-w-full">
       <ul className={root ? "menu pl-0 pt-0 menu-xs rounded-lg" : "pl-0"}>
@@ -48,7 +49,7 @@ const CaseTree = ({root, rootLink, hierarchy }: Props) => {
                   width={14}
                 />
                 <div className="truncate">
-                  {getCaseNameFromLocalID(item.local_id)}
+                  {getCaseNameFromLocalID(item.local_id) || item.id}
                 </div>
               </Redirect>
             </li>

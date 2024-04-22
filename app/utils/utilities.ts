@@ -7,7 +7,7 @@ export const getRandomString = (length: number) => {
 }
 
 export const getCaseNameFromLocalID = (localId: string | null) => {
-  return localId ? (localId.split(".")[3] || localId ): undefined;
+  return localId ? (localId.split(".")[3] || localId ) : undefined;
 }
 
 export const createSearchQueryFromUrl = (searchQueryParts: string[]) => {

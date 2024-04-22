@@ -2,7 +2,6 @@ import { Session } from 'next-auth';
 import { V3 } from '@/EmpationAPI/src';
 import { getSlideMaskSeparator } from './config';
 import { Root } from '@/EmpationAPI/src/v3';
-import { noAuthActive } from './auth';
 import { getSession } from 'next-auth/react';
 
 export const getRootApi = async (session: Session | null) => {
