@@ -1,3 +1,4 @@
+import { HierarchyNameOverrides } from "@/EmpationAPI/src/v3/extensions/case-explorer";
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 import { Case } from "@/EmpationAPI/src/v3/root/types/case";
 import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
@@ -8,9 +9,10 @@ export type AppConfigT = {
   local_id_separator?: string,
   local_id_hint?: string,
   hierarchy_spec?: string[],
+  hierarchy_key_overrides?: HierarchyNameOverrides,
   slide_mask_separator?: string,
   
-  searchKeys?: string[],
+  search_keys?: string[],
 
   settings?: object,
 }

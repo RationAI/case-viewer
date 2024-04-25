@@ -29,7 +29,7 @@ const handleOpenInXOpat = (data: string[], visualizations: Visualization[], back
     return;
   }
 
-  console.log(JSON.stringify("No visualization, cannot open xOpat"))
+  console.log("No visualization, cannot open xOpat")
 }
 
 const SlideVisualizations = ({slide, caseObj}: Props) => {

@@ -93,7 +93,6 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
     })).items;
 
     let validJobs: JobState[] = []
-    console.log(examinations)
     for(let i = 0; i < examinations.length; i = i+1) {
       const examination = examinations[i];
       const appConfig = await rootApi!.rationai.globalStorage.jobConfig.getJobConfig(examination.app_id);

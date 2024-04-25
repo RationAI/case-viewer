@@ -24,22 +24,28 @@ export const getConfig = () => {
   return configJson
 }
 
+const config = getConfig()
+
 export const getIdentifierSeparator = () => {
-  const config = getConfig()
   return config.local_id_separator || "[\\s\\S]*"
 }
 
 export const getHierarchySpec = () => {
-  const config = getConfig()
   return config.hierarchy_spec || []
 }
 
+export const getHierarchyNameOverrides = () => {
+  return config.hierarchy_key_overrides || {}
+}
+
 export const getSlideMaskSeparator = () => {
-  const config = getConfig()
   return config.slide_mask_separator!
 }
 
+export const getSearchKeys = () => {
+  return config.search_keys || [];
+}
+
 export const getSettings = () => {
-  const config = getConfig()
   return config.settings || {}
 }
