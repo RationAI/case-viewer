@@ -6,7 +6,7 @@ import { getSession } from 'next-auth/react';
 
 export const getRootApi = async (session: Session | null) => {
   const api = new V3.Root({
-    workbenchApiUrl: process.env.NEXT_EMPAIA_WB_URL || process.env.NEXT_PUBLIC_EMPAIA_WB_URL || "",
+    workbenchApiUrl: process.env.NEXT_PUBLIC_EMPAIA_WB_URL || "",
   })
 
   if(session && session.accessToken) {
