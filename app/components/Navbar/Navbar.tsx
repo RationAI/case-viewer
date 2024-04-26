@@ -9,7 +9,7 @@ import UserBubble from "./UserBubble";
 import { usePathname } from "next/navigation";
 import Redirect from "../Redirect/Redirect";
 import { getPathParts, getSettings } from "@/app/utils";
-import { checkSessionOnClient } from "@/app/utils/auth";
+import { checkSessionOnClient, noAuthActive } from "@/app/utils/auth";
 
 const homeLink = "/";
 
@@ -109,7 +109,7 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      {!checkSessionOnClient(session) && 
+      {!noAuthActive && 
         <UserBubble />
       }
     </nav>

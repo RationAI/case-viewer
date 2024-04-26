@@ -22,12 +22,11 @@ export default function AuthForm({ provider }: Props) {
     <div>
       {!checkSessionOnClient(session) && (
         <>
-          <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in with " + provider }</button>
+          <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in with " + (process.env.NEXT_PUBLIC_AUTH_PROVIDER_NAME || provider)}</button>
         </>
       )}
 
       {checkSessionOnClient(session) && <button className='btn btn-sm btn-outline font-sans' onClick={handleSignOut}>Sign out</button>}
-      {/* <div className='break-words'>{JSON.stringify(session) ?? ""}</div> */}
     </div>
   );
 }

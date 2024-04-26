@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import { OAuthRefreshResponse, OAuthToken } from "@/type-definitions"
 import KeycloakProvider from "next-auth/providers/keycloak"
-// import { cookies } from "next/headers";
 
 async function refreshAccessToken(token: OAuthToken) {
   try {
@@ -42,7 +41,7 @@ async function refreshAccessToken(token: OAuthToken) {
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    KeycloakProvider({
+    /* KeycloakProvider({
       clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
       clientSecret: process.env.NEXT_AUTH_SECRET || "",
       issuer: process.env.NEXT_AUTH_ISSUER,
@@ -51,7 +50,32 @@ export const authOptions: NextAuthOptions = {
           scope: process.env.NEXT_AUTH_OIDC_SCOPE,
         },
       },
-    })
+    }), */
+    {
+      id: "custom",
+      name: process.env.NEXT_PUBLIC_AUTH_PROVIDER_NAME || "Auth Provider",
+      type: "oauth",
+      wellKnown: process.env.NEXT_AUTH_OIDC_WELL_KNOWN || undefined,
+      authorization: { 
+        url: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_AUTHORIZATION_ENDPOINT,
+        params: { scope: process.env.NEXT_AUTH_OIDC_SCOPE }
+      },
+      token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
+      userinfo: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_USER_ENDPOINT,
+      idToken: true,
+      checks: ["pkce", "state"],
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
+      issuer: process.env.NEXT_AUTH_ISSUER,
+      clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
+      clientSecret: process.env.NEXT_AUTH_CLIENT_SECRET || "",
+    }
     // ...add more providers here  
   ],
   callbacks: {

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Form from '@/app/components/Forms/Form/Form';
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 import { CaseTissuesStains } from '@/EmpationAPI/src/v3/extensions/case-explorer';
+import { getSearchKeys } from '@/app/utils/config';
 
 type Props = {
   identifierParts: number;
@@ -96,7 +97,7 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
     title: "Search...",
     rows: searchRows.map((row) => (
       {
-        fields: row.map((field) => {
+        fields: row.filter((field) => getSearchKeys().includes(field)).map((field) => {
           if(field.slice(0, 8) === "id_part_") {
             return {
               type: "text",

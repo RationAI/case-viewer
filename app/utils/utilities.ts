@@ -1,5 +1,5 @@
 import { CaseSearchParams } from "@/EmpationAPI/src/v3/extensions/types/case-search-params";
-import { getConfig } from "./config";
+import { getConfig, getSearchKeys } from "./config";
 
 export const getRandomString = (length: number) => {
   const randomString = Math.random().toString(10);
@@ -15,7 +15,7 @@ export const createSearchQueryFromUrl = (searchQueryParts: string[]) => {
     return null
   }
 
-  const allowedSearchKeys = getConfig().searchKeys
+  const allowedSearchKeys = getSearchKeys()
 
   if(!allowedSearchKeys) {
     return null

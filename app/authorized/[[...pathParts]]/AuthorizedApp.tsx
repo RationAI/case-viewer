@@ -1,6 +1,6 @@
 'use client'
 
-import { getHierarchySpec, getIdentifierSeparator, getRootApi } from '@/app/utils'
+import { getHierarchyNameOverrides, getHierarchySpec, getIdentifierSeparator, getRootApi } from '@/app/utils'
 import { getSession } from 'next-auth/react'
 import React, { createContext, useEffect, useState } from 'react'
 import { Root } from '@/EmpationAPI/src/v3'
@@ -32,8 +32,9 @@ const AuthorizedApp = () => {
       if ((session && session.accessToken) || noAuthActive) {
         const root = await getRootApi(session);
 
-        root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec());
+        root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec(), getHierarchyNameOverrides());
         setRootApi(root);
+        root.cases.caseExplorer.hierarchy()
         /* await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
