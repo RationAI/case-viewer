@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
       token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
       userinfo: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_USER_ENDPOINT,
       idToken: true,
-      //checks: ["pkce", "state"],
+      checks: ["pkce", "state"],
       profile(profile) {
         return {
           id: profile.sub,
