@@ -36,10 +36,6 @@ const AuthorizedApp = () => {
         const hierSpec = getHierarchySpec();
         const overrides = getHierarchyNameOverrides();
 
-        console.log(id);
-        console.log(hierSpec);
-        console.log(overrides);
-
         root.cases.caseExplorer.use(id, hierSpec, overrides);
         setRootApi(root);
         /* await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");

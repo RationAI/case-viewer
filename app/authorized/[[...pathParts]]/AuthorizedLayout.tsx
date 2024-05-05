@@ -10,7 +10,6 @@ const AuthorizedLayout = () => {
   const rootApi = useContext(RootApiContext);
 
   const getCaseHierarchy = async () => {
-    console.log(rootApi)
     const hierarchy = await rootApi!.cases.caseExplorer.hierarchy()
     return hierarchy; 
   };
