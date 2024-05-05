@@ -10,7 +10,9 @@ const AuthorizedLayout = () => {
   const rootApi = useContext(RootApiContext);
 
   const getCaseHierarchy = async () => {
-    return await rootApi!.cases.caseExplorer.hierarchy()
+    console.log(rootApi)
+    const hierarchy = await rootApi!.cases.caseExplorer.hierarchy()
+    return hierarchy; 
   };
 
   const { isPending, isError, data } = useQuery({
