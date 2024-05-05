@@ -32,9 +32,16 @@ const AuthorizedApp = () => {
       if ((session && session.accessToken) || noAuthActive) {
         const root = await getRootApi(session);
 
-        root.cases.caseExplorer.use(getIdentifierSeparator(), getHierarchySpec(), getHierarchyNameOverrides());
+        const id = getIdentifierSeparator();
+        const hierSpec = getHierarchySpec();
+        const overrides = getHierarchyNameOverrides();
+
+        console.log(id);
+        console.log(hierSpec);
+        console.log(overrides);
+
+        root.cases.caseExplorer.use(id, hierSpec, overrides);
         setRootApi(root);
-        root.cases.caseExplorer.hierarchy()
         /* await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
         await root.rationai.globalStorage.jobConfig.deleteJobConfig("4e485b74-413e-477d-8e09-2c38ae57e582");
