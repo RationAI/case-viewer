@@ -1,6 +1,5 @@
 import { NextAuthOptions } from "next-auth";
 import { OAuthRefreshResponse, OAuthToken } from "@/type-definitions"
-import KeycloakProvider from "next-auth/providers/keycloak"
 
 async function refreshAccessToken(token: OAuthToken) {
   try {
@@ -8,7 +7,7 @@ async function refreshAccessToken(token: OAuthToken) {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
               client_id: process.env.NEXT_AUTH_CLIENT_ID || "",
-              // client_secret: process.env.NEXT_AUTH_SECRET,
+              client_secret: process.env.NEXT_AUTH_CLIENT_SECRET || "",
               grant_type: "refresh_token",
               refresh_token: token.refreshToken || "",
             }),
@@ -39,18 +38,8 @@ async function refreshAccessToken(token: OAuthToken) {
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXT_AUTH_SESSION_TOKEN_SECRET,
   providers: [
-    /* KeycloakProvider({
-      clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
-      clientSecret: process.env.NEXT_AUTH_SECRET || "",
-      issuer: process.env.NEXT_AUTH_ISSUER,
-      authorization: {
-        params: {
-          scope: process.env.NEXT_AUTH_OIDC_SCOPE,
-        },
-      },
-    }), */
     {
       id: "custom",
       name: process.env.NEXT_PUBLIC_AUTH_PROVIDER_NAME || "Auth Provider",
@@ -60,7 +49,7 @@ export const authOptions: NextAuthOptions = {
         url: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_AUTHORIZATION_ENDPOINT,
         params: { scope: process.env.NEXT_AUTH_OIDC_SCOPE }
       },
-      //token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
+      token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
       userinfo: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_USER_ENDPOINT,
       idToken: true,
       checks: ["pkce", "state"],
@@ -72,7 +61,7 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
         }
       },
-      token: {
+      /* token: {
         url: process.env.NEXT_AUTH_TOKEN_ENDPOINT,
   
         async request({ client, params, checks, provider }) {
@@ -90,7 +79,7 @@ export const authOptions: NextAuthOptions = {
             tokens: response,
           }
         },
-      },
+      }, */
       issuer: process.env.NEXT_AUTH_ISSUER,
       clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
       clientSecret: process.env.NEXT_AUTH_CLIENT_SECRET || "",
