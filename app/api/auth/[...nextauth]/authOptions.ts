@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
         url: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_AUTHORIZATION_ENDPOINT,
         params: { scope: process.env.NEXT_AUTH_OIDC_SCOPE }
       },
-      token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
+      //token: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_TOKEN_ENDPOINT,
       userinfo: Boolean(process.env.NEXT_AUTH_OIDC_WELL_KNOWN) ? undefined : process.env.NEXT_AUTH_USER_ENDPOINT,
       idToken: true,
       checks: ["pkce", "state"],
@@ -71,6 +71,25 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           image: profile.picture,
         }
+      },
+      token: {
+        url: process.env.NEXT_AUTH_TOKEN_ENDPOINT,
+  
+        async request({ client, params, checks, provider }) {
+          console.log(client);
+          console.log(params);
+          console.log(checks);
+          console.log(provider);
+          const response = await client.callback(provider.callbackUrl, params, checks, {
+            exchangeBody: {
+              client_id: process.env.NEXT_AUTH_CLIENT_ID,
+            },
+          })
+          console.log(response);
+          return {
+            tokens: response,
+          }
+        },
       },
       issuer: process.env.NEXT_AUTH_ISSUER,
       clientId: process.env.NEXT_AUTH_CLIENT_ID || "",
