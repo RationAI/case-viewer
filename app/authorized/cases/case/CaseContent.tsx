@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext } from 'react'
-import { JobState, SlideRow, Visualization } from '@/type-definitions';
+import { JobState, SlideRowT, Visualization } from '@/type-definitions';
 import { getCaseSlides } from '@/app/utils/data';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
 import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
@@ -10,6 +10,8 @@ import { useQuery } from '@tanstack/react-query';
 import SlideTable from '../components/Table/SlideTable';
 import { Job } from '@/EmpationAPI/src/v3/scope/types/job';
 import { WorkbenchServiceApiV3CustomModelsExaminationsExamination } from '@/EmpationAPI/src/v3/root/types/workbench-service-api-v-3-custom-models-examinations-examination';
+import Loading from '@/app/components/Loading/Loading';
+import FetchError from '@/app/components/FetchError/FetchError';
 
 const PROCESSING_STATES = ['ASSEMBLY', 'RUNNING', 'SCHEDULED'];
 const COMPLETED_STATES = ['COMPLETED'];
@@ -17,7 +19,7 @@ const ERROR_STATES = ['FAILED', 'TIMEOUT', 'ERROR', 'INCOMPLETE'];
 
 type Props = {
   caseObj: CaseH;
-  fetchDelayed?: boolean;
+  fetchActive?: boolean;
 }
 
 export const ValidJobsContext = createContext<JobState[]>([])
@@ -68,11 +70,11 @@ const getJobStatesFromJobs = (jobs: Job[], appConfig: object, examination: Workb
 }
 
 const getSlideRows = (caseObj: CaseH, slides: Slide[], jobs: JobState[]) => {
-  const slideTableRows: SlideRow[] = slides.map((slide) => ({slide: slide, caseObj: caseObj, jobs: jobs}))
+  const slideTableRows: SlideRowT[] = slides.map((slide) => ({slide: slide, caseObj: caseObj, jobs: jobs}))
   return slideTableRows;
 }
 
-const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
+const CaseContent = ({ caseObj, fetchActive=true }: Props) => {
   const rootApi = useContext(RootApiContext);
 
   const getCaseSlidesQuery= async () => {
@@ -83,11 +85,11 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   const { isPending, isError, data: slides } = useQuery({
     queryKey: [`case_${caseObj.id}_slides`],
     queryFn: getCaseSlidesQuery,
-    enabled: !fetchDelayed && rootApi !== undefined,
+    enabled: fetchActive && rootApi !== undefined,
   })
 
   const getCaseJobs = async () => {
-    console.log("Refetching job info")
+    console.log(`Fetching job info: ${caseObj.id}`)
     const examinations = (await rootApi!.examinations.query({
       cases: [caseObj.id],
     })).items;
@@ -108,16 +110,16 @@ const CaseContent = ({ caseObj, fetchDelayed=false }: Props) => {
   const { isPending: isPendingJobs, isError: isErrorJobs, data: jobs } = useQuery({
     queryKey: [`case_${caseObj.id}_jobs`],
     queryFn: getCaseJobs,
-    enabled: !fetchDelayed && rootApi !== undefined,
+    enabled: fetchActive && rootApi !== undefined,
     refetchInterval: 1000 * 30
   })
 
   if (isPending || isPendingJobs) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   if (isError || isErrorJobs) {
-    return <div>Unable to fetch data</div>
+    return <FetchError message='Case content' />
   }
 
   return (

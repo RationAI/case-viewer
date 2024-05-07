@@ -1,9 +1,9 @@
-import { SlideRow } from "@/type-definitions";
+import { SlideRowT } from "@/type-definitions";
 import React from "react";
-import FileRow from "./TableRows/FileRow";
+import SlideRow from "./TableRows/SlideRow";
 
 type Props = {
-  slideRows: SlideRow[];
+  slideRows: SlideRowT[];
   showHeader?: boolean;
 };
 
@@ -22,7 +22,7 @@ const SlideTable = ({ slideRows, showHeader = true}: Props) => {
           }
           {slideRows.map((row, idx) => (
             <div key={idx} className="flex flex-col gap-1">
-              <FileRow key={row.slide.id} slideRow={row} />
+              <SlideRow key={row.slide.id} slideRow={row} />
             </div>
           ))}
         </div>

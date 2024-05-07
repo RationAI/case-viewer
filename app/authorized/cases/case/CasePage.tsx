@@ -3,6 +3,8 @@ import CaseContent from './CaseContent';
 import { RootApiContext } from '../../[[...pathParts]]/AuthorizedApp';
 import { useQuery } from '@tanstack/react-query';
 import { getCaseNameFromLocalID } from '@/app/utils';
+import Loading from '@/app/components/Loading/Loading';
+import FetchError from '@/app/components/FetchError/FetchError';
 
 type Props = {
   caseId: string,
@@ -22,11 +24,11 @@ const CasePage = ({ caseId }: Props) => {
   })
 
   if (isPending) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   if (isError) {
-    return <div>Unable to fetch case</div>
+    return <FetchError message='Cases' />
   }
 
   return (

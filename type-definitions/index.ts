@@ -33,7 +33,7 @@ export type TableStructureT = {
   mergeCases?: boolean,
 };
 
-export type SlideRow = {
+export type SlideRowT = {
   slide: Slide,
   caseObj: CaseH,
   jobs: JobState[],
@@ -42,10 +42,6 @@ export type SlideRow = {
 type TableFolderRowT = {
   name: string,
   link: string,
-}
-
-type MetadataT = {
-  [key: string]: string,
 }
 
 export type Visualization = {
@@ -62,33 +58,10 @@ export type VisualizationConfig = {
   plugins?: object,
 };
 
-export type TableSlideRowT = {
-  slideId: string,
-  casePath: string,
-  name: string,
-  created: string,
-  metadata?: MetadataT,
-  masks?: MaskT[],
-  annotations?: AnnotationT[],
-  visualizationConfig: VisualizationConfig,
-}
-
 export type ImageT = {
   name: string,
   imageLink: string,
 }
-
-type MaskSpecificT = {
-  something?: string,
-}
-
-type AnnotationSpecificT = {
-  something?: string,
-}
-
-type MaskT = ImageT & MaskSpecificT;
-
-type AnnotationT = ImageT & AnnotationSpecificT;
 
 export type AnnotationPresetT = {
   id: string,

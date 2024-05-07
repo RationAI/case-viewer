@@ -61,6 +61,10 @@ body {
     filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(684%) hue-rotate(180deg) brightness(86%) contrast(85%);
   }
 
+  .svg-filter-red {
+    filter: brightness(0) saturate(100%) invert(5%) sepia(87%) saturate(7270%) hue-rotate(29deg) brightness(137%) contrast(133%);
+  }
+
   .svg-soft-filter-dark {
     filter: invert(81%) sepia(5%) saturate(684%) hue-rotate(180deg) brightness(86%) contrast(85%);
   }

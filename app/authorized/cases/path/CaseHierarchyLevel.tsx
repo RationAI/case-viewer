@@ -8,6 +8,7 @@ import Table from "../components/Table/Table";
 import SegmentedPathLink from "../components/SegmentedPathLink/SegmentedPathLink";
 import { getPathParts } from "@/app/utils";
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
+import Loading from "@/app/components/Loading/Loading";
 
 const basePageLink = '/authorized/cases'
 
@@ -69,7 +70,7 @@ export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
       }
       {currentLevel ? 
         <Table tableStructure={getTableStructureFromLevel(currentLevel, getPathParts(relativePath, 3))}/> :
-        <div>Loading...</div>
+        <Loading />
       }
     </div>
   );

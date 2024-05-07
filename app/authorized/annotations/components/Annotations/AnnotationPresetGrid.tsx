@@ -9,6 +9,8 @@ import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp'
 import AnnotationButtons from './AnnotationButtons';
 import { AnnotPreset } from '@/EmpationAPI/src/v3/extensions/types/annot-preset';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Loading from '@/app/components/Loading/Loading';
+import FetchError from '@/app/components/FetchError/FetchError';
 
 const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
 
@@ -29,7 +31,7 @@ const AnnotationPresetGrid = () => {
   };
 
   const postAnnotPresets = async () => {
-    const updatedPresets = await rootApi!.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
+    await rootApi!.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
     // TODO handle results
   }
 
@@ -129,9 +131,9 @@ const AnnotationPresetGrid = () => {
         <AnnotationButtons handleRevertClick={handleRevertClick} handleSaveClick={handleSaveClick}/>
       </div>
       {isFetching ? 
-        <div>Loading...</div> :
+        <Loading /> :
         isError ? 
-        <div>Unable to fetch presets</div> :
+        <FetchError message='Presets'/> :
         <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
         {presets.map((annotPreset) => {
           return (

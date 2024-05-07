@@ -1,6 +1,6 @@
 import { FormConfigT } from '@/type-definitions';
 import React from 'react'
-import Form from '../Forms/Form/Form';
+import Form from '../../../components/Forms/Form/Form';
 
 const formConfigExample: FormConfigT = {
   title: "Title",

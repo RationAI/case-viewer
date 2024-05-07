@@ -5,6 +5,8 @@ import React, { useContext } from 'react'
 import AuthorizedContent from './AuthorizedContent'
 import { useQuery } from '@tanstack/react-query'
 import { RootApiContext } from './AuthorizedApp'
+import Loading from '@/app/components/Loading/Loading'
+import FetchError from '@/app/components/FetchError/FetchError'
 
 const AuthorizedLayout = () => {
   const rootApi = useContext(RootApiContext);
@@ -15,7 +17,7 @@ const AuthorizedLayout = () => {
   };
 
   const { isPending, isError, data } = useQuery({
-    queryKey: [`case_hierarchy2`],
+    queryKey: [`case_hierarchy`],
     queryFn: getCaseHierarchy,
   })
 
@@ -23,10 +25,9 @@ const AuthorizedLayout = () => {
     <>
       <Sidebar caseHierarchy={data} isPending={isPending} isError={isError}/>
       <div className="p-2 overflow-y-scroll w-full">
-        {isPending ?
-          <div>Loading...</div> : (
+        {isPending ? <Loading /> : (
             isError ? 
-            <div>Unable to fetch cases</div> :
+            <FetchError message='Cases' /> :
             <AuthorizedContent caseHierarchy={data}/>
           )
         }

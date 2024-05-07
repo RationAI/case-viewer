@@ -1,9 +1,11 @@
 'use client'
 
 import React from "react";
-import FileBrowseInput from "../../components/Upload/FileBrowseInput";
-import UploadButtonsAndProgress from "../../components/Upload/UploadButtonsAndProgress";
-import UploadForm from "@/app/components/Upload/UploadForm";
+import FileBrowseInput from "./components/FileBrowseInput";
+import UploadButtonsAndProgress from "./components/UploadButtonsAndProgress";
+import UploadForm from "@/app/authorized/upload/components/UploadForm";
+
+// NOT USED YET
 
 const UploadPage = () => {
   return (

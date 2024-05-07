@@ -4,7 +4,7 @@ type Props = {
   options: string[];
 }
 
-const FileRowSelect = ({ options }: Props) => {
+const SlideRowSelect = ({ options }: Props) => {
   return (
     <select defaultValue={options[0]} className="select select-bordered select-xs w-full max-w-xs" id="visName" >
       {options.map((option) => {
@@ -18,4 +18,4 @@ const FileRowSelect = ({ options }: Props) => {
   );
 };
 
-export default FileRowSelect;
+export default SlideRowSelect;

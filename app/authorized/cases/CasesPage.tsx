@@ -8,7 +8,7 @@ import SlideContent from './path/SlideContent'
 import CaseSearchPage from './search/CaseSearchPage'
 import { getHierarchySpec } from '@/app/utils'
 import CasePage from './case/CasePage'
-import { PathPartsContext } from '../[[...pathParts]]/AuthorizedContent'
+import { PathPartsContext } from '../[[...pathParts]]/AuthorizedApp'
 
 type Props = {
   caseHierarchy: CaseHierarchy,

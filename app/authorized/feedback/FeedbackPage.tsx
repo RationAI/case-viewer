@@ -1,4 +1,4 @@
-import { useThemeDetector } from '@/app/components/useThemeDetector';
+import { useThemeDetector } from '@/app/hooks/useThemeDetector';
 import React, { useEffect } from 'react'
 
 const FeedbackPage = () => {

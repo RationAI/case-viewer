@@ -1,6 +1,6 @@
 'use client'
 
-import { SlideRow } from "@/type-definitions";
+import { SlideRowT } from "@/type-definitions";
 import React from "react";
 import ImagePreview from "./FileRowParts/ImagePreview";
 import SlideVisualizations from "./FileRowParts/SlideVisualizations";
@@ -8,7 +8,7 @@ import SlideTags from "./FileRowParts/SlideTags";
 import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
 
 type Props = {
-  slideRow: SlideRow;
+  slideRow: SlideRowT;
 };
 
 const getSlideTags = (slide: Slide) => {
@@ -22,7 +22,7 @@ const getSlideTags = (slide: Slide) => {
   return tags;
 }
 
-const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
+const SlideRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
   const date = new Date(slide.created_at * 1000);
 
   return (
@@ -62,4 +62,4 @@ const FileRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
   );
 };
 
-export default FileRow;
+export default SlideRow;

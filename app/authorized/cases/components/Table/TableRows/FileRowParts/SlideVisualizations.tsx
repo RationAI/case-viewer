@@ -8,10 +8,20 @@ import { ValidJobsContext } from '@/app/authorized/cases/case/CaseContent';
 import BGVis from './VisButtons/BGVis';
 import ProcessingVis from './VisButtons/ProcessingVis';
 import AvailableVis from './VisButtons/AvailableVis';
+import JobErrorIcon from './VisButtons/JobErrorIcon';
 
 type Props = {
   slide: Slide;
   caseObj: CaseH;
+}
+
+export const markVisVisited = (event, href: string) => {
+  event.preventDefault();
+  if (history.replaceState) {
+    const current_url = window.location.href;
+    history.replaceState({},'',href);
+    history.replaceState({},'',current_url);
+  }
 }
 
 const handleOpenInXOpat = (data: string[], visualizations: Visualization[], background?: object, plugins?: object) => {
@@ -35,29 +45,38 @@ const handleOpenInXOpat = (data: string[], visualizations: Visualization[], back
 const SlideVisualizations = ({slide, caseObj}: Props) => {
   const caseJobs = useContext(ValidJobsContext);
 
+  const slideJobs = caseJobs.filter((job) => job.inputs.includes(slide.id));
+
   return (
-    <div className='flex flex-col gap-1'>
-      <div className='flex flex-row gap-1 w-full'>
-        {caseJobs.filter((job) => job.inputs.includes(slide.id)).map((job) => {
-          if(job.status === "completed") {
-            const href = `cache/${slide.id}/${job.id}`
-            return  <AvailableVis 
-                      key={job.id} 
-                      href={href} 
-                      jobName={job.name} 
-                      jobDescription={job.description} 
-                      onClick={() => handleOpenInXOpat([slide.id].concat(job.outputs),
-                         (job.visualization ? [job.visualization] : []), 
-                         job.background, 
-                         {empaia: {caseId: job.caseId, appId: job.appId}}
-                      )}
-                    />
-          } else if(job.status === "processing") {
-            return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>
-          }
-        })}
-        <BGVis tooltipText='Open only slide' onClick={() => handleOpenInXOpat([slide.id], [])}/>
-      </div>
+    <div className='flex flex-row gap-1 w-full h-full justify-center items-center relative'>
+      {slideJobs.map((job) => {
+        if(job.status === "completed") {
+          const href = `cache/${slide.id}/${job.id}`
+          return  <AvailableVis 
+                    key={job.id} 
+                    href={href} 
+                    jobName={job.name} 
+                    jobDescription={job.description} 
+                    onClick={() => handleOpenInXOpat([slide.id].concat(job.outputs),
+                        (job.visualization ? [job.visualization] : []), 
+                        job.background, 
+                        {empaia: {caseId: job.caseId, appId: job.appId}}
+                    )}
+                  />
+        } else if(job.status === "processing") {
+          return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>
+        }
+      })}
+      <AvailableVis 
+        href={"sdasdsadsadasdasdsadsdsadsadsadasdsadsadasdasdasdsa"} 
+        jobName={"Prostate job"} 
+        jobDescription={"this is a desc"} 
+        onClick={() => {}}
+      />
+      <BGVis tooltipText='Open only slide' href={`cache/${slide.id}/wsi`} onClick={() => handleOpenInXOpat([slide.id], [])}/>
+      {slideJobs.find((job) => job.status === "error") && 
+        <JobErrorIcon />
+      }
     </div>
   )
 }
