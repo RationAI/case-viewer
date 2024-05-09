@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import AnnotationPresetGrid from './components/Annotations/AnnotationPresetGrid'
+import AnnotationPresetGrid from './components/AnnotationPresetGrid'
 
 const AnnotationsPage = () => {
   return (

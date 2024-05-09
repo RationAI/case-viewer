@@ -2,9 +2,9 @@
 
 import { SlideRowT } from "@/type-definitions";
 import React from "react";
-import ImagePreview from "./FileRowParts/ImagePreview";
-import SlideVisualizations from "./FileRowParts/SlideVisualizations";
-import SlideTags from "./FileRowParts/SlideTags";
+import ImagePreview from "./SlideRowParts/ImagePreview";
+import SlideVisualizations from "./SlideRowParts/SlideVisualizations";
+import SlideTags from "./SlideRowParts/SlideTags";
 import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
 
 type Props = {
@@ -39,24 +39,9 @@ const SlideRow = ({ slideRow: {slide: slide, caseObj: caseObj } }: Props) => {
             <div className="flex w-[15.5rem] items-center justify-center z-10">
               <SlideVisualizations slide={slide} caseObj={caseObj}/>
             </div>
-            {/* <div className="w-16 z-10">
-              <FileRowActions slidePath={`${HIERARCHY_ROOT_PATH}${caseObj.pathInHierarchy}/${slide.id}`} />
-            </div> */}
             <SlideTags tags={getSlideTags(slide)} />
           </div>
         </div>
-        {/* {metadata && 
-          <div className="collapse-content px-2">
-            <div className="pt-2">
-              {Object.entries(slide.metadata).map(([key, value]) => (
-                <div key={key} className="flex gap-1">
-                  <p className="font-medium">{key + ":"}</p>
-                  <p>{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        } */}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import SegmentedPathLink from "../components/SegmentedPathLink/SegmentedPathLink
 import { getPathParts } from "@/app/utils";
 import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
 import Loading from "@/app/components/Loading/Loading";
+import { HIERARCHY_ROOT_PATH } from "@/app/utils/constants";
 
 const basePageLink = '/authorized/cases'
 
@@ -65,7 +66,7 @@ export default function CaseHierarchyLevel({ caseHierarchy }: Props) {
   return (
     <div className="flex flex-col gap-4 p-1">
       {getPathParts(relativePath, 3).length > 0 ?
-        <SegmentedPathLink homelink="/authorized/cases/path" segments={getPathParts(relativePath, 3).map((part) => ({label: part, linkSegment: part}))} /> :
+        <SegmentedPathLink homelink={HIERARCHY_ROOT_PATH} segments={getPathParts(relativePath, 3).map((part) => ({label: part, linkSegment: part}))} /> :
         <div className="font-sans font-semibold text-slate-500 text-xl pl-1 dark:text-base-dark">All cases</div>
       }
       {currentLevel ? 

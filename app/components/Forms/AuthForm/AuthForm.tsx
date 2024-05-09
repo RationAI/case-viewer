@@ -1,6 +1,7 @@
 'use client';
 
 import { checkSessionOnClient } from '@/app/utils/auth';
+import { HIERARCHY_ROOT_PATH } from '@/app/utils/constants';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 interface Props {
@@ -11,7 +12,7 @@ export default function AuthForm({ provider }: Props) {
   const { data: session } = useSession();
 
   const handleSignIn = async () => {
-    await signIn(provider, { callbackUrl: '/authorized/cases/path' })
+    await signIn(provider, { callbackUrl: HIERARCHY_ROOT_PATH })
   };
 
   const handleSignOut = async () => {

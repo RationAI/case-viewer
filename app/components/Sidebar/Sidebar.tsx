@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import CaseTree from "./CaseTree";
 import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
+import { HIERARCHY_ROOT_PATH } from "@/app/utils/constants";
 
 type Props = {
   caseHierarchy?: CaseHierarchy,
@@ -54,7 +55,7 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
             <div className="pl-2 text-xs">Unable to fetch</div>
           }
           {caseHierarchy && 
-            <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
+            <CaseTree root={true} rootLink={HIERARCHY_ROOT_PATH} hierarchy={caseHierarchy} />
           }
         </div>
         <ul className={`menu p-0 min-w-max${extended ? " hidden" : ""}`}>

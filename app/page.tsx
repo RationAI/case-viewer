@@ -1,11 +1,12 @@
 import AuthForm from "./components/Forms/AuthForm/AuthForm";
 import { redirect } from "next/navigation";
 import { checkSessionOnServer } from "./utils/auth";
+import { HIERARCHY_ROOT_PATH } from "./utils/constants";
 
 const WelcomePage = async () => {
   const hasAccess = await checkSessionOnServer();
   if (hasAccess) {
-    redirect("/authorized/cases/path");
+    redirect(HIERARCHY_ROOT_PATH);
   }
 
   return (

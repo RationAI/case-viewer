@@ -5,6 +5,7 @@ import { MenuItemT } from '@/type-definitions';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { checkSessionOnClient } from '@/app/utils/auth';
 import { redirect, usePathname } from 'next/navigation';
+import { HIERARCHY_ROOT_PATH } from '@/app/utils/constants';
 
 const UserBubble = () => {
   const { data: session } = useSession();
@@ -13,7 +14,7 @@ const UserBubble = () => {
   const authProvider = "custom"
 
   const handleSignIn = async () => {
-    await signIn(authProvider, { callbackUrl: '/authorized/cases/path' })
+    await signIn(authProvider, { callbackUrl: HIERARCHY_ROOT_PATH })
   };
 
   const handleSignOut = async () => {
