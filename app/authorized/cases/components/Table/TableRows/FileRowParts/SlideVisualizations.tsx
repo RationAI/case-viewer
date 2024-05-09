@@ -67,7 +67,7 @@ const SlideVisualizations = ({slide}: Props) => {
           return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>
         }
       })}
-      <BGVis tooltipText='Open only slide' href={`cache/${slide.id}/wsi`} onClick={() => handleOpenInXOpat([slide.id], [])}/>
+      <BGVis tooltipText='Open only slide' href={`${window.location.href}?cache=cache/${slide.id}/wsi`} onClick={() => handleOpenInXOpat([slide.id], [])}/>
       {slideJobs.find((job) => job.status === "error") && 
         <JobErrorIcon />
       }
