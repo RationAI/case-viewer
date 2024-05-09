@@ -91,10 +91,10 @@ export const authOptions: NextAuthOptions = {
 
       // Initial sign in
       if (account && user)  {
-        token = Object.assign({}, token, { accessToken: account.access_token });
+        token.accessToken = account.access_token;
         const now = Date.now();
-        token = Object.assign({}, token, { accessTokenExpires: ((account.expires_at! * 1000) - now) / 2 + now});
-        token = Object.assign({}, token, { refreshToken: account.refresh_token });
+        token.accessTokenExpires =  ((account.expires_at! * 1000) - now) / 2 + now;
+        token.refreshToken = account.refresh_token;
         console.log("Initial sign in")
         return token
       }
@@ -112,10 +112,10 @@ export const authOptions: NextAuthOptions = {
     },
     async session({session, token}) {
     if(session) {
-      session = Object.assign({}, session, {accessToken: token.accessToken})
-      session = Object.assign({}, session, {accessTokenExpires: token.accessTokenExpires})
-      session = Object.assign({}, session, {refreshToken: token.refreshToken})
-      session = Object.assign({}, session, {userId: token.sub})
+      session.accessToken = token.accessToken as string;
+      session.accessTokenExpires = token.accessTokenExpires as number;
+      session.refreshToken = token.refreshToken as string;
+      session.userId = token.sub;
       }
     return session
     }

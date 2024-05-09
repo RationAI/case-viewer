@@ -15,7 +15,7 @@ type Props = {
   caseObj: CaseH;
 }
 
-export const markVisVisited = (event, href: string) => {
+export const markVisited = (event, href: string) => {
   event.preventDefault();
   if (history.replaceState) {
     const current_url = window.location.href;
@@ -42,7 +42,7 @@ const handleOpenInXOpat = (data: string[], visualizations: Visualization[], back
   console.log("No visualization, cannot open xOpat")
 }
 
-const SlideVisualizations = ({slide, caseObj}: Props) => {
+const SlideVisualizations = ({slide}: Props) => {
   const caseJobs = useContext(ValidJobsContext);
 
   const slideJobs = caseJobs.filter((job) => job.inputs.includes(slide.id));
@@ -51,7 +51,7 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
     <div className='flex flex-row gap-1 w-full h-full justify-center items-center relative'>
       {slideJobs.map((job) => {
         if(job.status === "completed") {
-          const href = `cache/${slide.id}/${job.id}`
+          const href = `${window.location.href}?cache=cache/${slide.id}/${job.id}`
           return  <AvailableVis 
                     key={job.id} 
                     href={href} 
@@ -67,12 +67,6 @@ const SlideVisualizations = ({slide, caseObj}: Props) => {
           return <ProcessingVis key={job.id} jobName={job.name} jobDescription={job.description}/>
         }
       })}
-      <AvailableVis 
-        href={"sdasdsadsadasdasdsadsdsadsadsadasdsadsadasdasdasdsa"} 
-        jobName={"Prostate job"} 
-        jobDescription={"this is a desc"} 
-        onClick={() => {}}
-      />
       <BGVis tooltipText='Open only slide' href={`cache/${slide.id}/wsi`} onClick={() => handleOpenInXOpat([slide.id], [])}/>
       {slideJobs.find((job) => job.status === "error") && 
         <JobErrorIcon />

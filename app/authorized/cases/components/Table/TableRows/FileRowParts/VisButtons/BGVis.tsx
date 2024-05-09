@@ -1,5 +1,5 @@
 import React from 'react'
-import { markVisVisited } from '../SlideVisualizations'
+import { markVisited } from '../SlideVisualizations'
 
 type Props = {
   tooltipText?: string,
@@ -9,7 +9,7 @@ type Props = {
 
 const BGVis = ({tooltipText, href, onClick}: Props) => {
   return (
-    <a href={href} className="group relative flex justify-center" onClick={(e) => markVisVisited(e, href)}>
+    <a href={href} className="group relative flex justify-center" onClick={(e) => markVisited(e, href)}>
       <div className="group relative flex justify-center">
         <button
           type="button"

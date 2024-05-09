@@ -76,7 +76,6 @@ const getSlideRows = (caseObj: CaseH, slides: Slide[], jobs: JobState[]) => {
 
 const CaseContent = ({ caseObj, fetchActive=true }: Props) => {
   const rootApi = useContext(RootApiContext);
-
   const getCaseSlidesQuery= async () => {
     const slides = await getCaseSlides(rootApi!, caseObj.id)
     return slides
@@ -89,7 +88,7 @@ const CaseContent = ({ caseObj, fetchActive=true }: Props) => {
   })
 
   const getCaseJobs = async () => {
-    console.log(`Fetching job info: ${caseObj.id}`)
+    console.log(`Fetching job info: ${caseObj.local_id || caseObj.id}`)
     const examinations = (await rootApi!.examinations.query({
       cases: [caseObj.id],
     })).items;

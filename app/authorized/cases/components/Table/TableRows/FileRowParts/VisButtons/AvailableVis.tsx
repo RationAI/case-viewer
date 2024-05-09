@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from "next/image";
-import { markVisVisited } from '../SlideVisualizations';
+import { markVisited } from '../SlideVisualizations';
 
 type Props = {
   jobName?: string,
@@ -11,7 +11,7 @@ type Props = {
 
 const AvailableVis = ({jobName, jobDescription, href, onClick}: Props) => {
   return (
-    <a href={href} className="group relative flex justify-center" onClick={(e) => markVisVisited(e, href)}>
+    <a href={href} className="group relative flex justify-center" onClick={(e) => markVisited(e, href)}>
       <button
         type="button"
         onClick={onClick}

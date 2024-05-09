@@ -4,9 +4,11 @@ import Image from "next/image";
 import { MenuItemT } from '@/type-definitions';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { checkSessionOnClient } from '@/app/utils/auth';
+import { redirect, usePathname } from 'next/navigation';
 
 const UserBubble = () => {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
+  const relativePath = usePathname();
 
   const authProvider = "custom"
 
@@ -18,13 +20,11 @@ const UserBubble = () => {
     await signOut({ callbackUrl: '/' });
   };
 
-  const userMenu: MenuItemT[] = [
-    /* {
-      label: "Profile",
-      link: `/authorized/user`,
-    }, */
-  ];
+  const userMenu: MenuItemT[] = [];
   if (!checkSessionOnClient(session)) {
+    if (relativePath !== "/") {
+      redirect("/");
+    }
     return (
       <>
         <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in"}</button>
