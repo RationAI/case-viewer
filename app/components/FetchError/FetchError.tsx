@@ -1,13 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 type Props = {
-  message: string
-}
+  message: string;
+};
 
-const FetchError = ({message}: Props) => {
-  return (
-    <div>Fetch failed: {message}</div>
-  )
-}
+const FetchError = ({ message }: Props) => {
+  return <div>Fetch failed: {message}</div>;
+};
 
-export default FetchError
+export default FetchError;

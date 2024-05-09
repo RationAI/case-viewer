@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import {v4 as uuidv4} from 'uuid';
-import React, { useContext, useState } from 'react'
-import Image from "next/image";
-import AnnotationPreset from './AnnotationPreset'
+import { v4 as uuidv4 } from 'uuid';
+import React, { useContext, useState } from 'react';
+import Image from 'next/image';
+import AnnotationPreset from './AnnotationPreset';
 import APConfirmationPopUp from './AnnotationPresetParts/APConfirmationPopUp';
 import { RootApiContext } from '@/app/authorized/[[...pathParts]]/AuthorizedApp';
 import AnnotationButtons from './AnnotationButtons';
@@ -12,28 +12,48 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Loading from '@/app/components/Loading/Loading';
 import FetchError from '@/app/components/FetchError/FetchError';
 
-const defaultColors = ['#005fd8', '#5af700', '#fff116', '#ff0000', '#a600ff', '#ff00ff', '#ff9b00', '#00fff3', '#018c1c', '#926100']
+const defaultColors = [
+  '#005fd8',
+  '#5af700',
+  '#fff116',
+  '#ff0000',
+  '#a600ff',
+  '#ff00ff',
+  '#ff9b00',
+  '#00fff3',
+  '#018c1c',
+  '#926100',
+];
 
 const AnnotationPresetGrid = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const rootApi = useContext(RootApiContext);
   const [presets, setPresets] = useState<AnnotPreset[]>([]);
   const [lastModified, setLastModified] = useState(0);
   const [currentColorIdx, setCurrentColorIdx] = useState(presets.length);
-  const [deletePresetId, setDeletePresetId] = useState<string | undefined>(undefined);
+  const [deletePresetId, setDeletePresetId] = useState<string | undefined>(
+    undefined,
+  );
 
   const getAnnotPresets = async () => {
-    const presetsResult = await rootApi!.rationai.globalStorage.annotPresets.getAnnotPresets(true);
-    setPresets(presetsResult.presets)
-    setLastModified(presetsResult.lastModifiedAt)
-    return { presets: presetsResult.presets, lastModifiedAt: presetsResult.lastModifiedAt}
+    const presetsResult =
+      await rootApi!.rationai.globalStorage.annotPresets.getAnnotPresets(true);
+    setPresets(presetsResult.presets);
+    setLastModified(presetsResult.lastModifiedAt);
+    return {
+      presets: presetsResult.presets,
+      lastModifiedAt: presetsResult.lastModifiedAt,
+    };
   };
 
   const postAnnotPresets = async () => {
-    await rootApi!.rationai.globalStorage.annotPresets.updateAnnotPresets(presets, lastModified);
+    await rootApi!.rationai.globalStorage.annotPresets.updateAnnotPresets(
+      presets,
+      lastModified,
+    );
     // TODO handle results
-  }
+  };
 
   const { isFetching, isError, refetch } = useQuery({
     queryKey: [`annot_preset`],
@@ -41,44 +61,44 @@ const AnnotationPresetGrid = () => {
     refetchInterval: Infinity,
     refetchOnMount: true,
     refetchOnReconnect: false,
-  })
+  });
 
   const mutation = useMutation({
     mutationFn: postAnnotPresets,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['annot_preset'] })
+      queryClient.invalidateQueries({ queryKey: ['annot_preset'] });
     },
-  })
+  });
 
   const handleEditPreset = (id: string, editedPreset: AnnotPreset) => {
     const newPresets = [...presets];
     const editedIdx = newPresets.findIndex((preset) => preset.id === id);
     newPresets[editedIdx] = editedPreset;
     setPresets(newPresets);
-  }
+  };
 
   const handleNewPreset: () => void = () => {
     const id = uuidv4();
     const currentDate = Date.now();
-    setCurrentColorIdx(currentColorIdx + 1)
-    const color = defaultColors[currentColorIdx % defaultColors.length]
+    setCurrentColorIdx(currentColorIdx + 1);
+    const color = defaultColors[currentColorIdx % defaultColors.length];
     const newPreset: AnnotPreset = {
       id: id,
       color: color,
-      factoryID: "polygon",
-      presetID: "Ignore*",
+      factoryID: 'polygon',
+      presetID: 'Ignore*',
       meta: {
         category: {
-          name: "Category",
-          value: "Ignore*",
-        },  
+          name: 'Category',
+          value: 'Ignore*',
+        },
       },
       createdAt: currentDate,
-    }
+    };
     const newGroup = [...presets];
     newGroup.push(newPreset);
     setPresets(newGroup);
-  }
+  };
 
   const handleCopyPreset = (id: string) => {
     const currId = uuidv4();
@@ -90,71 +110,116 @@ const AnnotationPresetGrid = () => {
       createdAt: currentDate,
     };
     const newGroup = [...presets];
-    setPresets(newGroup.slice(0, oldPresetIdx + 1).concat([copiedPreset]).concat(newGroup.slice(oldPresetIdx + 1)))
-  }
+    setPresets(
+      newGroup
+        .slice(0, oldPresetIdx + 1)
+        .concat([copiedPreset])
+        .concat(newGroup.slice(oldPresetIdx + 1)),
+    );
+  };
 
   const handleDeletePreset = (id: string) => {
     const newGroup = presets.filter((preset) => preset.id != id);
     setPresets(newGroup);
-  }
+  };
 
   const handleDeletePopUpOpen = (presetId: string) => {
     setDeletePresetId(presetId);
-    (document.getElementById('presetDeletePopUp') as HTMLDialogElement).showModal()
-  }
+    (
+      document.getElementById('presetDeletePopUp') as HTMLDialogElement
+    ).showModal();
+  };
 
   const handleRevertClick = async () => {
-    (document.getElementById('revertPopUp') as HTMLDialogElement).showModal()
-  }
+    (document.getElementById('revertPopUp') as HTMLDialogElement).showModal();
+  };
 
   const handleRevert = async () => {
-    if(rootApi) {
+    if (rootApi) {
       refetch();
     }
-  }
+  };
 
   const handleSaveClick = async () => {
-    (document.getElementById('savePopUp') as HTMLDialogElement).showModal()
-  }
+    (document.getElementById('savePopUp') as HTMLDialogElement).showModal();
+  };
 
   const handleSave = async () => {
     // TODO handle different outcomes of save
-    if(rootApi) {
-      mutation.mutate()
+    if (rootApi) {
+      mutation.mutate();
     }
-  }
+  };
 
   return (
-    <div className='flex flex-col items-center gap-2 md:w-5/6 lg:w-9/12'>
-      <div className='w-full flex justify-between items-center gap-2'>
-        <div className='font-sans font-semibold text-slate-500 text-2xl pl-1 dark:text-base-dark'>Annotations presets</div>
-        <AnnotationButtons handleRevertClick={handleRevertClick} handleSaveClick={handleSaveClick}/>
-      </div>
-      {isFetching ? 
-        <Loading /> :
-        isError ? 
-        <FetchError message='Presets'/> :
-        <div className='grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))] w-full'>
-        {presets.map((annotPreset) => {
-          return (
-            <AnnotationPreset key={annotPreset.id} annotationPreset={annotPreset} removePresetHandler={handleDeletePopUpOpen} copyPresetHandler={handleCopyPreset} editPresetHandler={handleEditPreset} />
-          )
-        })}
-        <div>
-          <div className='flex border border-gray-400 rounded-lg p-2 border-dashed'>
-            <button onClick={() => handleNewPreset()} className="btn btn-sm flex justify-start default-button-bg-border w-full">
-              <Image className="dark:svg-filter-dark" src="/svg/plus.svg" alt="Remove" height={27} width={27} />
-              New preset
-            </button>
-          </div>
+    <div className="flex flex-col items-center gap-2 md:w-5/6 lg:w-9/12">
+      <div className="flex w-full items-center justify-between gap-2">
+        <div className="dark:text-base-dark pl-1 font-sans text-2xl font-semibold text-slate-500">
+          Annotations presets
         </div>
-        <APConfirmationPopUp message='Confirm preset deletion:' modalId='presetDeletePopUp' onConfirm={() => handleDeletePreset(deletePresetId!)} onCancel={() => {setDeletePresetId(undefined)}}/>
-        <APConfirmationPopUp message='This will revert to project presets, your local changes will be lost:' modalId='revertPopUp' onConfirm={handleRevert} onCancel={() => {}}/>
-        <APConfirmationPopUp message='This will save the changes globally:' modalId='savePopUp' onConfirm={handleSave} onCancel={() => {}}/>
+        <AnnotationButtons
+          handleRevertClick={handleRevertClick}
+          handleSaveClick={handleSaveClick}
+        />
       </div>
-      }
+      {isFetching ? (
+        <Loading />
+      ) : isError ? (
+        <FetchError message="Presets" />
+      ) : (
+        <div className="grid w-full gap-2 [grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))]">
+          {presets.map((annotPreset) => {
+            return (
+              <AnnotationPreset
+                key={annotPreset.id}
+                annotationPreset={annotPreset}
+                removePresetHandler={handleDeletePopUpOpen}
+                copyPresetHandler={handleCopyPreset}
+                editPresetHandler={handleEditPreset}
+              />
+            );
+          })}
+          <div>
+            <div className="flex rounded-lg border border-dashed border-gray-400 p-2">
+              <button
+                onClick={() => handleNewPreset()}
+                className="default-button-bg-border btn btn-sm flex w-full justify-start"
+              >
+                <Image
+                  className="dark:svg-filter-dark"
+                  src="/svg/plus.svg"
+                  alt="Remove"
+                  height={27}
+                  width={27}
+                />
+                New preset
+              </button>
+            </div>
+          </div>
+          <APConfirmationPopUp
+            message="Confirm preset deletion:"
+            modalId="presetDeletePopUp"
+            onConfirm={() => handleDeletePreset(deletePresetId!)}
+            onCancel={() => {
+              setDeletePresetId(undefined);
+            }}
+          />
+          <APConfirmationPopUp
+            message="This will revert to project presets, your local changes will be lost:"
+            modalId="revertPopUp"
+            onConfirm={handleRevert}
+            onCancel={() => {}}
+          />
+          <APConfirmationPopUp
+            message="This will save the changes globally:"
+            modalId="savePopUp"
+            onConfirm={handleSave}
+            onCancel={() => {}}
+          />
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default AnnotationPresetGrid
+export default AnnotationPresetGrid;

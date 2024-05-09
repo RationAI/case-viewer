@@ -1,8 +1,8 @@
-import { TableStructureT } from "@/type-definitions";
-import React from "react";
-import FolderRow from "./TableRows/FolderRow";
-import CollapseCaseRow from "./TableRows/CollapseCaseRow";
-import { getCaseNameFromLocalID } from "@/app/utils";
+import { TableStructureT } from '@/type-definitions';
+import React from 'react';
+import FolderRow from './TableRows/FolderRow';
+import CollapseCaseRow from './TableRows/CollapseCaseRow';
+import { getCaseNameFromLocalID } from '@/app/utils';
 
 type Props = {
   tableStructure: TableStructureT;
@@ -35,7 +35,15 @@ const Table = ({ tableStructure }: Props) => {
             <>
               <ul className="menu p-0">
                 {tableStructure.cases.map((c) => (
-                  <CollapseCaseRow key={c.id} caseRow={c} defaultOpen={tableStructure.cases ? tableStructure.cases.length <= 1 : false}/>
+                  <CollapseCaseRow
+                    key={c.id}
+                    caseRow={c}
+                    defaultOpen={
+                      tableStructure.cases
+                        ? tableStructure.cases.length <= 1
+                        : false
+                    }
+                  />
                 ))}
               </ul>
             </>

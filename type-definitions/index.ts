@@ -1,96 +1,96 @@
-import { HierarchyNameOverrides } from "@/EmpationAPI/src/v3/extensions/case-explorer";
-import { CaseH } from "@/EmpationAPI/src/v3/extensions/types/case-h";
-import { Case } from "@/EmpationAPI/src/v3/root/types/case";
-import { Slide } from "@/EmpationAPI/src/v3/root/types/slide";
-import { JWT } from "next-auth/jwt";
+import { HierarchyNameOverrides } from '@/EmpationAPI/src/v3/extensions/case-explorer';
+import { CaseH } from '@/EmpationAPI/src/v3/extensions/types/case-h';
+import { Case } from '@/EmpationAPI/src/v3/root/types/case';
+import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
+import { JWT } from 'next-auth/jwt';
 
 export type AppConfigT = {
-  project?: string,
-  local_id_separator?: string,
-  local_id_hint?: string,
-  hierarchy_spec?: string[],
-  hierarchy_key_overrides?: HierarchyNameOverrides,
-  slide_mask_separator?: string,
-  
-  search_keys?: string[],
+  project?: string;
+  local_id_separator?: string;
+  local_id_hint?: string;
+  hierarchy_spec?: string[];
+  hierarchy_key_overrides?: HierarchyNameOverrides;
+  slide_mask_separator?: string;
 
-  settings?: object,
-}
+  search_keys?: string[];
+
+  settings?: object;
+};
 
 export type MenuItemT = {
-  label: string,
-  link: string,
-  icon?: string, 
-  subItems?: MenuItemT[],
-  external?: boolean,
-  shallowLink?: boolean,
-}
+  label: string;
+  link: string;
+  icon?: string;
+  subItems?: MenuItemT[];
+  external?: boolean;
+  shallowLink?: boolean;
+};
 
 export type TableStructureT = {
-  parent?: string,
-  folders?: TableFolderRowT[],
+  parent?: string;
+  folders?: TableFolderRowT[];
   cases?: (Case | CaseH)[];
-  mergeCases?: boolean,
+  mergeCases?: boolean;
 };
 
 export type SlideRowT = {
-  slide: Slide,
-  caseObj: CaseH,
-  jobs: JobState[],
-}
+  slide: Slide;
+  caseObj: CaseH;
+  jobs: JobState[];
+};
 
 type TableFolderRowT = {
-  name: string,
-  link: string,
-}
+  name: string;
+  link: string;
+};
 
 export type Visualization = {
-  shaders: object,
-  name: string,
-  protocol: string,
-}
+  shaders: object;
+  name: string;
+  protocol: string;
+};
 
 export type VisualizationConfig = {
-  params?: object,
-  data: string[],
-  background?: object,
-  visualizations: Visualization[],
-  plugins?: object,
+  params?: object;
+  data: string[];
+  background?: object;
+  visualizations: Visualization[];
+  plugins?: object;
 };
 
 export type ImageT = {
-  name: string,
-  imageLink: string,
-}
+  name: string;
+  imageLink: string;
+};
 
 export type AnnotationPresetT = {
-  id: string,
-  color: string,
-  factoryID: string,
-  presetID: string,
+  id: string;
+  color: string;
+  factoryID: string;
+  presetID: string;
   meta: {
     [key: string]: {
-      name: string,
-      value: string,
-    },
-  },
-}
+      name: string;
+      value: string;
+    };
+  };
+};
 
 export type FormConfigT = {
   title?: string;
   description?: string;
   rows: FormRowT[];
-}
+};
 
 type FormRowT = {
   fields: FormFieldT[];
-}
+};
 
 export type FormFieldT = FormSelectFieldT | FormTextFieldT | FormNumberFieldT;
 
 export type FormSelectFieldT = FormFieldBaseT & {
   options: string[];
-}
+};
 
 export type FormTextFieldT = FormFieldBaseT;
 
@@ -106,20 +106,20 @@ type FormFieldBaseT = {
   label: string;
   defaultValue?: string;
   description?: string;
-}
+};
 
 export type JobState = {
-  caseId: string,
-  appId: string,
-  id: string,
-  status: string,
-  inputs: string[],
-  outputs: string[],
-  visualization?: Visualization,
-  background?: object,
-  name?: string,
-  description?: string,
-}
+  caseId: string;
+  appId: string;
+  id: string;
+  status: string;
+  inputs: string[];
+  outputs: string[];
+  visualization?: Visualization;
+  background?: object;
+  name?: string;
+  description?: string;
+};
 
 export interface OAuthToken extends JWT {
   accessToken?: string;

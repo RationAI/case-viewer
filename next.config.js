@@ -2,6 +2,6 @@
 const nextConfig = {
   output: 'standalone',
   transpilePackages: ['lib-empationapi', 'EmpationAPI'],
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -23,15 +23,15 @@ body {
 
 @layer components {
   .form-input-custom {
-    @apply block w-full p-2 font-sans font-semibold text-gray-800 dark:text-base-dark border border-gray-300 dark:border-gray-500 rounded-lg bg-gray-50 dark:bg-gray-700  sm:text-sm focus:ring-blue-500 focus:border-blue-500;
+    @apply dark:text-base-dark block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 font-sans font-semibold text-gray-800 focus:border-blue-500 focus:ring-blue-500  sm:text-sm dark:border-gray-500 dark:bg-gray-700;
   }
 
   .form-label-custom {
-    @apply block text-sm font-medium text-gray-800 dark:text-base-dark;
+    @apply dark:text-base-dark block text-sm font-medium text-gray-800;
   }
 
   .default-button-bg-border {
-    @apply border-gray-300 hover:border-gray-300 bg-gray-50 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:hover:border-gray-600
+    @apply border-gray-300 bg-gray-50 hover:border-gray-300 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-600;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
@@ -41,8 +41,8 @@ body {
 
   /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 
   .text-base-dark {
@@ -54,18 +54,21 @@ body {
   }
 
   .bg-dark {
-    background-color: #1D232A
+    background-color: #1d232a;
   }
 
   .svg-filter-dark {
-    filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(684%) hue-rotate(180deg) brightness(86%) contrast(85%);
+    filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(684%)
+      hue-rotate(180deg) brightness(86%) contrast(85%);
   }
 
   .svg-filter-red {
-    filter: brightness(0) saturate(100%) invert(5%) sepia(87%) saturate(7270%) hue-rotate(29deg) brightness(137%) contrast(133%);
+    filter: brightness(0) saturate(100%) invert(5%) sepia(87%) saturate(7270%)
+      hue-rotate(29deg) brightness(137%) contrast(133%);
   }
 
   .svg-soft-filter-dark {
-    filter: invert(81%) sepia(5%) saturate(684%) hue-rotate(180deg) brightness(86%) contrast(85%);
+    filter: invert(81%) sepia(5%) saturate(684%) hue-rotate(180deg)
+      brightness(86%) contrast(85%);
   }
 }

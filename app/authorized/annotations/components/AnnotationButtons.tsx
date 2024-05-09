@@ -1,19 +1,29 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
 type Props = {
   handleRevertClick: () => void;
   handleSaveClick: () => void;
-}
+};
 
-const AnnotationButtons = ({handleRevertClick, handleSaveClick}: Props) => {
+const AnnotationButtons = ({ handleRevertClick, handleSaveClick }: Props) => {
   return (
-    <div className='flex flex-row flex-wrap gap-2 justify-end'>
-      <button onClick={handleRevertClick} className="btn btn-sm btn-outline font-sans">Revert to global presets</button>
-      <button onClick={handleSaveClick} className="btn btn-sm btn-outline btn-error font-sans">!! Save globally !!</button>
+    <div className="flex flex-row flex-wrap justify-end gap-2">
+      <button
+        onClick={handleRevertClick}
+        className="btn btn-outline btn-sm font-sans"
+      >
+        Revert to global presets
+      </button>
+      <button
+        onClick={handleSaveClick}
+        className="btn btn-error btn-outline btn-sm font-sans"
+      >
+        !! Save globally !!
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default AnnotationButtons
+export default AnnotationButtons;

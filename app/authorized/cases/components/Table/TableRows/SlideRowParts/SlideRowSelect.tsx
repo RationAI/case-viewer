@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
   options: string[];
-}
+};
 
 const SlideRowSelect = ({ options }: Props) => {
   return (
-    <select defaultValue={options[0]} className="select select-bordered select-xs w-full max-w-xs" id="visName" >
+    <select
+      defaultValue={options[0]}
+      className="select select-bordered select-xs w-full max-w-xs"
+      id="visName"
+    >
       {options.map((option) => {
-        return (
-        <option key={option}>
-          {option}
-        </option>
-        )
+        return <option key={option}>{option}</option>;
       })}
     </select>
   );

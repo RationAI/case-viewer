@@ -1,5 +1,5 @@
-import { FormTextFieldT } from "@/type-definitions";
-import React from "react";
+import { FormTextFieldT } from '@/type-definitions';
+import React from 'react';
 
 type Props = {
   field: FormTextFieldT;

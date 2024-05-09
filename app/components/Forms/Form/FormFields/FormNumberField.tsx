@@ -1,5 +1,5 @@
-import { FormNumberFieldT } from "@/type-definitions";
-import React from "react";
+import { FormNumberFieldT } from '@/type-definitions';
+import React from 'react';
 
 type Props = {
   field: FormNumberFieldT;
@@ -18,7 +18,8 @@ const FormNumberField = ({ field }: Props) => {
         min={field.minValue}
         max={field.maxValue}
         step={field.step}
-        defaultValue={field.defaultValue} />
+        defaultValue={field.defaultValue}
+      />
     </div>
   );
 };
