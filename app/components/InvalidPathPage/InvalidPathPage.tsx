@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const InvalidPathPage = () => {
-  return (
-    <div>Page not found! Invalid path</div>
-  )
-}
+  return <div>Page not found! Invalid path</div>;
+};
 
-export default InvalidPathPage
+export default InvalidPathPage;

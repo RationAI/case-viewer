@@ -1,5 +1,5 @@
-import React from 'react'
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 
 type Props = {
   modalId: string;
@@ -9,12 +9,17 @@ type Props = {
 const ModalImagePreview = ({ modalId, imageLink }: Props) => {
   return (
     <dialog id={modalId} className="modal">
-      <Image className="object-contain block m-auto !h-min max-h-contain max-w-fit" src={imageLink} alt="Image preview" fill/>
+      <Image
+        className="max-h-contain m-auto block !h-min max-w-fit object-contain"
+        src={imageLink}
+        alt="Image preview"
+        fill
+      />
       <form method="dialog" className="modal-backdrop">
         <button>close</button>
       </form>
     </dialog>
-  )
-}
+  );
+};
 
-export default ModalImagePreview
+export default ModalImagePreview;

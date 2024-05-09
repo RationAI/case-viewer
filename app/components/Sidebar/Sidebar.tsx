@@ -1,23 +1,24 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import CaseTree from "./CaseTree";
-import { CaseHierarchy } from "@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import CaseTree from './CaseTree';
+import { CaseHierarchy } from '@/EmpationAPI/src/v3/extensions/types/case-hierarchy-result';
+import { HIERARCHY_ROOT_PATH } from '@/app/utils/constants';
 
 type Props = {
-  caseHierarchy?: CaseHierarchy,
-  isPending: boolean,
-  isError: boolean,
-}
+  caseHierarchy?: CaseHierarchy;
+  isPending: boolean;
+  isError: boolean;
+};
 
-const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
+const Sidebar = ({ caseHierarchy, isPending, isError }: Props) => {
   const [extended, setExtended] = useState(true);
 
   const sidebarIconMenu = [
     {
-      label: "Cases",
+      label: 'Cases',
       onClick: () => setExtended(true),
-      icon: "/svg/projects.svg",
+      icon: '/svg/projects.svg',
       subItems: [],
     },
   ];
@@ -25,17 +26,19 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
   return (
     <aside
       className={
-        "flex flex-col items-center bg-base-100 border-r border-neutral dark:border-color-dark shadow max-h-full" +
-        (extended ? " min-w-[13rem] max-w-[13rem]" : "")
+        'dark:border-color-dark flex max-h-full flex-col items-center border-r border-neutral bg-base-100 shadow' +
+        (extended ? ' min-w-[13rem] max-w-[13rem]' : '')
       }
     >
-      <div className="navbar-center pt-1 p-[2px] w-full flex-1 max-h-full overflow-y-auto">
-        <div className={`${extended ? "" : "hidden"}`}>
-          <div className="flex flex-row justify-between items-center">
-            <div className="px-2 font-sans font-semibold text-gray-800 dark:text-base-dark">{"Cases"}</div>
+      <div className="navbar-center max-h-full w-full flex-1 overflow-y-auto p-[2px] pt-1">
+        <div className={`${extended ? '' : 'hidden'}`}>
+          <div className="flex flex-row items-center justify-between">
+            <div className="dark:text-base-dark px-2 font-sans font-semibold text-gray-800">
+              {'Cases'}
+            </div>
             <label
               tabIndex={0}
-              className="btn btn-sm btn-ghost"
+              className="btn btn-ghost btn-sm"
               onClick={() => setExtended(!extended)}
             >
               <Image
@@ -47,21 +50,21 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
               />
             </label>
           </div>
-          {isPending && 
-            <div className="pl-2 text-xs">Loading...</div>
-          }
-          {isError && 
-            <div className="pl-2 text-xs">Unable to fetch</div>
-          }
-          {caseHierarchy && 
-            <CaseTree root={true} rootLink={"/authorized/cases/path"} hierarchy={caseHierarchy} />
-          }
+          {isPending && <div className="pl-2 text-xs">Loading...</div>}
+          {isError && <div className="pl-2 text-xs">Unable to fetch</div>}
+          {caseHierarchy && (
+            <CaseTree
+              root={true}
+              rootLink={HIERARCHY_ROOT_PATH}
+              hierarchy={caseHierarchy}
+            />
+          )}
         </div>
-        <ul className={`menu p-0 min-w-max${extended ? " hidden" : ""}`}>
+        <ul className={`menu p-0 min-w-max${extended ? ' hidden' : ''}`}>
           {sidebarIconMenu.map((menuItem) => (
             <li key={menuItem.label}>
               <div onClick={menuItem.onClick}>
-                {menuItem.icon &&
+                {menuItem.icon && (
                   <div className="flex flex-col items-center">
                     <Image
                       className="dark:svg-filter-dark"
@@ -70,9 +73,11 @@ const Sidebar = ({caseHierarchy, isPending, isError}: Props) => {
                       height={30}
                       width={30}
                     />
-                    <div className="font-sans text-xs font-semibold text-slate-700 dark:text-base-dark">{menuItem.label}</div>
+                    <div className="dark:text-base-dark font-sans text-xs font-semibold text-slate-700">
+                      {menuItem.label}
+                    </div>
                   </div>
-                }
+                )}
               </div>
             </li>
           ))}

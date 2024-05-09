@@ -1,6 +1,7 @@
 'use client';
 
 import { checkSessionOnClient } from '@/app/utils/auth';
+import { HIERARCHY_ROOT_PATH } from '@/app/utils/constants';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 interface Props {
@@ -11,7 +12,7 @@ export default function AuthForm({ provider }: Props) {
   const { data: session } = useSession();
 
   const handleSignIn = async () => {
-    await signIn(provider, { callbackUrl: '/authorized/cases/path' })
+    await signIn(provider, { callbackUrl: HIERARCHY_ROOT_PATH });
   };
 
   const handleSignOut = async () => {
@@ -22,11 +23,24 @@ export default function AuthForm({ provider }: Props) {
     <div>
       {!checkSessionOnClient(session) && (
         <>
-          <button className='btn btn-sm btn-outline font-sans' onClick={handleSignIn}>{"Sign in with " + (process.env.NEXT_PUBLIC_AUTH_PROVIDER_NAME || provider)}</button>
+          <button
+            className="btn btn-outline btn-sm font-sans"
+            onClick={handleSignIn}
+          >
+            {'Sign in with ' +
+              (process.env.NEXT_PUBLIC_AUTH_PROVIDER_NAME || provider)}
+          </button>
         </>
       )}
 
-      {checkSessionOnClient(session) && <button className='btn btn-sm btn-outline font-sans' onClick={handleSignOut}>Sign out</button>}
+      {checkSessionOnClient(session) && (
+        <button
+          className="btn btn-outline btn-sm font-sans"
+          onClick={handleSignOut}
+        >
+          Sign out
+        </button>
+      )}
     </div>
   );
 }

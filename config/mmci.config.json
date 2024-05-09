@@ -4,11 +4,24 @@
   "local_id_hint": "Separator splits id into 2 groups, named id_part_<index>, use them in specification of hierarchy, you can also use year, month, day",
   "hierarchy_spec": ["year", "id_part_1", "id_part_2"],
 
-  "hierarchy_key_overrides": {"id_part_1": {"": "Public"},"id_part_2": {"": "Public"}},
+  "hierarchy_key_overrides": {
+    "id_part_1": { "": "Public" },
+    "id_part_2": { "": "Public" }
+  },
 
   "slide_mask_separator": "\\w{4}.\\w{4}.(\\w)..*",
 
-  "search_keys": ["year", "month", "day", "description", "identifier", "tissues", "stains", "id_part_1", "id_part_2"],
+  "search_keys": [
+    "year",
+    "month",
+    "day",
+    "description",
+    "identifier",
+    "tissues",
+    "stains",
+    "id_part_1",
+    "id_part_2"
+  ],
   "settings": {
     "allowAnnotationPresets": false
   }

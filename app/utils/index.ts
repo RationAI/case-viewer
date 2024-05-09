@@ -1,3 +1,3 @@
-export * from './config'
-export * from './data'
-export * from './utilities'
+export * from './config';
+export * from './data';
+export * from './utilities';
