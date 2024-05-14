@@ -67,25 +67,6 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
         };
       },
-      /* token: {
-        url: process.env.NEXT_AUTH_TOKEN_ENDPOINT,
-  
-        async request({ client, params, checks, provider }) {
-          console.log(client);
-          console.log(params);
-          console.log(checks);
-          console.log(provider);
-          const response = await client.callback(provider.callbackUrl, params, checks, {
-            exchangeBody: {
-              client_id: process.env.NEXT_AUTH_CLIENT_ID,
-            },
-          })
-          console.log(response);
-          return {
-            tokens: response,
-          }
-        },
-      }, */
       issuer: process.env.NEXT_AUTH_ISSUER,
       clientId: process.env.NEXT_AUTH_CLIENT_ID || '',
       clientSecret: process.env.NEXT_AUTH_CLIENT_SECRET || '',
@@ -112,8 +93,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Access token has expired, try to update it
-      const newTokens = await refreshAccessToken(token as OAuthToken);
-      return newTokens;
+      return await refreshAccessToken(token as OAuthToken);
     },
     async session({ session, token }) {
       if (session) {
@@ -121,6 +101,7 @@ export const authOptions: NextAuthOptions = {
         session.accessTokenExpires = token.accessTokenExpires as number;
         session.refreshToken = token.refreshToken as string;
         session.userId = token.sub;
+        session.error = token.error ? (token.error as string) : undefined;
       }
       return session;
     },
