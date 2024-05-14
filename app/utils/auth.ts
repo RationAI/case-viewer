@@ -10,9 +10,12 @@ export const checkSessionOnServer = async () => {
 
   const session = await getServerSession(authOptions);
 
-  return session && session.user;
+  return session && session.user && session.error !== 'RefreshAccessTokenError';
 };
 
 export const checkSessionOnClient = (session: Session | null) => {
-  return noAuthActive || session !== null;
+  return (
+    (noAuthActive || session !== null) &&
+    session?.error !== 'RefreshAccessTokenError'
+  );
 };

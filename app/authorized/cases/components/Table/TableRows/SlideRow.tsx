@@ -6,6 +6,7 @@ import ImagePreview from './SlideRowParts/ImagePreview';
 import SlideVisualizations from './SlideRowParts/SlideVisualizations';
 import SlideTags from './SlideRowParts/SlideTags';
 import { Slide } from '@/EmpationAPI/src/v3/root/types/slide';
+import { getCaseNameFromLocalID } from '@/app/utils';
 
 type Props = {
   slideRow: SlideRowT;
@@ -36,7 +37,7 @@ const SlideRow = ({ slideRow: { slide: slide, caseObj: caseObj } }: Props) => {
           <div className="flex flex-1 flex-row gap-4">
             <div className="flex min-w-[15rem] flex-1 flex-col justify-center px-2">
               <p className="dark:text-base-dark font-bold text-gray-800">
-                {slide.local_id ?? slide.id}
+                {getCaseNameFromLocalID(slide.local_id) ?? slide.id}
               </p>
               <p className="">{date.toLocaleString('cs')}</p>
             </div>

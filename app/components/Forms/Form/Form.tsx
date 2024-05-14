@@ -17,6 +17,7 @@ type Props = {
 };
 
 const Form = ({ formID, config, onSubmit }: Props) => {
+  console.log(config);
   return (
     <div className="flex flex-col gap-2">
       {config.title && (
