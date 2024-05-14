@@ -93,11 +93,14 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
     },
   };
 
+  const allowedSearchKeys = getSearchKeys();
+  console.log(allowedSearchKeys);
+
   const searchForm: FormConfigT = {
     title: 'Search...',
     rows: searchRows.map((row) => ({
       fields: row
-        .filter((field) => getSearchKeys().includes(field))
+        .filter((field) => allowedSearchKeys.includes(field))
         .map((field) => {
           if (field.slice(0, 8) === 'id_part_') {
             return {
