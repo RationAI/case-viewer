@@ -51,6 +51,7 @@ export const getSlideMaskSeparator = () => {
 
 export const getSearchKeys = () => {
   const config = getConfig();
+  console.log(config);
   return config.search_keys || [];
 };
 
