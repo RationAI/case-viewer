@@ -16,6 +16,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN rm -r ./EmpationAPI/tests
 
 RUN export VERSION=$(npm run version)
 
@@ -33,6 +34,50 @@ WORKDIR /app
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
+
+# use NEXT_PUBLIC_ prefix for variables that should be visible in browser
+
+# use NEXT_PUBLIC_ prefix for variables that should be visible in browser
+
+# AUTH provider
+ENV NEXT_PUBLIC_AUTH_PROVIDER_NAME="keycloak"
+ENV NEXT_AUTH_OIDC_WELL_KNOWN="https://auth-xopat.dyn.cloud.e-infra.cz/auth/realms/EMPAIA//.well-known/openid-configuration"
+ENV NEXT_AUTH_AUTHORIZATION_ENDPOINT=""
+ENV NEXT_AUTH_TOKEN_ENDPOINT="https://auth-xopat.dyn.cloud.e-infra.cz/auth/realms/EMPAIA/protocol/openid-connect/token"
+ENV NEXT_AUTH_USER_ENDPOINT=""
+ENV NEXT_AUTH_OIDC_SCOPE="openid offline_access"
+ENV NEXT_AUTH_ISSUER="https://auth-xopat.dyn.cloud.e-infra.cz/auth/realms/EMPAIA"
+ENV NEXT_AUTH_CLIENT_ID="WBC_CLIENT"
+ENV NEXT_AUTH_CLIENT_SECRET="cEQBj_ZES4XQ9MPZq_pi3pbhbiFeKcIGLZOJxEoY5QLG32BY"
+
+ENV NEXTAUTH_URL="http://localhost:3000"
+ENV NEXT_AUTH_SESSION_TOKEN_SECRET="iYt6kNs4eeGJL7zWcVJ/7lvsqRe8jNiXCjtuWzCTE6U=" 
+
+ENV NEXT_PUBLIC_ORIGIN="http://localhost:3000"
+
+ENV NEXT_RUNTIME="nodejs"
+
+# Used for href in slide rows to store visited state
+ENV NEXT_PUBLIC_CACHE_KEY="b82d5953-2983-4ed6-80fe-2200889b90b8"
+
+# WBS 
+ENV NEXT_PUBLIC_EMPAIA_WB_URL="https://workbench-xopat.dyn.cloud.e-infra.cz/"
+
+#UPLOADER
+ENV NEXT_PUBLIC_UPLOADER_LINK="https://rationai.cloud.trusted.e-infra.cz"
+
+# APP CONFIG
+ENV NEXT_PUBLIC_APP_CONFIG='{"project":"","local_id_separator":"(\\w{0,5})\\.(\\w{0,5})\\.\\w\\..*","local_id_hint":"Separator splits id into 2 groups, named id_part_<index>, use them in specification of hierarchy, you can also use year, month, day","hierarchy_spec":["id_part_1","id_part_2"],"hierarchy_key_overrides": {"id_part_1": {"": "Public"},"id_part_2": {"": "Public"}},"slide_mask_separator":"\\w{0,5}\\.\\w{0,5}.(\\w)\\..*","search_keys":["year","month","day","description","identifier","tissues","stains","id_part_1","id_part_2"], "settings":{"allowAnnotationPresets":true}}'
+# \\w{0,5}\\.\\w{0,5}\\.\\w\\.\\w*-?[0-9]{4}_([0-9]*)([0-9]{2}).*
+
+# XOPAT
+ENV NEXT_PUBLIC_XOPAT_URL="https://app-xopat.dyn.cloud.e-infra.cz/"
+ENV NEXT_PUBLIC_XOPAT_OPEN_METHOD="GET"
+
+# Unauthorized mode
+ENV NEXT_PUBLIC_NO_AUTH=false
+ENV NEXT_PUBLIC_NO_AUTH_USER_ID="anonymous"
+
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

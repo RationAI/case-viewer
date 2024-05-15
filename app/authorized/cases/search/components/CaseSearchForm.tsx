@@ -94,7 +94,6 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
   };
 
   const allowedSearchKeys = getSearchKeys();
-  console.log(allowedSearchKeys);
 
   const searchForm: FormConfigT = {
     title: 'Search...',
