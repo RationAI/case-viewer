@@ -4,6 +4,12 @@ Run dev mode
 
 ENV: .env.local
 
+Check if EmpationAPI submodule is present, if not, run:
+```bash
+git submodule init
+git submodule update
+```
+
 ```bash
 npm run dev
 ```
@@ -15,6 +21,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Run locally in docker
 
 ENV: Fill out in Dockerfile on specified place (marked by FILL OUT ENV VARIABLES HERE)
+
+Check if EmpationAPI submodule is present, if not, run:
+```bash
+git submodule init
+git submodule update
+```
 
 Build image
 ```bash
