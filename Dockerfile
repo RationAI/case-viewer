@@ -26,8 +26,6 @@ RUN export VERSION=$(npm run version)
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# FILL OUT ENV VARIABLES HERE
-
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -37,6 +35,8 @@ WORKDIR /app
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
+
+#### FILL OUT ENV VARIABLES HERE ###
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
