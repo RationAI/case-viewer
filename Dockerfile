@@ -17,6 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN rm -r ./EmpationAPI/tests
+RUN npx prettier . --write
 
 RUN export VERSION=$(npm run version)
 
@@ -24,6 +25,8 @@ RUN export VERSION=$(npm run version)
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
+
+# FILL OUT ENV VARIABLES HERE
 
 RUN npm run build
 
@@ -34,8 +37,6 @@ WORKDIR /app
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
-
-# FILL OUT ENV VARIABLES HERE
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
