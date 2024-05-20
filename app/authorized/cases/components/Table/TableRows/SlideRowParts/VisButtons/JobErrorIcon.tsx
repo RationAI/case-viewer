@@ -11,9 +11,11 @@ const JobErrorIcon = () => {
         height={18}
         width={18}
       />
-      <div className="dark:bg-dark absolute bottom-8 flex w-max scale-0 flex-col items-center rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
+      <div className="dark:bg-dark absolute bottom-8 flex w-max max-w-60 scale-0 flex-col items-center rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
         <span className="text-xs">Slide has jobs that ended with</span>
-        <span className="text-xs font-semibold text-red-700">error</span>
+        <span className="text-center text-xs font-semibold text-red-700">
+          error
+        </span>
       </div>
     </div>
   );

@@ -23,8 +23,8 @@ const BGVis = ({ tooltipText, href, onClick }: Props) => {
           WSI
         </button>
         {tooltipText && (
-          <div className="dark:bg-dark absolute bottom-11 w-max scale-0 rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
-            <span className="text-xs">{tooltipText}</span>
+          <div className="dark:bg-dark absolute bottom-11 w-max max-w-60 scale-0 rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
+            <span className="text-center text-xs">{tooltipText}</span>
           </div>
         )}
       </div>

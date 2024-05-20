@@ -37,11 +37,13 @@ const AvailableVis = ({ jobName, jobDescription, href, onClick }: Props) => {
           </div>
         </div>
       </button>
-      <div className="dark:bg-dark absolute bottom-11 flex w-max scale-0 flex-col items-center rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
+      <div className="dark:bg-dark absolute bottom-11 flex w-max max-w-60 scale-0 flex-col items-center rounded border border-gray-500 bg-white p-[2px]  transition-all group-hover:scale-100">
         <span className="text-xs">{jobName || 'Job'}</span>
         <span className="text-xs font-semibold text-green-500">completed</span>
         {jobDescription && (
-          <span className="text-xs text-slate-500">{jobDescription}</span>
+          <span className="text-center text-xs text-slate-500">
+            {jobDescription}
+          </span>
         )}
       </div>
     </a>
