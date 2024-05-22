@@ -32,7 +32,7 @@ const SlideRow = ({ slideRow: { slide: slide, caseObj: caseObj } }: Props) => {
         {' '}
         {/* collapse-arrow */}
         <input type="checkbox" />
-        <div className="collapse-title flex flex-row gap-4 py-0 pl-0 pr-20">
+        <div className="collapse-title flex flex-row gap-4 py-0 pl-0 pr-20 xl:pr-40">
           <ImagePreview modalId={'modalId' + slide.id} slideId={slide.id} />
           <div className="flex flex-1 flex-row gap-4">
             <div className="flex min-w-[15rem] flex-1 flex-col justify-center px-2">
@@ -41,7 +41,7 @@ const SlideRow = ({ slideRow: { slide: slide, caseObj: caseObj } }: Props) => {
               </p>
               <p className="">{date.toLocaleString('cs')}</p>
             </div>
-            <div className="z-10 flex w-[15.5rem] items-center justify-center">
+            <div className="z-10 flex items-center justify-center">
               <SlideVisualizations slide={slide} caseObj={caseObj} />
             </div>
             <SlideTags tags={getSlideTags(slide)} />
