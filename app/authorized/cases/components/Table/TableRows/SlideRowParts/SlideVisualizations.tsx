@@ -60,41 +60,45 @@ const SlideVisualizations = ({ slide }: Props) => {
 
   return (
     <div className="relative flex h-full w-full flex-row items-center justify-center gap-1">
-      {slideJobs.map((job) => {
-        if (job.status === 'completed') {
-          const href = `${window.location.href}?cache=cache/${slide.id}/${job.id}`;
-          return (
-            <AvailableVis
-              key={job.id}
-              href={href}
-              jobName={job.name}
-              jobDescription={job.description}
-              onClick={() =>
-                handleOpenInXOpat(
-                  [slide.id].concat(job.outputs),
-                  job.visualization ? [job.visualization] : [],
-                  job.background,
-                  { empaia: { caseId: job.caseId, appId: job.appId } },
-                )
-              }
-            />
-          );
-        } else if (job.status === 'processing') {
-          return (
-            <ProcessingVis
-              key={job.id}
-              jobName={job.name}
-              jobDescription={job.description}
-            />
-          );
-        }
-      })}
-      <BGVis
-        tooltipText="Open only slide"
-        href={`${window.location.href}?cache=cache/${slide.id}/wsi`}
-        onClick={() => handleOpenInXOpat([slide.id], [])}
-      />
-      {slideJobs.find((job) => job.status === 'error') && <JobErrorIcon />}
+      <div className="flex flex-1 flex-row justify-end gap-1">
+        {slideJobs.map((job) => {
+          if (job.status === 'completed') {
+            const href = `${window.location.href}?cache=cache/${slide.id}/${job.id}`;
+            return (
+              <AvailableVis
+                key={job.id}
+                href={href}
+                jobName={job.name}
+                jobDescription={job.description}
+                onClick={() =>
+                  handleOpenInXOpat(
+                    [slide.id].concat(job.outputs),
+                    job.visualization ? [job.visualization] : [],
+                    job.background,
+                    { empaia: { caseId: job.caseId, appId: job.appId } },
+                  )
+                }
+              />
+            );
+          } else if (job.status === 'processing') {
+            return (
+              <ProcessingVis
+                key={job.id}
+                jobName={job.name}
+                jobDescription={job.description}
+              />
+            );
+          }
+        })}
+        <BGVis
+          tooltipText="Open only slide"
+          href={`${window.location.href}?cache=cache/${slide.id}/wsi`}
+          onClick={() => handleOpenInXOpat([slide.id], [])}
+        />
+      </div>
+      <div className="w-5">
+        {slideJobs.find((job) => job.status === 'error') && <JobErrorIcon />}
+      </div>
     </div>
   );
 };
