@@ -12,6 +12,8 @@ import { Job } from '@/EmpationAPI/src/v3/scope/types/job';
 import { WorkbenchServiceApiV3CustomModelsExaminationsExamination } from '@/EmpationAPI/src/v3/root/types/workbench-service-api-v-3-custom-models-examinations-examination';
 import Loading from '@/app/components/Loading/Loading';
 import FetchError from '@/app/components/FetchError/FetchError';
+import { Scope } from '@/EmpationAPI/src/v3';
+import { StringPrimitive } from '@/EmpationAPI/src/v3/scope/types/string-primitive';
 
 const PROCESSING_STATES = ['ASSEMBLY', 'RUNNING', 'SCHEDULED'];
 const COMPLETED_STATES = ['COMPLETED'];
@@ -23,6 +25,23 @@ type Props = {
 };
 
 export const ValidJobsContext = createContext<JobState[]>([]);
+
+const getJobOutputs = async (job: Job, scope: Scope) => {
+  const jobOutputs = await Promise.all(
+    Object.entries(job.outputs).map(async ([outputKey, primitiveID]) => {
+      try {
+        const primitiveWithOutputID = (await scope.rawQuery(
+          `/primitives/${primitiveID}`,
+        )) as StringPrimitive;
+        return [outputKey, primitiveWithOutputID.value] as [string, string];
+      } catch {
+        return [outputKey, 'processing'] as [string, string];
+      }
+    }),
+  );
+  job.outputs = Object.fromEntries(jobOutputs);
+  return job;
+};
 
 const getJobStatesFromJobs = (
   jobs: Job[],
@@ -53,7 +72,6 @@ const getJobStatesFromJobs = (
       status = 'completed';
       visualization = {
         name: `${appConfig['name'] || 'Job'} output`,
-        protocol: appConfig['visProtocol'],
         shaders: Object.fromEntries(
           outputKeys.map((key, idx) => [
             key,
@@ -136,8 +154,11 @@ const CaseContent = ({ caseObj, fetchActive = true }: Props) => {
       if (appConfig) {
         const scope = await rootApi!.getScopeFrom(examination);
         const jobs = await scope.jobs.getJobs();
+        const jobsWithOutputs = await Promise.all(
+          jobs.map(async (job) => await getJobOutputs(job, scope)),
+        );
         validJobs = validJobs.concat(
-          getJobStatesFromJobs(jobs, appConfig, examination),
+          getJobStatesFromJobs(jobsWithOutputs, appConfig, examination),
         );
       }
     }

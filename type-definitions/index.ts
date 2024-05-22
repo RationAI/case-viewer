@@ -47,7 +47,6 @@ type TableFolderRowT = {
 export type Visualization = {
   shaders: object;
   name: string;
-  protocol: string;
 };
 
 export type VisualizationConfig = {
