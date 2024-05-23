@@ -74,7 +74,7 @@ export const authOptions: NextAuthOptions = {
     // ...add more providers here
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       // Initial sign in
       if (account && user) {
         token.accessToken = account.access_token;
@@ -82,6 +82,9 @@ export const authOptions: NextAuthOptions = {
         token.accessTokenExpires = (account.expires_at! * 1000 - now) / 2 + now;
         token.refreshToken = account.refresh_token;
         console.log('Initial sign in');
+        console.log(user);
+        console.log(account);
+        console.log(profile);
         return token;
       }
 
