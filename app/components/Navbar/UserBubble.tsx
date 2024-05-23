@@ -22,6 +22,7 @@ const UserBubble = () => {
   };
 
   const userMenu: MenuItemT[] = [];
+
   if (!checkSessionOnClient(session)) {
     if (relativePath !== '/') {
       redirect('/');
@@ -39,7 +40,10 @@ const UserBubble = () => {
   }
 
   return (
-    <div className="flex flex-none flex-row">
+    <div className="flex flex-none flex-row gap-1">
+      <div className="flex flex-col justify-end">
+        <div className="pt-6 text-xs">{session.user.name || ''}</div>
+      </div>
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="avatar btn btn-circle btn-md">
           <div className="w-8 rounded-full">
