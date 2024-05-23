@@ -81,10 +81,8 @@ export const authOptions: NextAuthOptions = {
         const now = Date.now();
         token.accessTokenExpires = (account.expires_at! * 1000 - now) / 2 + now;
         token.refreshToken = account.refresh_token;
+        token.name = profile.name || profile['preferred_username'] || '';
         console.log('Initial sign in');
-        console.log(user);
-        console.log(account);
-        console.log(profile);
         return token;
       }
 
@@ -105,6 +103,9 @@ export const authOptions: NextAuthOptions = {
         session.refreshToken = token.refreshToken as string;
         session.userId = token.sub;
         session.error = token.error ? (token.error as string) : undefined;
+        session.user = {
+          name: token.name,
+        };
       }
       return session;
     },
