@@ -28,18 +28,18 @@ const UserBubble = () => {
     }
     return (
       <>
-        <button
+        {/* <button
           className="btn btn-outline btn-sm font-sans"
           onClick={handleSignIn}
         >
           {'Sign in'}
-        </button>
+        </button> */}
       </>
     );
   }
 
   return (
-    <div className="flex-none">
+    <div className="flex flex-none flex-row">
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="avatar btn btn-circle btn-md">
           <div className="w-8 rounded-full">
