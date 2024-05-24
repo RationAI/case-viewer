@@ -151,6 +151,58 @@ const AnnotationPresetGrid = () => {
     }
   };
 
+  const uploadCustomEAD = async () => {
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      '4e485b74-413e-477d-8e09-2c38ae57e582',
+    );
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      '4e485b74-413e-477d-8e09-2c38ae57e582',
+    );
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      '4e485b74-413e-477d-8e09-2c38ae57e582',
+    );
+    const jobEAD = {
+      name: 'Prostate job',
+      description: 'This is a description of prostate job',
+      appId: '4e485b74-413e-477d-8e09-2c38ae57e582',
+      modes: {
+        preprocessing: {
+          inputs: {
+            my_wsi: {
+              _layer_loc: 'background',
+              lossless: false,
+            },
+          },
+          outputs: {
+            probability_mask: {
+              _layer_loc: 'shader',
+              name: 'Cancer prediction',
+              type: 'heatmap',
+              visible: 1,
+              params: {
+                opacity: 0.5,
+              },
+            },
+            background_mask: {
+              _layer_loc: 'shader',
+              name: 'Mask',
+              type: 'heatmap',
+              visible: 1,
+              params: {
+                threshold: 50,
+                use_mode: 'mask_clip',
+              },
+            },
+          },
+        },
+      },
+    };
+    await rootApi.rationai.globalStorage.jobConfig.createJobConfig(
+      '4e485b74-413e-477d-8e09-2c38ae57e582',
+      jobEAD,
+    );
+  };
+
   return (
     <div className="flex flex-col items-center gap-2 md:w-5/6 lg:w-9/12">
       <div className="flex w-full items-center justify-between gap-2">
@@ -196,6 +248,9 @@ const AnnotationPresetGrid = () => {
               </button>
             </div>
           </div>
+          <button className="btn btn-outline" onClick={() => uploadCustomEAD()}>
+            Save EAD
+          </button>
           <APConfirmationPopUp
             message="Confirm preset deletion:"
             modalId="presetDeletePopUp"
