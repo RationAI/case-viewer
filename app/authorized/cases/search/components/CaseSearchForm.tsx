@@ -45,6 +45,58 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
     }
   }, [rootApi]);
 
+  const uploadCustomEAD = async () => {
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      'b6a43f9a-83d6-45f2-b141-bd287053f8ff',
+    );
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      'b6a43f9a-83d6-45f2-b141-bd287053f8ff',
+    );
+    await rootApi.rationai.globalStorage.jobConfig.deleteJobConfig(
+      'b6a43f9a-83d6-45f2-b141-bd287053f8ff',
+    );
+    const jobEAD = {
+      name: 'Prostate Cancer Detection',
+      description: 'Identifies cancer in prostate tissue',
+      appId: 'b6a43f9a-83d6-45f2-b141-bd287053f8ff',
+      modes: {
+        preprocessing: {
+          inputs: {
+            my_wsi: {
+              _layer_loc: 'background',
+              lossless: false,
+            },
+          },
+          outputs: {
+            probability_mask: {
+              _layer_loc: 'shader',
+              name: 'Cancer prediction',
+              type: 'heatmap',
+              visible: 1,
+              params: {
+                opacity: 0.5,
+              },
+            },
+            background_mask: {
+              _layer_loc: 'shader',
+              name: 'Mask',
+              type: 'heatmap',
+              visible: 1,
+              params: {
+                threshold: 50,
+                use_mode: 'mask_clip',
+              },
+            },
+          },
+        },
+      },
+    };
+    await rootApi.rationai.globalStorage.jobConfig.createJobConfig(
+      'b6a43f9a-83d6-45f2-b141-bd287053f8ff',
+      jobEAD,
+    );
+  };
+
   const searchRows = [
     ['year', 'month', 'day'],
     [...new Array(identifierParts)].map((value, idx) => `id_part_${idx + 1}`),
@@ -155,6 +207,9 @@ const CaseSearchForm = ({ identifierParts }: Props) => {
         className="btn btn-outline btn-sm mt-2 font-sans"
       >
         Search
+      </button>
+      <button className="btn btn-outline" onClick={() => uploadCustomEAD()}>
+        Save EAD
       </button>
     </>
   );
