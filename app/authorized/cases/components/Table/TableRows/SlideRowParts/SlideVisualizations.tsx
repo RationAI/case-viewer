@@ -53,7 +53,7 @@ const handleOpenInXOpat = (
   console.log('No visualization, cannot open xOpat');
 };
 
-const SlideVisualizations = ({ slide }: Props) => {
+const SlideVisualizations = ({ slide, caseObj }: Props) => {
   const caseJobs = useContext(ValidJobsContext);
 
   const slideJobs = caseJobs.filter((job) => job.inputs.includes(slide.id));
@@ -75,7 +75,14 @@ const SlideVisualizations = ({ slide }: Props) => {
                     [slide.id].concat(job.outputs),
                     job.visualization ? [job.visualization] : [],
                     job.background,
-                    { empaia: { caseId: job.caseId, appId: job.appId } },
+                    {
+                      empaia: {
+                        cases: {
+                          [job.caseId]: { slides: [0] },
+                        },
+                        appId: job.appId,
+                      },
+                    },
                   )
                 }
               />
@@ -93,7 +100,16 @@ const SlideVisualizations = ({ slide }: Props) => {
         <BGVis
           tooltipText="Open only slide"
           href={`${window.location.href}?cache=cache/${slide.id}/wsi`}
-          onClick={() => handleOpenInXOpat([slide.id], [])}
+          onClick={() =>
+            handleOpenInXOpat([slide.id], [], undefined, {
+              empaia: {
+                cases: {
+                  [caseObj.id]: { slides: [0] },
+                },
+                appId: '',
+              },
+            })
+          }
         />
       </div>
       <div className="w-5">
